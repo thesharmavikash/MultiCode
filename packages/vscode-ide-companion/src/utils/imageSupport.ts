@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { isSupportedImageMimeType } from '@param-code/param-code-core/src/utils/request-tokenizer/supportedImageFormats.js';
+import { isSupportedImageMimeType } from '@agent-param/param-core/src/utils/request-tokenizer/supportedImageFormats.js';
 
 // ---------- Types ----------
 
@@ -159,3 +159,4 @@ export function normalizeImageAttachment(
     data: payload,
   };
 }
+

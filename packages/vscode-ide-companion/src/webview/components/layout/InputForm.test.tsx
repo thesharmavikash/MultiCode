@@ -14,7 +14,7 @@ import { ApprovalMode } from '../../../types/acpTypes.js';
 import type { CompletionItem } from '../../../types/completionItemTypes.js';
 import { InputForm } from './InputForm.js';
 
-vi.mock('@param-code/webui', async () => {
+vi.mock('@agent-param/webui', async () => {
   const actual = await vi.importActual(
     '../../../../../webui/src/components/layout/InputForm.tsx',
   );
@@ -153,3 +153,4 @@ describe('InputForm completion keyboard handling', () => {
     expect(rendered.onCompletionFill).not.toHaveBeenCalled();
   });
 });
+

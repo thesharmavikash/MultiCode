@@ -10,7 +10,7 @@
  */
 
 import type { FC } from 'react';
-import type { ToolCallData } from '@param-code/webui';
+import type { ToolCallData } from '@agent-param/webui';
 import { ToolCallRouter } from './index.js';
 
 // Re-export types from webui for backward compatibility
@@ -18,7 +18,7 @@ export type {
   ToolCallData,
   BaseToolCallProps as ToolCallProps,
   ToolCallContent,
-} from '@param-code/webui';
+} from '@agent-param/webui';
 
 export const ToolCall: FC<{
   toolCall: ToolCallData;
@@ -27,3 +27,4 @@ export const ToolCall: FC<{
 }> = ({ toolCall, isFirst, isLast }) => (
   <ToolCallRouter toolCall={toolCall} isFirst={isFirst} isLast={isLast} />
 );
+

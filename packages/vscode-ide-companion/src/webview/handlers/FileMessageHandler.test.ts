@@ -5,7 +5,7 @@
  */
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { QwenAgentManager } from '../../services/qwenAgentManager.js';
+import type { ParamAgentManager } from '../../services/ParamAgentManager.js';
 import type { ConversationStore } from '../../services/conversationStore.js';
 import { FileMessageHandler } from './FileMessageHandler.js';
 import * as vscode from 'vscode';
@@ -56,7 +56,7 @@ const vscodeMock = vi.hoisted(() => {
 
 vi.mock('vscode', () => vscodeMock);
 vi.mock(
-  '@qwen-code/qwen-code-core/src/services/fileDiscoveryService.js',
+  '@agent-param/param-core/src/services/fileDiscoveryService.js',
   () => ({
     FileDiscoveryService: class {
       shouldIgnoreFile(filePath: string, options?: unknown) {
@@ -65,12 +65,12 @@ vi.mock(
     },
   }),
 );
-vi.mock('@qwen-code/qwen-code-core/src/utils/filesearch/fileSearch.js', () => ({
+vi.mock('@agent-param/param-core/src/utils/filesearch/fileSearch.js', () => ({
   FileSearchFactory: {
     create: () => fileSearchMock,
   },
 }));
-vi.mock('@qwen-code/qwen-code-core/src/utils/filesearch/crawlCache.js', () => ({
+vi.mock('@agent-param/param-core/src/utils/filesearch/crawlCache.js', () => ({
   clear: vi.fn(),
 }));
 
@@ -94,7 +94,7 @@ describe('FileMessageHandler', () => {
 
     const sendToWebView = vi.fn();
     const handler = new FileMessageHandler(
-      {} as QwenAgentManager,
+      {} as ParamAgentManager,
       {} as ConversationStore,
       null,
       sendToWebView,
@@ -148,7 +148,7 @@ describe('FileMessageHandler', () => {
 
     const sendToWebView = vi.fn();
     const handler = new FileMessageHandler(
-      {} as QwenAgentManager,
+      {} as ParamAgentManager,
       {} as ConversationStore,
       null,
       sendToWebView,
@@ -184,3 +184,5 @@ describe('FileMessageHandler', () => {
     expect(payload.data.requestId).toBe(7);
   });
 });
+
+

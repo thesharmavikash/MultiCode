@@ -8,11 +8,11 @@
  */
 
 import type { ClipboardEvent, FC, ReactNode } from 'react';
-import { InputForm as BaseInputForm, getEditModeIcon } from '@param-code/webui';
+import { InputForm as BaseInputForm, getEditModeIcon } from '@agent-param/webui';
 import type {
   InputFormProps as BaseInputFormProps,
   EditModeInfo,
-} from '@param-code/webui';
+} from '@agent-param/webui';
 import type { CompletionItem } from '../../../types/completionItemTypes.js';
 import { getApprovalModeInfoFromString } from '../../../types/acpTypes.js';
 import type { ApprovalModeValue } from '../../../types/approvalModeValueTypes.js';
@@ -93,3 +93,4 @@ export const InputForm: FC<InputFormProps> = ({
     </>
   );
 };
+

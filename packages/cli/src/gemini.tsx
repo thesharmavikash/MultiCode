@@ -138,7 +138,7 @@ export async function startInteractiveUI(
   workspaceRoot: string = process.cwd(),
   initializationResult: InitializationResult,
 ) {
-  const [_, { AppContainer }] = await Promise.all([
+  const [ink, { AppContainer }] = await Promise.all([
     import('ink'),
     import('./ui/AppContainer.js'),
   ]);
@@ -177,7 +177,7 @@ export async function startInteractiveUI(
     );
   };
 
-  const instance = render(
+  const instance = ink.render(
     process.env['DEBUG'] ? (
       <React.StrictMode>
         <AppWrapper />

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  *
  * Tool call component factory - routes to specialized components by kind
- * All UI components are now imported from @param-code/webui
+ * All UI components are now imported from @agent-param/webui
  */
 
 import type { FC } from 'react';
@@ -21,8 +21,8 @@ import {
   ShellToolCall,
   ReadToolCall,
   WebFetchToolCall,
-} from '@param-code/webui';
-import type { BaseToolCallProps } from '@param-code/webui';
+} from '@agent-param/webui';
+import type { BaseToolCallProps } from '@agent-param/webui';
 
 /**
  * Factory function that returns the appropriate tool call component based on kind
@@ -98,4 +98,5 @@ export const ToolCallRouter: React.FC<BaseToolCallProps> = ({ toolCall }) => {
 };
 
 // Re-export types for convenience
-export type { BaseToolCallProps, ToolCallData } from '@param-code/webui';
+export type { BaseToolCallProps, ToolCallData } from '@agent-param/webui';
+

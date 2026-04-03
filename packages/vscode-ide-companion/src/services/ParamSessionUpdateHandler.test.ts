@@ -5,14 +5,14 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { QwenSessionUpdateHandler } from './qwenSessionUpdateHandler.js';
+import { ParamSessionUpdateHandler } from './ParamSessionUpdateHandler.js';
 import type { SessionNotification } from '@agentclientprotocol/sdk';
 import type { ApprovalModeValue } from '../types/approvalModeValueTypes.js';
-import type { QwenAgentCallbacks } from '../types/chatTypes.js';
+import type { ParamAgentCallbacks } from '../types/chatTypes.js';
 
-describe('QwenSessionUpdateHandler', () => {
-  let handler: QwenSessionUpdateHandler;
-  let mockCallbacks: QwenAgentCallbacks;
+describe('ParamSessionUpdateHandler', () => {
+  let handler: ParamSessionUpdateHandler;
+  let mockCallbacks: ParamAgentCallbacks;
 
   beforeEach(() => {
     mockCallbacks = {
@@ -25,7 +25,7 @@ describe('QwenSessionUpdateHandler', () => {
       onUsageUpdate: vi.fn(),
       onAvailableCommands: vi.fn(),
     };
-    handler = new QwenSessionUpdateHandler(mockCallbacks);
+    handler = new ParamSessionUpdateHandler(mockCallbacks);
   });
 
   describe('current_mode_update handling', () => {
@@ -193,7 +193,7 @@ describe('QwenSessionUpdateHandler', () => {
     });
 
     it('falls back to stream chunk when onPlan is not set', () => {
-      const handlerWithStream = new QwenSessionUpdateHandler({
+      const handlerWithStream = new ParamSessionUpdateHandler({
         onStreamChunk: vi.fn(),
       });
 
@@ -277,7 +277,7 @@ describe('QwenSessionUpdateHandler', () => {
     });
 
     it('does not call callback when onAvailableCommands is not set', () => {
-      const handlerWithoutCallback = new QwenSessionUpdateHandler({});
+      const handlerWithoutCallback = new ParamSessionUpdateHandler({});
 
       const commandsUpdate: SessionNotification = {
         sessionId: 'test-session',
@@ -356,3 +356,4 @@ describe('QwenSessionUpdateHandler', () => {
     });
   });
 });
+

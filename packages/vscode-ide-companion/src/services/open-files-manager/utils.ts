@@ -5,7 +5,7 @@
  */
 
 import * as vscode from 'vscode';
-import type { File } from '@param-code/param-code-core/src/ide/types.js';
+import type { File } from '@agent-param/param-core/src/ide/types.js';
 
 export function isFileUri(uri: vscode.Uri): boolean {
   return uri.scheme === 'file';
@@ -99,3 +99,4 @@ export function getNotebookUriFromCellUri(
   }
   return null;
 }
+

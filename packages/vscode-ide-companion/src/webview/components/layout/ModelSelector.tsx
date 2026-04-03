@@ -7,7 +7,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
 import type { ModelInfo } from '@agentclientprotocol/sdk';
-import { PlanCompletedIcon } from '@param-code/webui';
+import { PlanCompletedIcon } from '@agent-param/webui';
 
 interface ModelSelectorProps {
   visible: boolean;
@@ -195,3 +195,4 @@ export const ModelSelector: FC<ModelSelectorProps> = ({
     </div>
   );
 };
+

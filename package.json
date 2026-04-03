@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/paramLM/param-code.git"
+    "url": "git+https://github.com/thesharmavikash/MultiCode.git"
   },
   "config": {
     "sandboxImageUri": "ghcr.io/agent-param/param:0.14.0"

@@ -7,7 +7,7 @@
 // React import not needed for test files
 import { render } from 'ink-testing-library';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { paramOAuthProgress } from './paramOAuthProgress.js';
+import { ParamOAuthProgress } from './ParamOAuthProgress.js';
 import type { DeviceAuthorizationData } from '@agent-param/param-core';
 import { useKeypress } from '../hooks/useKeypress.js';
 import type { Key } from '../contexts/KeypressContext.js';
@@ -56,7 +56,7 @@ describe('paramOAuthProgress', () => {
     }> = {},
   ) =>
     render(
-      <paramOAuthProgress
+      <ParamOAuthProgress authStatus="polling" authMessage={null}
         onTimeout={mockOnTimeout}
         onCancel={mockOnCancel}
         {...props}
@@ -127,7 +127,7 @@ describe('paramOAuthProgress', () => {
       };
 
       const { lastFrame } = render(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={deviceAuthWithCustomTime}
@@ -145,7 +145,7 @@ describe('paramOAuthProgress', () => {
       };
 
       const { lastFrame } = render(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={deviceAuthWithCustomTime}
@@ -165,7 +165,7 @@ describe('paramOAuthProgress', () => {
       };
 
       const { rerender } = render(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={deviceAuthWithShortTime}
@@ -175,7 +175,7 @@ describe('paramOAuthProgress', () => {
       // Advance timer by 1 second
       vi.advanceTimersByTime(1000);
       rerender(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={deviceAuthWithShortTime}
@@ -185,7 +185,7 @@ describe('paramOAuthProgress', () => {
       // Advance timer by another second to trigger timeout
       vi.advanceTimersByTime(1000);
       rerender(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={deviceAuthWithShortTime}
@@ -197,7 +197,7 @@ describe('paramOAuthProgress', () => {
 
     it('should update time remaining display', async () => {
       const { lastFrame, rerender } = render(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={mockDeviceAuth}
@@ -210,7 +210,7 @@ describe('paramOAuthProgress', () => {
       // Advance by 1 second
       vi.advanceTimersByTime(1000);
       rerender(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={mockDeviceAuth}
@@ -223,7 +223,7 @@ describe('paramOAuthProgress', () => {
 
     it('should use default 300 second timeout when deviceAuth is null', () => {
       const { lastFrame } = render(
-        <paramOAuthProgress onTimeout={mockOnTimeout} onCancel={mockOnCancel} />,
+        <ParamOAuthProgress authStatus="polling" authMessage={null} onTimeout={mockOnTimeout} onCancel={mockOnCancel} />,
       );
 
       // Should show default 5:00 (300 seconds) timeout
@@ -237,7 +237,7 @@ describe('paramOAuthProgress', () => {
   describe('Animated dots', () => {
     it('should cycle through animated dots', async () => {
       const { lastFrame, rerender } = render(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={mockDeviceAuth}
@@ -251,7 +251,7 @@ describe('paramOAuthProgress', () => {
       // Advance by 500ms to cycle animation
       vi.advanceTimersByTime(500);
       rerender(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={mockDeviceAuth}
@@ -263,7 +263,7 @@ describe('paramOAuthProgress', () => {
       // Advance by another 500ms to continue animation
       vi.advanceTimersByTime(500);
       rerender(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={mockDeviceAuth}
@@ -275,7 +275,7 @@ describe('paramOAuthProgress', () => {
       // Advance by another 500ms to complete cycle
       vi.advanceTimersByTime(500);
       rerender(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={mockDeviceAuth}
@@ -289,7 +289,7 @@ describe('paramOAuthProgress', () => {
   describe('User interactions', () => {
     it('should call onCancel when ESC key is pressed', () => {
       render(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={mockDeviceAuth}
@@ -313,7 +313,7 @@ describe('paramOAuthProgress', () => {
 
     it('should call onCancel when ESC is pressed in loading state', () => {
       render(
-        <paramOAuthProgress onTimeout={mockOnTimeout} onCancel={mockOnCancel} />,
+        <ParamOAuthProgress authStatus="polling" authMessage={null} onTimeout={mockOnTimeout} onCancel={mockOnCancel} />,
       );
 
       // Simulate ESC key press
@@ -333,7 +333,7 @@ describe('paramOAuthProgress', () => {
 
     it('should not call onCancel for other key presses', () => {
       render(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={mockDeviceAuth}
@@ -380,7 +380,7 @@ describe('paramOAuthProgress', () => {
       };
 
       const { lastFrame } = render(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={deviceAuthWith10Min}
@@ -392,7 +392,7 @@ describe('paramOAuthProgress', () => {
 
     it('should reset to loading state when deviceAuth becomes null', () => {
       const { rerender, lastFrame } = render(
-        <paramOAuthProgress
+        <ParamOAuthProgress authStatus="polling" authMessage={null}
           onTimeout={mockOnTimeout}
           onCancel={mockOnCancel}
           deviceAuth={mockDeviceAuth}
@@ -403,7 +403,7 @@ describe('paramOAuthProgress', () => {
       expect(lastFrame()).toContain('Waiting for authorization');
 
       rerender(
-        <paramOAuthProgress onTimeout={mockOnTimeout} onCancel={mockOnCancel} />,
+        <ParamOAuthProgress authStatus="polling" authMessage={null} onTimeout={mockOnTimeout} onCancel={mockOnCancel} />,
       );
 
       expect(lastFrame()).toContain('Waiting for param OAuth authentication...');

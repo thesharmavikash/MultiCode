@@ -13,7 +13,7 @@ import {
   detectIdeFromEnv,
   IDE_DEFINITIONS,
   type IdeInfo,
-} from '@param-code/param-code-core/src/ide/detect-ide.js';
+} from '@agent-param/param-core/src/ide/detect-ide.js';
 import { WebViewProvider } from './webview/providers/WebViewProvider.js';
 import { ChatProviderRegistry } from './webview/providers/ChatProviderRegistry.js';
 import { registerChatViewProviders } from './webview/providers/chatViewRegistration.js';
@@ -394,3 +394,4 @@ export async function deactivate(): Promise<void> {
     }
   }
 }
+

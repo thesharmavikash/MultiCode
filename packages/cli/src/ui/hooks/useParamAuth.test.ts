@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen
+ * Copyright 2025 Param
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,11 +10,11 @@ import type { DeviceAuthorizationData } from '@agent-param/param-core';
 import { useParamAuth } from './useParamAuth.js';
 import {
   AuthType,
-  qwenOAuth2Events,
-  QwenOAuth2Event,
+  paramOAuth2Events,
+  ParamOAuth2Event,
 } from '@agent-param/param-core';
 
-// Mock the qwenOAuth2Events
+// Mock the paramOAuth2Events
 vi.mock('@agent-param/param-core', async () => {
   const actual = await vi.importActual('@agent-param/param-core');
   const mockEmitter = {
@@ -24,20 +24,20 @@ vi.mock('@agent-param/param-core', async () => {
   };
   return {
     ...actual,
-    qwenOAuth2Events: mockEmitter,
-    QwenOAuth2Event: {
+    paramOAuth2Events: mockEmitter,
+    ParamOAuth2Event: {
       AuthUri: 'authUri',
       AuthProgress: 'authProgress',
     },
   };
 });
 
-const mockQwenOAuth2Events = vi.mocked(qwenOAuth2Events);
+const mockparamOAuth2Events = vi.mocked(paramOAuth2Events);
 
 describe('useParamAuth', () => {
   const mockDeviceAuth: DeviceAuthorizationData = {
-    verification_uri: 'https://oauth.qwen.com/device',
-    verification_uri_complete: 'https://oauth.qwen.com/device?user_code=ABC123',
+    verification_uri: 'https://oauth.Param.com/device',
+    verification_uri_complete: 'https://oauth.Param.com/device?user_code=ABC123',
     user_code: 'ABC123',
     expires_in: 1800,
     device_code: 'device_code_123',
@@ -51,41 +51,41 @@ describe('useParamAuth', () => {
     vi.clearAllMocks();
   });
 
-  it('should initialize with default state when not Qwen auth', () => {
+  it('should initialize with default state when not Param auth', () => {
     const { result } = renderHook(() =>
       useParamAuth(AuthType.USE_GEMINI, false),
     );
 
-    expect(result.current.qwenAuthState).toEqual({
+    expect(result.current.paramAuthState).toEqual({
       deviceAuth: null,
       authStatus: 'idle',
       authMessage: null,
     });
-    expect(result.current.cancelQwenAuth).toBeInstanceOf(Function);
+    expect(result.current.cancelparamAuth).toBeInstanceOf(Function);
   });
 
-  it('should initialize with default state when Qwen auth but not authenticating', () => {
+  it('should initialize with default state when Param auth but not authenticating', () => {
     const { result } = renderHook(() =>
       useParamAuth(AuthType.PARAM_OAUTH, false),
     );
 
-    expect(result.current.qwenAuthState).toEqual({
+    expect(result.current.paramAuthState).toEqual({
       deviceAuth: null,
       authStatus: 'idle',
       authMessage: null,
     });
-    expect(result.current.cancelQwenAuth).toBeInstanceOf(Function);
+    expect(result.current.cancelparamAuth).toBeInstanceOf(Function);
   });
 
-  it('should set up event listeners when Qwen auth and authenticating', () => {
+  it('should set up event listeners when Param auth and authenticating', () => {
     renderHook(() => useParamAuth(AuthType.PARAM_OAUTH, true));
 
-    expect(mockQwenOAuth2Events.on).toHaveBeenCalledWith(
-      QwenOAuth2Event.AuthUri,
+    expect(mockparamOAuth2Events.on).toHaveBeenCalledWith(
+      ParamOAuth2Event.AuthUri,
       expect.any(Function),
     );
-    expect(mockQwenOAuth2Events.on).toHaveBeenCalledWith(
-      QwenOAuth2Event.AuthProgress,
+    expect(mockparamOAuth2Events.on).toHaveBeenCalledWith(
+      ParamOAuth2Event.AuthProgress,
       expect.any(Function),
     );
   });
@@ -93,11 +93,11 @@ describe('useParamAuth', () => {
   it('should handle device auth event', () => {
     let handleDeviceAuth: (deviceAuth: DeviceAuthorizationData) => void;
 
-    mockQwenOAuth2Events.on.mockImplementation((event, handler) => {
-      if (event === QwenOAuth2Event.AuthUri) {
+    mockparamOAuth2Events.on.mockImplementation((event, handler) => {
+      if (event === ParamOAuth2Event.AuthUri) {
         handleDeviceAuth = handler;
       }
-      return mockQwenOAuth2Events;
+      return mockparamOAuth2Events;
     });
 
     const { result } = renderHook(() => useParamAuth(AuthType.PARAM_OAUTH, true));
@@ -106,8 +106,8 @@ describe('useParamAuth', () => {
       handleDeviceAuth!(mockDeviceAuth);
     });
 
-    expect(result.current.qwenAuthState.deviceAuth).toEqual(mockDeviceAuth);
-    expect(result.current.qwenAuthState.authStatus).toBe('polling');
+    expect(result.current.paramAuthState.deviceAuth).toEqual(mockDeviceAuth);
+    expect(result.current.paramAuthState.authStatus).toBe('polling');
   });
 
   it('should handle auth progress event - success', () => {
@@ -116,11 +116,11 @@ describe('useParamAuth', () => {
       message?: string,
     ) => void;
 
-    mockQwenOAuth2Events.on.mockImplementation((event, handler) => {
-      if (event === QwenOAuth2Event.AuthProgress) {
+    mockparamOAuth2Events.on.mockImplementation((event, handler) => {
+      if (event === ParamOAuth2Event.AuthProgress) {
         handleAuthProgress = handler;
       }
-      return mockQwenOAuth2Events;
+      return mockparamOAuth2Events;
     });
 
     const { result } = renderHook(() => useParamAuth(AuthType.PARAM_OAUTH, true));
@@ -129,8 +129,8 @@ describe('useParamAuth', () => {
       handleAuthProgress!('success', 'Authentication successful!');
     });
 
-    expect(result.current.qwenAuthState.authStatus).toBe('success');
-    expect(result.current.qwenAuthState.authMessage).toBe(
+    expect(result.current.paramAuthState.authStatus).toBe('success');
+    expect(result.current.paramAuthState.authMessage).toBe(
       'Authentication successful!',
     );
   });
@@ -141,11 +141,11 @@ describe('useParamAuth', () => {
       message?: string,
     ) => void;
 
-    mockQwenOAuth2Events.on.mockImplementation((event, handler) => {
-      if (event === QwenOAuth2Event.AuthProgress) {
+    mockparamOAuth2Events.on.mockImplementation((event, handler) => {
+      if (event === ParamOAuth2Event.AuthProgress) {
         handleAuthProgress = handler;
       }
-      return mockQwenOAuth2Events;
+      return mockparamOAuth2Events;
     });
 
     const { result } = renderHook(() => useParamAuth(AuthType.PARAM_OAUTH, true));
@@ -154,8 +154,8 @@ describe('useParamAuth', () => {
       handleAuthProgress!('error', 'Authentication failed');
     });
 
-    expect(result.current.qwenAuthState.authStatus).toBe('error');
-    expect(result.current.qwenAuthState.authMessage).toBe(
+    expect(result.current.paramAuthState.authStatus).toBe('error');
+    expect(result.current.paramAuthState.authMessage).toBe(
       'Authentication failed',
     );
   });
@@ -166,11 +166,11 @@ describe('useParamAuth', () => {
       message?: string,
     ) => void;
 
-    mockQwenOAuth2Events.on.mockImplementation((event, handler) => {
-      if (event === QwenOAuth2Event.AuthProgress) {
+    mockparamOAuth2Events.on.mockImplementation((event, handler) => {
+      if (event === ParamOAuth2Event.AuthProgress) {
         handleAuthProgress = handler;
       }
-      return mockQwenOAuth2Events;
+      return mockparamOAuth2Events;
     });
 
     const { result } = renderHook(() => useParamAuth(AuthType.PARAM_OAUTH, true));
@@ -179,8 +179,8 @@ describe('useParamAuth', () => {
       handleAuthProgress!('polling', 'Waiting for user authorization...');
     });
 
-    expect(result.current.qwenAuthState.authStatus).toBe('polling');
-    expect(result.current.qwenAuthState.authMessage).toBe(
+    expect(result.current.paramAuthState.authStatus).toBe('polling');
+    expect(result.current.paramAuthState.authMessage).toBe(
       'Waiting for user authorization...',
     );
   });
@@ -191,11 +191,11 @@ describe('useParamAuth', () => {
       message?: string,
     ) => void;
 
-    mockQwenOAuth2Events.on.mockImplementation((event, handler) => {
-      if (event === QwenOAuth2Event.AuthProgress) {
+    mockparamOAuth2Events.on.mockImplementation((event, handler) => {
+      if (event === ParamOAuth2Event.AuthProgress) {
         handleAuthProgress = handler;
       }
-      return mockQwenOAuth2Events;
+      return mockparamOAuth2Events;
     });
 
     const { result } = renderHook(() => useParamAuth(AuthType.PARAM_OAUTH, true));
@@ -207,8 +207,8 @@ describe('useParamAuth', () => {
       );
     });
 
-    expect(result.current.qwenAuthState.authStatus).toBe('rate_limit');
-    expect(result.current.qwenAuthState.authMessage).toBe(
+    expect(result.current.paramAuthState.authStatus).toBe('rate_limit');
+    expect(result.current.paramAuthState.authMessage).toBe(
       'Too many requests. The server is rate limiting our requests. Please select a different authentication method or try again later.',
     );
   });
@@ -219,11 +219,11 @@ describe('useParamAuth', () => {
       message?: string,
     ) => void;
 
-    mockQwenOAuth2Events.on.mockImplementation((event, handler) => {
-      if (event === QwenOAuth2Event.AuthProgress) {
+    mockparamOAuth2Events.on.mockImplementation((event, handler) => {
+      if (event === ParamOAuth2Event.AuthProgress) {
         handleAuthProgress = handler;
       }
-      return mockQwenOAuth2Events;
+      return mockparamOAuth2Events;
     });
 
     const { result } = renderHook(() => useParamAuth(AuthType.PARAM_OAUTH, true));
@@ -232,8 +232,8 @@ describe('useParamAuth', () => {
       handleAuthProgress!('success');
     });
 
-    expect(result.current.qwenAuthState.authStatus).toBe('success');
-    expect(result.current.qwenAuthState.authMessage).toBe(null);
+    expect(result.current.paramAuthState.authStatus).toBe('success');
+    expect(result.current.paramAuthState.authMessage).toBe(null);
   });
 
   it('should clean up event listeners when auth type changes', () => {
@@ -248,15 +248,15 @@ describe('useParamAuth', () => {
       },
     );
 
-    // Change to non-Qwen auth
+    // Change to non-Param auth
     rerender({ pendingAuthType: AuthType.USE_GEMINI, isAuthenticating: true });
 
-    expect(mockQwenOAuth2Events.off).toHaveBeenCalledWith(
-      QwenOAuth2Event.AuthUri,
+    expect(mockparamOAuth2Events.off).toHaveBeenCalledWith(
+      ParamOAuth2Event.AuthUri,
       expect.any(Function),
     );
-    expect(mockQwenOAuth2Events.off).toHaveBeenCalledWith(
-      QwenOAuth2Event.AuthProgress,
+    expect(mockparamOAuth2Events.off).toHaveBeenCalledWith(
+      ParamOAuth2Event.AuthProgress,
       expect.any(Function),
     );
   });
@@ -271,12 +271,12 @@ describe('useParamAuth', () => {
     // Stop authentication
     rerender({ isAuthenticating: false });
 
-    expect(mockQwenOAuth2Events.off).toHaveBeenCalledWith(
-      QwenOAuth2Event.AuthUri,
+    expect(mockparamOAuth2Events.off).toHaveBeenCalledWith(
+      ParamOAuth2Event.AuthUri,
       expect.any(Function),
     );
-    expect(mockQwenOAuth2Events.off).toHaveBeenCalledWith(
-      QwenOAuth2Event.AuthProgress,
+    expect(mockparamOAuth2Events.off).toHaveBeenCalledWith(
+      ParamOAuth2Event.AuthProgress,
       expect.any(Function),
     );
   });
@@ -288,24 +288,24 @@ describe('useParamAuth', () => {
 
     unmount();
 
-    expect(mockQwenOAuth2Events.off).toHaveBeenCalledWith(
-      QwenOAuth2Event.AuthUri,
+    expect(mockparamOAuth2Events.off).toHaveBeenCalledWith(
+      ParamOAuth2Event.AuthUri,
       expect.any(Function),
     );
-    expect(mockQwenOAuth2Events.off).toHaveBeenCalledWith(
-      QwenOAuth2Event.AuthProgress,
+    expect(mockparamOAuth2Events.off).toHaveBeenCalledWith(
+      ParamOAuth2Event.AuthProgress,
       expect.any(Function),
     );
   });
 
-  it('should reset state when switching from Qwen auth to another auth type', () => {
+  it('should reset state when switching from Param auth to another auth type', () => {
     let handleDeviceAuth: (deviceAuth: DeviceAuthorizationData) => void;
 
-    mockQwenOAuth2Events.on.mockImplementation((event, handler) => {
-      if (event === QwenOAuth2Event.AuthUri) {
+    mockparamOAuth2Events.on.mockImplementation((event, handler) => {
+      if (event === ParamOAuth2Event.AuthUri) {
         handleDeviceAuth = handler;
       }
-      return mockQwenOAuth2Events;
+      return mockparamOAuth2Events;
     });
 
     const { result, rerender } = renderHook(
@@ -324,25 +324,25 @@ describe('useParamAuth', () => {
       handleDeviceAuth!(mockDeviceAuth);
     });
 
-    expect(result.current.qwenAuthState.deviceAuth).toEqual(mockDeviceAuth);
-    expect(result.current.qwenAuthState.authStatus).toBe('polling');
+    expect(result.current.paramAuthState.deviceAuth).toEqual(mockDeviceAuth);
+    expect(result.current.paramAuthState.authStatus).toBe('polling');
 
     // Switch to different auth type
     rerender({ pendingAuthType: AuthType.USE_GEMINI, isAuthenticating: true });
 
-    expect(result.current.qwenAuthState.deviceAuth).toBe(null);
-    expect(result.current.qwenAuthState.authStatus).toBe('idle');
-    expect(result.current.qwenAuthState.authMessage).toBe(null);
+    expect(result.current.paramAuthState.deviceAuth).toBe(null);
+    expect(result.current.paramAuthState.authStatus).toBe('idle');
+    expect(result.current.paramAuthState.authMessage).toBe(null);
   });
 
   it('should reset state when authentication stops', () => {
     let handleDeviceAuth: (deviceAuth: DeviceAuthorizationData) => void;
 
-    mockQwenOAuth2Events.on.mockImplementation((event, handler) => {
-      if (event === QwenOAuth2Event.AuthUri) {
+    mockparamOAuth2Events.on.mockImplementation((event, handler) => {
+      if (event === ParamOAuth2Event.AuthUri) {
         handleDeviceAuth = handler;
       }
-      return mockQwenOAuth2Events;
+      return mockparamOAuth2Events;
     });
 
     const { result, rerender } = renderHook(
@@ -356,25 +356,25 @@ describe('useParamAuth', () => {
       handleDeviceAuth!(mockDeviceAuth);
     });
 
-    expect(result.current.qwenAuthState.deviceAuth).toEqual(mockDeviceAuth);
-    expect(result.current.qwenAuthState.authStatus).toBe('polling');
+    expect(result.current.paramAuthState.deviceAuth).toEqual(mockDeviceAuth);
+    expect(result.current.paramAuthState.authStatus).toBe('polling');
 
     // Stop authentication
     rerender({ isAuthenticating: false });
 
-    expect(result.current.qwenAuthState.deviceAuth).toBe(null);
-    expect(result.current.qwenAuthState.authStatus).toBe('idle');
-    expect(result.current.qwenAuthState.authMessage).toBe(null);
+    expect(result.current.paramAuthState.deviceAuth).toBe(null);
+    expect(result.current.paramAuthState.authStatus).toBe('idle');
+    expect(result.current.paramAuthState.authMessage).toBe(null);
   });
 
-  it('should handle cancelQwenAuth function', () => {
+  it('should handle cancelparamAuth function', () => {
     let handleDeviceAuth: (deviceAuth: DeviceAuthorizationData) => void;
 
-    mockQwenOAuth2Events.on.mockImplementation((event, handler) => {
-      if (event === QwenOAuth2Event.AuthUri) {
+    mockparamOAuth2Events.on.mockImplementation((event, handler) => {
+      if (event === ParamOAuth2Event.AuthUri) {
         handleDeviceAuth = handler;
       }
-      return mockQwenOAuth2Events;
+      return mockparamOAuth2Events;
     });
 
     const { result } = renderHook(() => useParamAuth(AuthType.PARAM_OAUTH, true));
@@ -384,42 +384,42 @@ describe('useParamAuth', () => {
       handleDeviceAuth!(mockDeviceAuth);
     });
 
-    expect(result.current.qwenAuthState.deviceAuth).toEqual(mockDeviceAuth);
+    expect(result.current.paramAuthState.deviceAuth).toEqual(mockDeviceAuth);
 
     // Cancel auth
     act(() => {
-      result.current.cancelQwenAuth();
+      result.current.cancelparamAuth();
     });
 
-    expect(result.current.qwenAuthState.deviceAuth).toBe(null);
-    expect(result.current.qwenAuthState.authStatus).toBe('idle');
-    expect(result.current.qwenAuthState.authMessage).toBe(null);
+    expect(result.current.paramAuthState.deviceAuth).toBe(null);
+    expect(result.current.paramAuthState.authStatus).toBe('idle');
+    expect(result.current.paramAuthState.authMessage).toBe(null);
   });
 
   it('should handle different auth types correctly', () => {
-    // Test with Qwen OAuth - should set up event listeners when authenticating
-    const { result: qwenResult } = renderHook(() =>
+    // Test with Param OAuth - should set up event listeners when authenticating
+    const { result: ParamResult } = renderHook(() =>
       useParamAuth(AuthType.PARAM_OAUTH, true),
     );
-    expect(qwenResult.current.qwenAuthState.authStatus).toBe('idle');
-    expect(mockQwenOAuth2Events.on).toHaveBeenCalled();
+    expect(ParamResult.current.paramAuthState.authStatus).toBe('idle');
+    expect(mockparamOAuth2Events.on).toHaveBeenCalled();
 
     // Test with other auth types - should not set up event listeners
     const { result: geminiResult } = renderHook(() =>
       useParamAuth(AuthType.USE_GEMINI, true),
     );
-    expect(geminiResult.current.qwenAuthState.authStatus).toBe('idle');
+    expect(geminiResult.current.paramAuthState.authStatus).toBe('idle');
 
     const { result: oauthResult } = renderHook(() =>
       useParamAuth(AuthType.USE_OPENAI, true),
     );
-    expect(oauthResult.current.qwenAuthState.authStatus).toBe('idle');
+    expect(oauthResult.current.paramAuthState.authStatus).toBe('idle');
   });
 
-  it('should initialize with idle status when starting authentication with Qwen auth', () => {
+  it('should initialize with idle status when starting authentication with Param auth', () => {
     const { result } = renderHook(() => useParamAuth(AuthType.PARAM_OAUTH, true));
 
-    expect(result.current.qwenAuthState.authStatus).toBe('idle');
-    expect(mockQwenOAuth2Events.on).toHaveBeenCalled();
+    expect(result.current.paramAuthState.authStatus).toBe('idle');
+    expect(mockparamOAuth2Events.on).toHaveBeenCalled();
   });
 });

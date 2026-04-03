@@ -9,8 +9,8 @@ import {
   CloseDiffRequestSchema,
   IdeContextNotificationSchema,
   OpenDiffRequestSchema,
-} from '@param-code/param-code-core/src/ide/types.js';
-import { detectIdeFromEnv } from '@param-code/param-code-core/src/ide/detect-ide.js';
+} from '@agent-param/param-core/src/ide/types.js';
+import { detectIdeFromEnv } from '@agent-param/param-core/src/ide/detect-ide.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
@@ -475,3 +475,4 @@ const createMcpServer = (diffManager: DiffManager) => {
   );
   return server;
 };
+

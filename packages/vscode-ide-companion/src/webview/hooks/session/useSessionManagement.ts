@@ -12,7 +12,7 @@ import type { VSCodeAPI } from '../../hooks/useVSCode.js';
  * Manages session list, current session, session switching, and search
  */
 export const useSessionManagement = (vscode: VSCodeAPI) => {
-  const [paramSessions, setparamSessions] = useState<
+  const [ParamSessions, setParamSessions] = useState<
     Array<Record<string, unknown>>
   >([]);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
@@ -31,10 +31,10 @@ export const useSessionManagement = (vscode: VSCodeAPI) => {
    */
   const filteredSessions = useMemo(() => {
     if (!sessionSearchQuery.trim()) {
-      return paramSessions;
+      return ParamSessions;
     }
     const query = sessionSearchQuery.toLowerCase();
-    return paramSessions.filter((session) => {
+    return ParamSessions.filter((session) => {
       const title = (
         (session.title as string) ||
         (session.name as string) ||
@@ -42,18 +42,18 @@ export const useSessionManagement = (vscode: VSCodeAPI) => {
       ).toLowerCase();
       return title.includes(query);
     });
-  }, [paramSessions, sessionSearchQuery]);
+  }, [ParamSessions, sessionSearchQuery]);
 
   /**
    * Load session list
    */
-  const handleLoadparamSessions = useCallback(() => {
+  const handleLoadParamSessions = useCallback(() => {
     // Reset pagination state and load first page
-    setparamSessions([]);
+    setParamSessions([]);
     setNextCursor(undefined);
     setHasMore(true);
     setIsLoading(true);
-    vscode.postMessage({ type: 'getparamSessions', data: { size: PAGE_SIZE } });
+    vscode.postMessage({ type: 'getParamSessions', data: { size: PAGE_SIZE } });
     setShowSessionSelector(true);
   }, [vscode]);
 
@@ -63,7 +63,7 @@ export const useSessionManagement = (vscode: VSCodeAPI) => {
     }
     setIsLoading(true);
     vscode.postMessage({
-      type: 'getparamSessions',
+      type: 'getParamSessions',
       data: { cursor: nextCursor, size: PAGE_SIZE },
     });
   }, [hasMore, isLoading, nextCursor, vscode]);
@@ -71,7 +71,7 @@ export const useSessionManagement = (vscode: VSCodeAPI) => {
   /**
    * Create new session
    */
-  const handleNewparamSession = useCallback(() => {
+  const handleNewParamSession = useCallback(() => {
     vscode.postMessage({ type: 'openNewChatTab', data: {} });
     setShowSessionSelector(false);
   }, [vscode]);
@@ -89,7 +89,7 @@ export const useSessionManagement = (vscode: VSCodeAPI) => {
 
       console.log('[useSessionManagement] Switching to session:', sessionId);
       vscode.postMessage({
-        type: 'switchparamSession',
+        type: 'switchParamSession',
         data: { sessionId },
       });
     },
@@ -98,7 +98,7 @@ export const useSessionManagement = (vscode: VSCodeAPI) => {
 
   return {
     // State
-    paramSessions,
+    ParamSessions,
     currentSessionId,
     currentSessionTitle,
     showSessionSelector,
@@ -109,7 +109,7 @@ export const useSessionManagement = (vscode: VSCodeAPI) => {
     isLoading,
 
     // State setters
-    setparamSessions,
+    setParamSessions,
     setCurrentSessionId,
     setCurrentSessionTitle,
     setShowSessionSelector,
@@ -119,8 +119,8 @@ export const useSessionManagement = (vscode: VSCodeAPI) => {
     setIsLoading,
 
     // Operations
-    handleLoadparamSessions,
-    handleNewparamSession,
+    handleLoadParamSessions,
+    handleNewParamSession,
     handleSwitchSession,
     handleLoadMoreSessions,
   };

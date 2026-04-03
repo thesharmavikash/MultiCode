@@ -13,12 +13,12 @@ import {
   ensureLeftGroupOfChatWebview,
 } from '../../utils/editorGroupUtils.js';
 import { ReadonlyFileSystemProvider } from '../../services/readonlyFileSystemProvider.js';
-import { FileDiscoveryService } from '@param-code/param-code-core/src/services/fileDiscoveryService.js';
+import { FileDiscoveryService } from '@agent-param/param-core/src/services/fileDiscoveryService.js';
 import {
   FileSearchFactory,
   type FileSearch,
-} from '@param-code/param-code-core/src/utils/filesearch/fileSearch.js';
-import * as crawlCache from '@param-code/param-code-core/src/utils/filesearch/crawlCache.js';
+} from '@agent-param/param-core/src/utils/filesearch/fileSearch.js';
+import * as crawlCache from '@agent-param/param-core/src/utils/filesearch/crawlCache.js';
 import { getErrorMessage } from '../../utils/errorMessage.js';
 
 /**
@@ -374,7 +374,7 @@ export class FileMessageHandler extends BaseMessageHandler {
           if (
             discovery.shouldIgnoreFile(uri.fsPath, {
               respectGitIgnore: true,
-              respectparamIgnore: false,
+              respectParamIgnore: false,
             })
           ) {
             return;
@@ -718,3 +718,4 @@ export class FileMessageHandler extends BaseMessageHandler {
     return pattern;
   }
 }
+

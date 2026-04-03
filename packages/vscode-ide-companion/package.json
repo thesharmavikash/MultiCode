@@ -3,11 +3,11 @@
   "displayName": "param Code Companion",
   "description": "Enable param Code with direct access to your VS Code workspace.",
   "version": "0.14.0",
-  "publisher": "paramlm",
+  "publisher": "agent-param",
   "icon": "assets/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/paramLM/param-code.git",
+    "url": "https://github.com/thesharmavikash/MultiCode.git",
     "directory": "packages/vscode-ide-companion"
   },
   "engines": {
@@ -220,7 +220,7 @@
   },
   "dependencies": {
     "@agentclientprotocol/sdk": "^0.14.1",
-    "@param-code/webui": "*",
+    "@agent-param/webui": "*",
     "@modelcontextprotocol/sdk": "^1.25.1",
     "cors": "^2.8.5",
     "express": "^5.1.0",
@@ -231,3 +231,4 @@
     "zod": "^3.25.76"
   }
 }
+

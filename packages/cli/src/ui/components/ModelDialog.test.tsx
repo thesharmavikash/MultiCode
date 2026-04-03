@@ -15,7 +15,7 @@ import type { Config } from '@agent-param/param-core';
 import { AuthType, DEFAULT_PARAM_MODEL } from '@agent-param/param-core';
 import type { LoadedSettings } from '../../config/settings.js';
 import { SettingScope } from '../../config/settings.js';
-import { getFilteredparamModels } from '../models/availableModels.js';
+import { getFilteredParamModels } from '../models/availableModels.js';
 
 vi.mock('../hooks/useKeypress.js', () => ({
   useKeypress: vi.fn(),
@@ -30,7 +30,7 @@ vi.mock('./shared/DescriptiveRadioButtonSelect.js', () => ({
 const createMockGetAvailableModelsForAuthType = () =>
   vi.fn((t: AuthType) => {
     if (t === AuthType.PARAM_OAUTH) {
-      return getFilteredparamModels().map((m) => ({
+      return getFilteredParamModels().map((m) => ({
         id: m.id,
         label: m.label,
         authType: AuthType.PARAM_OAUTH,
@@ -63,7 +63,7 @@ const renderComponent = (
     switchModel: vi.fn().mockResolvedValue(undefined),
     getAuthType: vi.fn(() => 'param-oauth'),
     getAllConfiguredModels: vi.fn(() =>
-      getFilteredparamModels().map((m) => ({
+      getFilteredParamModels().map((m) => ({
         id: m.id,
         label: m.label,
         description: m.description || '',
@@ -124,7 +124,7 @@ describe('<ModelDialog />', () => {
     expect(mockedSelect).toHaveBeenCalledTimes(1);
 
     const props = mockedSelect.mock.calls[0][0];
-    expect(props.items).toHaveLength(getFilteredparamModels().length);
+    expect(props.items).toHaveLength(getFilteredParamModels().length);
     // coder-model is the only model and it has vision capability
     expect(props.items[0].value).toBe(
       `${AuthType.PARAM_OAUTH}::${DEFAULT_PARAM_MODEL}`,
@@ -145,7 +145,7 @@ describe('<ModelDialog />', () => {
 
     expect(mockGetModel).toHaveBeenCalled();
     // Calculate expected index dynamically based on model list
-    const paramModels = getFilteredparamModels();
+    const paramModels = getFilteredParamModels();
     const expectedIndex = paramModels.findIndex(
       (m) => m.id === DEFAULT_PARAM_MODEL,
     );
@@ -198,7 +198,7 @@ describe('<ModelDialog />', () => {
       {
         getAvailableModelsForAuthType: vi.fn((t: AuthType) => {
           if (t === AuthType.PARAM_OAUTH) {
-            return getFilteredparamModels().map((m) => ({
+            return getFilteredParamModels().map((m) => ({
               id: m.id,
               label: m.label,
               authType: AuthType.PARAM_OAUTH,
@@ -240,7 +240,7 @@ describe('<ModelDialog />', () => {
         return [{ id: 'gpt-4', label: 'GPT-4', authType: t }];
       }
       if (t === AuthType.PARAM_OAUTH) {
-        return getFilteredparamModels().map((m) => ({
+        return getFilteredParamModels().map((m) => ({
           id: m.id,
           label: m.label,
           authType: AuthType.PARAM_OAUTH,
@@ -346,7 +346,7 @@ describe('<ModelDialog />', () => {
               getAvailableModelsForAuthType:
                 createMockGetAvailableModelsForAuthType(),
               getAllConfiguredModels: vi.fn(() =>
-                getFilteredparamModels().map((m) => ({
+                getFilteredParamModels().map((m) => ({
                   id: m.id,
                   label: m.label,
                   description: m.description || '',
@@ -370,7 +370,7 @@ describe('<ModelDialog />', () => {
       getAuthType: mockGetAuthType,
       getAvailableModelsForAuthType: createMockGetAvailableModelsForAuthType(),
       getAllConfiguredModels: vi.fn(() =>
-        getFilteredparamModels().map((m) => ({
+        getFilteredParamModels().map((m) => ({
           id: m.id,
           label: m.label,
           description: m.description || '',
@@ -390,7 +390,7 @@ describe('<ModelDialog />', () => {
     // Should be called at least twice: initial render + re-render after context change
     expect(mockedSelect).toHaveBeenCalledTimes(2);
     // Calculate expected index for DEFAULT_PARAM_MODEL dynamically
-    const paramModels = getFilteredparamModels();
+    const paramModels = getFilteredParamModels();
     const expectedCoderIndex = paramModels.findIndex(
       (m) => m.id === DEFAULT_PARAM_MODEL,
     );

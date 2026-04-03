@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { paramAgentManager } from '../../services/paramAgentManager.js';
+import type { ParamAgentManager } from '../../services/ParamAgentManager.js';
 import type { ConversationStore } from '../../services/conversationStore.js';
 
 /**
@@ -33,7 +33,7 @@ export interface IMessageHandler {
  */
 export abstract class BaseMessageHandler implements IMessageHandler {
   constructor(
-    protected agentManager: paramAgentManager,
+    protected agentManager: ParamAgentManager,
     protected conversationStore: ConversationStore,
     protected currentConversationId: string | null,
     protected sendToWebView: (message: unknown) => void,

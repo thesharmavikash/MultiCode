@@ -23,7 +23,7 @@ import { getErrorMessage } from '../utils/errorMessage.js';
 import type { ModelInfo } from '@agentclientprotocol/sdk';
 import type { ApprovalModeValue } from '../types/approvalModeValueTypes.js';
 
-export interface paramConnectionResult {
+export interface ParamConnectionResult {
   sessionCreated: boolean;
   requiresAuth: boolean;
   modelInfo?: ModelInfo;
@@ -40,7 +40,7 @@ export interface paramConnectionResult {
  * param Connection Handler class
  * Handles connection, authentication, and session initialization
  */
-export class paramConnectionHandler {
+export class ParamConnectionHandler {
   /**
    * Connect to param service and establish session
    *
@@ -55,9 +55,9 @@ export class paramConnectionHandler {
     options?: {
       autoAuthenticate?: boolean;
     },
-  ): Promise<paramConnectionResult> {
+  ): Promise<ParamConnectionResult> {
     const connectId = Date.now();
-    console.log(`[paramAgentManager] 🚀 CONNECT() CALLED - ID: ${connectId}`);
+    console.log(`[ParamAgentManager] 🚀 CONNECT() CALLED - ID: ${connectId}`);
     const autoAuthenticate = options?.autoAuthenticate ?? true;
     let sessionCreated = false;
     let requiresAuth = false;
@@ -80,7 +80,7 @@ export class paramConnectionHandler {
     if (proxyUrl) {
       extraArgs.push('--proxy', proxyUrl);
       console.log(
-        '[paramAgentManager] Using proxy from VSCode settings:',
+        '[ParamAgentManager] Using proxy from VSCode settings:',
         proxyUrl,
       );
     }
@@ -96,12 +96,12 @@ export class paramConnectionHandler {
     // Create new session if unable to restore
     if (!sessionRestored) {
       console.log(
-        '[paramAgentManager] no sessionRestored, Creating new session...',
+        '[ParamAgentManager] no sessionRestored, Creating new session...',
       );
 
       try {
         console.log(
-          '[paramAgentManager] Creating new session (letting CLI handle authentication)...',
+          '[ParamAgentManager] Creating new session (letting CLI handle authentication)...',
         );
         const newSessionResult = await this.newSessionWithRetry(
           connection,
@@ -121,7 +121,7 @@ export class paramConnectionHandler {
         ) {
           availableModels = modelState.availableModels;
           console.log(
-            '[paramAgentManager] Extracted availableModels from session/new:',
+            '[ParamAgentManager] Extracted availableModels from session/new:',
             availableModels.map((m) => m.modelId),
           );
         }
@@ -129,7 +129,7 @@ export class paramConnectionHandler {
         currentModeId = modeState?.currentModeId;
         availableModes = modeState?.availableModes;
 
-        console.log('[paramAgentManager] New session created successfully');
+        console.log('[ParamAgentManager] New session created successfully');
         sessionCreated = true;
       } catch (sessionError) {
         const needsAuth =
@@ -138,13 +138,13 @@ export class paramConnectionHandler {
         if (needsAuth) {
           requiresAuth = true;
           console.log(
-            '[paramAgentManager] Session creation requires authentication; waiting for user-triggered login.',
+            '[ParamAgentManager] Session creation requires authentication; waiting for user-triggered login.',
           );
         } else {
           console.log(
             `\n⚠️ [SESSION FAILED] newSessionWithRetry threw error\n`,
           );
-          console.log(`[paramAgentManager] Error details:`, sessionError);
+          console.log(`[ParamAgentManager] Error details:`, sessionError);
           throw sessionError;
         }
       }
@@ -153,7 +153,7 @@ export class paramConnectionHandler {
     }
 
     console.log(`\n========================================`);
-    console.log(`[paramAgentManager] ✅ CONNECT() COMPLETED SUCCESSFULLY`);
+    console.log(`[ParamAgentManager] ✅ CONNECT() COMPLETED SUCCESSFULLY`);
     console.log(`========================================\n`);
     return {
       sessionCreated,
@@ -184,16 +184,16 @@ export class paramConnectionHandler {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         console.log(
-          `[paramAgentManager] Creating session (attempt ${attempt}/${maxRetries})...`,
+          `[ParamAgentManager] Creating session (attempt ${attempt}/${maxRetries})...`,
         );
         const res = await connection.newSession(workingDir);
-        console.log('[paramAgentManager] Session created successfully');
+        console.log('[ParamAgentManager] Session created successfully');
         return res;
       } catch (error) {
         lastError = error;
         const errorMessage = getErrorMessage(error);
         console.error(
-          `[paramAgentManager] Session creation attempt ${attempt} failed:`,
+          `[ParamAgentManager] Session creation attempt ${attempt} failed:`,
           errorMessage,
         );
 
@@ -203,12 +203,12 @@ export class paramConnectionHandler {
         if (requiresAuth) {
           if (!autoAuthenticate) {
             console.log(
-              '[paramAgentManager] Authentication required but auto-authentication is disabled. Propagating error.',
+              '[ParamAgentManager] Authentication required but auto-authentication is disabled. Propagating error.',
             );
             throw error;
           }
           console.log(
-            '[paramAgentManager] param requires authentication. Authenticating and retrying session/new...',
+            '[ParamAgentManager] param requires authentication. Authenticating and retrying session/new...',
           );
           try {
             await connection.authenticate(authMethod);
@@ -217,17 +217,17 @@ export class paramConnectionHandler {
             // Add a slight delay to ensure auth state is settled
             await new Promise((resolve) => setTimeout(resolve, 300));
             console.log(
-              '[paramAgentManager] newSessionWithRetry Authentication successful',
+              '[ParamAgentManager] newSessionWithRetry Authentication successful',
             );
             // Retry immediately after successful auth
             const res = await connection.newSession(workingDir);
             console.log(
-              '[paramAgentManager] Session created successfully after auth',
+              '[ParamAgentManager] Session created successfully after auth',
             );
             return res;
           } catch (authErr) {
             console.error(
-              '[paramAgentManager] Re-authentication failed:',
+              '[ParamAgentManager] Re-authentication failed:',
               authErr,
             );
             // Fall through to retry logic below
@@ -239,7 +239,7 @@ export class paramConnectionHandler {
         }
 
         const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
-        console.log(`[paramAgentManager] Retrying in ${delay}ms...`);
+        console.log(`[ParamAgentManager] Retrying in ${delay}ms...`);
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }

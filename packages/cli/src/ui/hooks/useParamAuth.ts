@@ -8,7 +8,7 @@ import { useState, useCallback, useEffect } from 'react';
 import {
   AuthType,
   paramOAuth2Events,
-  paramOAuth2Event,
+  ParamOAuth2Event,
   type DeviceAuthorizationData,
 } from '@agent-param/param-core';
 
@@ -83,19 +83,19 @@ export const useParamAuth = (
     };
 
     // Add event listeners
-    paramOAuth2Events.on(paramOAuth2Event.AuthUri, handleDeviceAuth);
-    paramOAuth2Events.on(paramOAuth2Event.AuthProgress, handleAuthProgress);
+    paramOAuth2Events.on(ParamOAuth2Event.AuthUri, handleDeviceAuth);
+    paramOAuth2Events.on(ParamOAuth2Event.AuthProgress, handleAuthProgress);
 
     // Cleanup event listeners when component unmounts or auth finishes
     return () => {
-      paramOAuth2Events.off(paramOAuth2Event.AuthUri, handleDeviceAuth);
-      paramOAuth2Events.off(paramOAuth2Event.AuthProgress, handleAuthProgress);
+      paramOAuth2Events.off(ParamOAuth2Event.AuthUri, handleDeviceAuth);
+      paramOAuth2Events.off(ParamOAuth2Event.AuthProgress, handleAuthProgress);
     };
   }, [isParamAuth, isAuthenticating]);
 
   const cancelparamAuth = useCallback(() => {
     // Emit cancel event to stop polling
-    paramOAuth2Events.emit(paramOAuth2Event.AuthCancel);
+    paramOAuth2Events.emit(ParamOAuth2Event.AuthCancel);
 
     setparamAuthState({
       deviceAuth: null,

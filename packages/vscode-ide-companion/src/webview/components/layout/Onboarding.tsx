@@ -8,7 +8,7 @@
  */
 
 import type { FC } from 'react';
-import { Onboarding as BaseOnboarding } from '@param-code/webui';
+import { Onboarding as BaseOnboarding } from '@agent-param/webui';
 import { generateIconUrl } from '../../utils/resourceUrl.js';
 
 interface OnboardingPageProps {
@@ -24,3 +24,4 @@ export const Onboarding: FC<OnboardingPageProps> = ({ onLogin }) => {
 
   return <BaseOnboarding iconUrl={iconUri} onGetStarted={onLogin} />;
 };
+

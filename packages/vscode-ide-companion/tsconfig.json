@@ -10,7 +10,13 @@
     "strict": true,
     "skipLibCheck": true,
     "paths": {
-      "@lydell/node-pty": ["../../node_modules/@lydell/node-pty/node-pty.d.ts"]
+      "@lydell/node-pty": ["../../node_modules/@lydell/node-pty/node-pty.d.ts"],
+      "@agent-param/param-core": ["../core/src/index.ts"],
+      "@agent-param/param-core/*": ["../core/*"],
+      "@agent-param/webui": ["../webui/src/index.ts"],
+      "@agent-param/webui/tailwind.preset": ["../webui/tailwind.preset.js"],
+      "@agent-param/webui/styles.css": ["../webui/dist/styles.css"],
+      "@agent-param/webui/*": ["../webui/*"]
     }
     /* Additional Checks */
     // "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */

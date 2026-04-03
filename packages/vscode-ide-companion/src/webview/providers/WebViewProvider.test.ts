@@ -22,7 +22,7 @@ const {
   mockOnDidChangeTextEditorSelection: vi.fn(() => ({ dispose: vi.fn() })),
 }));
 
-vi.mock('@qwen-code/qwen-code-core', () => ({
+vi.mock('@agent-param/param-core', () => ({
   Storage: {
     getGlobalTempDir: mockGetGlobalTempDir,
   },
@@ -48,8 +48,8 @@ vi.mock('vscode', () => ({
   },
 }));
 
-vi.mock('../../services/qwenAgentManager.js', () => ({
-  QwenAgentManager: class {
+vi.mock('../../services/ParamAgentManager.js', () => ({
+  ParamAgentManager: class {
     isConnected = false;
     currentSessionId = null;
     onMessage = vi.fn();
@@ -288,3 +288,5 @@ describe('WebViewProvider.attachToView', () => {
     expect(panelPostMessage).not.toHaveBeenCalled();
   });
 });
+
+

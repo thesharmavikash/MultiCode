@@ -17,7 +17,7 @@ import type {
 import type { SessionUpdateMeta } from '../types/acpTypes.js';
 import type { ApprovalModeValue } from '../types/approvalModeValueTypes.js';
 import type {
-  paramAgentCallbacks,
+  ParamAgentCallbacks,
   UsageStatsPayload,
 } from '../types/chatTypes.js';
 
@@ -25,10 +25,10 @@ import type {
  * param Session Update Handler class
  * Processes various session update events and calls appropriate callbacks
  */
-export class paramSessionUpdateHandler {
-  private callbacks: paramAgentCallbacks;
+export class ParamSessionUpdateHandler {
+  private callbacks: ParamAgentCallbacks;
 
-  constructor(callbacks: paramAgentCallbacks) {
+  constructor(callbacks: ParamAgentCallbacks) {
     this.callbacks = callbacks;
   }
 
@@ -37,7 +37,7 @@ export class paramSessionUpdateHandler {
    *
    * @param callbacks - New callback collection
    */
-  updateCallbacks(callbacks: paramAgentCallbacks): void {
+  updateCallbacks(callbacks: ParamAgentCallbacks): void {
     this.callbacks = callbacks;
   }
 
@@ -209,7 +209,7 @@ export class paramSessionUpdateHandler {
       }
 
       default:
-        console.log('[paramAgentManager] Unhandled session update type');
+        console.log('[ParamAgentManager] Unhandled session update type');
         break;
     }
   }

@@ -17,7 +17,7 @@ export type WebViewProviderFactory = () => WebViewProvider;
  * WebviewView host for placing the chat UI in sidebar / panel / secondary sidebar.
  *
  * Accepts a factory function instead of a pre-built WebViewProvider so the
- * heavyweight provider (paramAgentManager, ConversationStore, etc.) is only
+ * heavyweight provider (ParamAgentManager, ConversationStore, etc.) is only
  * created when VS Code actually opens the view, not at extension startup.
  */
 export class ChatWebviewViewProvider implements vscode.WebviewViewProvider {

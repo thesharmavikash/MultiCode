@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  *
  * Shared utility functions for tool call components
- * Now re-exports from @param-code/webui for backward compatibility
+ * Now re-exports from @agent-param/webui for backward compatibility
  */
 
 export {
@@ -15,7 +15,7 @@ export {
   groupContent,
   hasToolCallOutput,
   mapToolStatusToContainerStatus,
-} from '@param-code/webui';
+} from '@agent-param/webui';
 
 // Re-export types for backward compatibility
 export type {
@@ -23,4 +23,5 @@ export type {
   GroupedContent,
   ToolCallData,
   ToolCallStatus,
-} from '@param-code/webui';
+} from '@agent-param/webui';
+

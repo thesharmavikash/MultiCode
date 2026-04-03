@@ -5,7 +5,7 @@
  */
 
 import * as vscode from 'vscode';
-import { Storage } from '@param-code/param-code-core';
+import { Storage } from '@agent-param/param-core';
 
 export function getLocalResourceRoots(
   extensionUri: vscode.Uri,
@@ -411,3 +411,4 @@ export class PanelManager {
     this.panelTab = null;
   }
 }
+

@@ -36,7 +36,7 @@ function getparamOAuthModels(): readonly AvailableModel[] {
  * Get available param models
  * coder-model now has vision capabilities by default.
  */
-export function getFilteredparamModels(): AvailableModel[] {
+export function getFilteredParamModels(): AvailableModel[] {
   return [...getparamOAuthModels()];
 }
 

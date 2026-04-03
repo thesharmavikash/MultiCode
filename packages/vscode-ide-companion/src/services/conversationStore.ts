@@ -5,7 +5,7 @@
  */
 
 import type * as vscode from 'vscode';
-import type { ChatMessage } from './paramAgentManager.js';
+import type { ChatMessage } from './ParamAgentManager.js';
 
 export interface Conversation {
   id: string;

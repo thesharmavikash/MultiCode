@@ -7,7 +7,7 @@
 import {
   IdeDiffAcceptedNotificationSchema,
   IdeDiffClosedNotificationSchema,
-} from '@param-code/param-code-core/src/ide/types.js';
+} from '@agent-param/param-core/src/ide/types.js';
 import { type JSONRPCNotification } from '@modelcontextprotocol/sdk/types.js';
 import * as path from 'node:path';
 import * as vscode from 'vscode';
@@ -431,3 +431,4 @@ export class DiffManager {
     this.suppressUntil = Date.now() + Math.max(0, durationMs);
   }
 }
+

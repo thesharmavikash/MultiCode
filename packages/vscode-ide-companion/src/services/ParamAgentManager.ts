@@ -16,20 +16,20 @@ import type {
   AskUserQuestionRequest,
 } from '../types/acpTypes.js';
 import type { ApprovalModeValue } from '../types/approvalModeValueTypes.js';
-import { paramSessionReader, type paramSession } from './paramSessionReader.js';
-import { paramSessionManager } from './paramSessionManager.js';
+import { ParamSessionReader, type ParamSession } from './ParamSessionReader.js';
+import { ParamSessionManager } from './ParamSessionManager.js';
 import type {
   ChatMessage,
   PlanEntry,
   ToolCallUpdateData,
-  paramAgentCallbacks,
+  ParamAgentCallbacks,
   UsageStatsPayload,
 } from '../types/chatTypes.js';
 import {
-  paramConnectionHandler,
-  type paramConnectionResult,
-} from '../services/paramConnectionHandler.js';
-import { paramSessionUpdateHandler } from './paramSessionUpdateHandler.js';
+  ParamConnectionHandler,
+  type ParamConnectionResult,
+} from '../services/ParamConnectionHandler.js';
+import { ParamSessionUpdateHandler } from './ParamSessionUpdateHandler.js';
 import { authMethod } from '../types/acpTypes.js';
 import {
   extractModelInfoFromNewSessionResult,
@@ -84,12 +84,12 @@ interface AgentSessionOptions {
   autoAuthenticate?: boolean;
 }
 
-export class paramAgentManager {
+export class ParamAgentManager {
   private connection: AcpConnection;
-  private sessionReader: paramSessionReader;
-  private sessionManager: paramSessionManager;
-  private connectionHandler: paramConnectionHandler;
-  private sessionUpdateHandler: paramSessionUpdateHandler;
+  private sessionReader: ParamSessionReader;
+  private sessionManager: ParamSessionManager;
+  private connectionHandler: ParamConnectionHandler;
+  private sessionUpdateHandler: ParamSessionUpdateHandler;
   private currentWorkingDir: string = process.cwd();
   // When loading a past session via ACP, the CLI replays history through
   // session/update notifications. We set this flag to route message chunks
@@ -100,7 +100,7 @@ export class paramAgentManager {
   private sessionCreateInFlight: Promise<string | null> | null = null;
 
   // Callback storage
-  private callbacks: paramAgentCallbacks = {};
+  private callbacks: ParamAgentCallbacks = {};
   // Baseline state from session/new (default/settings-backed), used to clear stale
   // UI mode/model when session/load response omits optional fields.
   private baselineModeId: ApprovalModeValue = 'default';
@@ -116,10 +116,10 @@ export class paramAgentManager {
 
   constructor() {
     this.connection = new AcpConnection();
-    this.sessionReader = new paramSessionReader();
-    this.sessionManager = new paramSessionManager();
-    this.connectionHandler = new paramConnectionHandler();
-    this.sessionUpdateHandler = new paramSessionUpdateHandler({});
+    this.sessionReader = new ParamSessionReader();
+    this.sessionManager = new ParamSessionManager();
+    this.connectionHandler = new ParamConnectionHandler();
+    this.sessionUpdateHandler = new ParamSessionUpdateHandler({});
 
     // Set ACP connection callbacks
     this.connection.onSessionUpdate = (data: SessionNotification) => {
@@ -211,7 +211,7 @@ export class paramAgentManager {
           // the webview can process independently of streaming state.
         }
       } catch (err) {
-        console.warn('[paramAgentManager] Rehydration routing failed:', err);
+        console.warn('[ParamAgentManager] Rehydration routing failed:', err);
       }
 
       // Default handling path
@@ -252,7 +252,7 @@ export class paramAgentManager {
           this.callbacks.onStreamChunk('');
         }
       } catch (err) {
-        console.warn('[paramAgentManager] onEndTurn callback error:', err);
+        console.warn('[ParamAgentManager] onEndTurn callback error:', err);
       }
     };
 
@@ -264,7 +264,7 @@ export class paramAgentManager {
         handleAuthenticateUpdate(data);
       } catch (err) {
         console.warn(
-          '[paramAgentManager] onAuthenticateUpdate callback error:',
+          '[ParamAgentManager] onAuthenticateUpdate callback error:',
           err,
         );
       }
@@ -291,7 +291,7 @@ export class paramAgentManager {
           });
         }
       } catch (err) {
-        console.warn('[paramAgentManager] onInitialized parse error:', err);
+        console.warn('[ParamAgentManager] onInitialized parse error:', err);
       }
     };
   }
@@ -306,7 +306,7 @@ export class paramAgentManager {
     workingDir: string,
     cliEntryPath: string,
     options?: AgentConnectOptions,
-  ): Promise<paramConnectionResult> {
+  ): Promise<ParamConnectionResult> {
     this.currentWorkingDir = workingDir;
     const res = await this.connectionHandler.connect(
       this.connection,
@@ -322,7 +322,7 @@ export class paramAgentManager {
     if (res.availableModels && res.availableModels.length > 0) {
       this.baselineAvailableModels = res.availableModels;
       console.log(
-        '[paramAgentManager] Emitting availableModels from connect():',
+        '[ParamAgentManager] Emitting availableModels from connect():',
         res.availableModels.map((m) => m.modelId),
       );
       if (this.callbacks.onAvailableModels) {
@@ -370,7 +370,7 @@ export class paramAgentManager {
       this.callbacks.onModeChanged?.(confirmed);
       return confirmed;
     } catch (err) {
-      console.error('[paramAgentManager] Failed to set mode:', err);
+      console.error('[ParamAgentManager] Failed to set mode:', err);
       throw err;
     }
   }
@@ -392,7 +392,7 @@ export class paramAgentManager {
       this.callbacks.onModelChanged?.(modelInfo);
       return modelInfo;
     } catch (err) {
-      console.error('[paramAgentManager] Failed to set model:', err);
+      console.error('[ParamAgentManager] Failed to set model:', err);
       throw err;
     }
   }
@@ -423,7 +423,7 @@ export class paramAgentManager {
 
       return sessionExists;
     } catch (error) {
-      console.warn('[paramAgentManager] Session validation failed:', error);
+      console.warn('[ParamAgentManager] Session validation failed:', error);
       // If we can't validate, assume session is invalid
       return false;
     }
@@ -437,21 +437,21 @@ export class paramAgentManager {
    */
   async getSessionList(): Promise<Array<Record<string, unknown>>> {
     console.log(
-      '[paramAgentManager] Getting session list with version-aware strategy',
+      '[ParamAgentManager] Getting session list with version-aware strategy',
     );
 
     try {
       console.log(
-        '[paramAgentManager] Attempting to get session list via ACP method',
+        '[ParamAgentManager] Attempting to get session list via ACP method',
       );
       const response = await this.connection.listSessions();
-      console.log('[paramAgentManager] ACP session list response:', response);
+      console.log('[ParamAgentManager] ACP session list response:', response);
 
       const res: unknown = response;
       const items = extractSessionListItems(res);
 
       console.log(
-        '[paramAgentManager] Sessions retrieved via ACP:',
+        '[ParamAgentManager] Sessions retrieved via ACP:',
         res,
         items.length,
       );
@@ -470,29 +470,29 @@ export class paramAgentManager {
         }));
 
         console.log(
-          '[paramAgentManager] Sessions retrieved via ACP:',
+          '[ParamAgentManager] Sessions retrieved via ACP:',
           sessions.length,
         );
         return sessions;
       }
     } catch (error) {
       console.warn(
-        '[paramAgentManager] ACP session list failed, falling back to file system method:',
+        '[ParamAgentManager] ACP session list failed, falling back to file system method:',
         error,
       );
     }
 
     // Always fall back to file system method
     try {
-      console.log('[paramAgentManager] Getting session list from file system');
+      console.log('[ParamAgentManager] Getting session list from file system');
       const sessions = await this.sessionReader.getAllSessions(undefined, true);
       console.log(
-        '[paramAgentManager] Session list from file system (all projects):',
+        '[ParamAgentManager] Session list from file system (all projects):',
         sessions.length,
       );
 
       const result = sessions.map(
-        (session: paramSession): Record<string, unknown> => ({
+        (session: ParamSession): Record<string, unknown> => ({
           id: session.sessionId,
           sessionId: session.sessionId,
           title: this.sessionReader.getSessionTitle(session),
@@ -507,13 +507,13 @@ export class paramAgentManager {
       );
 
       console.log(
-        '[paramAgentManager] Sessions retrieved from file system:',
+        '[ParamAgentManager] Sessions retrieved from file system:',
         result.length,
       );
       return result;
     } catch (error) {
       console.error(
-        '[paramAgentManager] Failed to get session list from file system:',
+        '[ParamAgentManager] Failed to get session list from file system:',
         error,
       );
       return [];
@@ -574,7 +574,7 @@ export class paramAgentManager {
 
       return { sessions: mapped, nextCursor: nextCursorNum, hasMore };
     } catch (error) {
-      console.warn('[paramAgentManager] Paged ACP session list failed:', error);
+      console.warn('[ParamAgentManager] Paged ACP session list failed:', error);
       // fall through to file system
     }
 
@@ -611,7 +611,7 @@ export class paramAgentManager {
       const hasMore = filtered.length > size;
       return { sessions, nextCursor: nextCursorVal, hasMore };
     } catch (error) {
-      console.error('[paramAgentManager] File system paged list failed:', error);
+      console.error('[ParamAgentManager] File system paged list failed:', error);
       return { sessions: [], hasMore: false };
     }
   }
@@ -630,7 +630,7 @@ export class paramAgentManager {
           (s) => s.sessionId === sessionId || s.id === sessionId,
         );
         console.log(
-          '[paramAgentManager] Session list item for filePath lookup:',
+          '[ParamAgentManager] Session list item for filePath lookup:',
           item,
         );
         if (
@@ -645,7 +645,7 @@ export class paramAgentManager {
           return messages;
         }
       } catch (e) {
-        console.warn('[paramAgentManager] JSONL read path lookup failed:', e);
+        console.warn('[ParamAgentManager] JSONL read path lookup failed:', e);
       }
 
       // Fallback: legacy JSON session files
@@ -665,7 +665,7 @@ export class paramAgentManager {
       );
     } catch (error) {
       console.error(
-        '[paramAgentManager] Failed to get session messages:',
+        '[ParamAgentManager] Failed to get session messages:',
         error,
       );
       return [];
@@ -700,7 +700,7 @@ export class paramAgentManager {
       }
       // Simple linear reconstruction: filter user/assistant and sort by timestamp
       console.log(
-        '[paramAgentManager] JSONL records read:',
+        '[ParamAgentManager] JSONL records read:',
         records.length,
         filePath,
       );
@@ -859,12 +859,12 @@ export class paramAgentManager {
       }
 
       console.log(
-        '[paramAgentManager] JSONL messages reconstructed:',
+        '[ParamAgentManager] JSONL messages reconstructed:',
         msgs.length,
       );
       return msgs;
     } catch (err) {
-      console.warn('[paramAgentManager] Failed to read JSONL messages:', err);
+      console.warn('[ParamAgentManager] Failed to read JSONL messages:', err);
       return [];
     }
   }
@@ -998,11 +998,11 @@ export class paramAgentManager {
       // Route upcoming session/update messages as discrete messages for replay
       this.rehydratingSessionId = sessionId;
       console.log(
-        '[paramAgentManager] Rehydration start for session:',
+        '[ParamAgentManager] Rehydration start for session:',
         sessionId,
       );
       console.log(
-        '[paramAgentManager] Attempting session/load via ACP for session:',
+        '[ParamAgentManager] Attempting session/load via ACP for session:',
         sessionId,
       );
       const response = await this.connection.loadSession(
@@ -1010,7 +1010,7 @@ export class paramAgentManager {
         cwdOverride,
       );
       console.log(
-        '[paramAgentManager] Session load succeeded. Response:',
+        '[ParamAgentManager] Session load succeeded. Response:',
         JSON.stringify(response).substring(0, 200),
       );
       this.applySessionStateFromResult(response);
@@ -1020,11 +1020,11 @@ export class paramAgentManager {
     } catch (error) {
       const errorMessage = getErrorMessage(error);
       console.error(
-        '[paramAgentManager] Session load via ACP failed for session:',
+        '[ParamAgentManager] Session load via ACP failed for session:',
         sessionId,
       );
-      console.error('[paramAgentManager] Error type:', error?.constructor?.name);
-      console.error('[paramAgentManager] Error message:', errorMessage);
+      console.error('[ParamAgentManager] Error type:', error?.constructor?.name);
+      console.error('[ParamAgentManager] Error message:', errorMessage);
 
       // Check if error is from ACP response
       if (error && typeof error === 'object') {
@@ -1035,23 +1035,23 @@ export class paramAgentManager {
           };
           if (acpError.error) {
             console.error(
-              '[paramAgentManager] ACP error code:',
+              '[ParamAgentManager] ACP error code:',
               acpError.error.code,
             );
             console.error(
-              '[paramAgentManager] ACP error message:',
+              '[ParamAgentManager] ACP error message:',
               acpError.error.message,
             );
           }
         } else {
-          console.error('[paramAgentManager] Non-ACPIf error details:', error);
+          console.error('[ParamAgentManager] Non-ACPIf error details:', error);
         }
       }
 
       throw error;
     } finally {
       // End rehydration routing regardless of outcome
-      console.log('[paramAgentManager] Rehydration end for session:', sessionId);
+      console.log('[ParamAgentManager] Rehydration end for session:', sessionId);
       this.rehydratingSessionId = null;
     }
   }
@@ -1065,22 +1065,22 @@ export class paramAgentManager {
    */
   async loadSession(sessionId: string): Promise<ChatMessage[] | null> {
     console.log(
-      '[paramAgentManager] Loading session with version-aware strategy:',
+      '[ParamAgentManager] Loading session with version-aware strategy:',
       sessionId,
     );
 
     try {
       console.log(
-        '[paramAgentManager] Attempting to load session via ACP method',
+        '[ParamAgentManager] Attempting to load session via ACP method',
       );
       await this.loadSessionViaAcp(sessionId);
-      console.log('[paramAgentManager] Session loaded successfully via ACP');
+      console.log('[ParamAgentManager] Session loaded successfully via ACP');
 
       // After loading via ACP, we still need to get messages from file system
       // In future, we might get them directly from the ACP response
     } catch (error) {
       console.warn(
-        '[paramAgentManager] ACP session load failed, falling back to file system method:',
+        '[ParamAgentManager] ACP session load failed, falling back to file system method:',
         error,
       );
     }
@@ -1088,16 +1088,16 @@ export class paramAgentManager {
     // Always fall back to file system method
     try {
       console.log(
-        '[paramAgentManager] Loading session messages from file system',
+        '[ParamAgentManager] Loading session messages from file system',
       );
       const messages = await this.loadSessionMessagesFromFile(sessionId);
       console.log(
-        '[paramAgentManager] Session messages loaded successfully from file system',
+        '[ParamAgentManager] Session messages loaded successfully from file system',
       );
       return messages;
     } catch (error) {
       console.error(
-        '[paramAgentManager] Failed to load session messages from file system:',
+        '[ParamAgentManager] Failed to load session messages from file system:',
         error,
       );
       return null;
@@ -1115,7 +1115,7 @@ export class paramAgentManager {
   ): Promise<ChatMessage[] | null> {
     try {
       console.log(
-        '[paramAgentManager] Loading session from file system:',
+        '[ParamAgentManager] Loading session from file system:',
         sessionId,
       );
 
@@ -1127,7 +1127,7 @@ export class paramAgentManager {
 
       if (!session) {
         console.log(
-          '[paramAgentManager] Session not found in file system:',
+          '[ParamAgentManager] Session not found in file system:',
           sessionId,
         );
         return null;
@@ -1143,7 +1143,7 @@ export class paramAgentManager {
       return messages;
     } catch (error) {
       console.error(
-        '[paramAgentManager] Session load from file system failed:',
+        '[ParamAgentManager] Session load from file system failed:',
         error,
       );
       throw error;
@@ -1166,7 +1166,7 @@ export class paramAgentManager {
     // Reuse existing session if present
     if (this.connection.currentSessionId) {
       console.log(
-        '[paramAgentManager] createNewSession: reusing existing session',
+        '[ParamAgentManager] createNewSession: reusing existing session',
         this.connection.currentSessionId,
       );
       return this.connection.currentSessionId;
@@ -1174,12 +1174,12 @@ export class paramAgentManager {
     // Deduplicate concurrent session/new attempts
     if (this.sessionCreateInFlight) {
       console.log(
-        '[paramAgentManager] createNewSession: session creation already in flight',
+        '[ParamAgentManager] createNewSession: session creation already in flight',
       );
       return this.sessionCreateInFlight;
     }
 
-    console.log('[paramAgentManager] Creating new session...');
+    console.log('[ParamAgentManager] Creating new session...');
 
     this.sessionCreateInFlight = (async () => {
       try {
@@ -1188,7 +1188,7 @@ export class paramAgentManager {
         try {
           newSessionResult = await this.connection.newSession(workingDir);
           console.log(
-            '[paramAgentManager] newSession returned:',
+            '[ParamAgentManager] newSession returned:',
             JSON.stringify(newSessionResult, null, 2),
           );
         } catch (err) {
@@ -1197,25 +1197,25 @@ export class paramAgentManager {
           if (requiresAuth) {
             if (!autoAuthenticate) {
               console.warn(
-                '[paramAgentManager] session/new requires authentication but auto-auth is disabled. Deferring until user logs in.',
+                '[ParamAgentManager] session/new requires authentication but auto-auth is disabled. Deferring until user logs in.',
               );
               throw err;
             }
             console.warn(
-              '[paramAgentManager] session/new requires authentication. Retrying with authenticate...',
+              '[ParamAgentManager] session/new requires authentication. Retrying with authenticate...',
             );
             try {
               // Let CLI handle authentication - it's the single source of truth
               await this.connection.authenticate(authMethod);
               console.log(
-                '[paramAgentManager] createNewSession Authentication successful. Retrying session/new...',
+                '[ParamAgentManager] createNewSession Authentication successful. Retrying session/new...',
               );
               // Add a slight delay to ensure auth state is settled
               await new Promise((resolve) => setTimeout(resolve, 300));
               newSessionResult = await this.connection.newSession(workingDir);
             } catch (reauthErr) {
               console.error(
-                '[paramAgentManager] Re-authentication failed:',
+                '[ParamAgentManager] Re-authentication failed:',
                 reauthErr,
               );
               throw reauthErr;
@@ -1229,7 +1229,7 @@ export class paramAgentManager {
 
         const newSessionId = this.connection.currentSessionId;
         console.log(
-          '[paramAgentManager] New session created with ID:',
+          '[ParamAgentManager] New session created with ID:',
           newSessionId,
         );
         return newSessionId;
@@ -1254,7 +1254,7 @@ export class paramAgentManager {
    * Cancel current prompt
    */
   async cancelCurrentPrompt(): Promise<void> {
-    console.log('[paramAgentManager] Cancelling current prompt');
+    console.log('[ParamAgentManager] Cancelling current prompt');
     await this.connection.cancelSession();
   }
 

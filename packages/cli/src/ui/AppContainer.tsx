@@ -36,13 +36,15 @@ import {
   ideContextStore,
   createDebugLogger,
   getErrorMessage,
-  getAllParamMdFilenames,
+  getAllGeminiMdFilenames,
   ShellExecutionService,
   Storage,
   SessionEndReason,
   SessionStartSource,
   type PermissionMode,
-} from '@param-code/param-code-core';
+  type ClaudeMarketplaceConfig,
+  type ExtensionSetting,
+} from '@agent-param/param-core';
 import { buildResumedHistoryItems } from './utils/resumeHistoryUtils.js';
 import { validateAuthMethod } from '../config/auth.js';
 import { loadHierarchicalParamMemory } from '../config/config.js';
@@ -70,7 +72,7 @@ import { computeWindowTitle } from '../utils/windowTitle.js';
 import { clearScreen } from '../utils/stdioHelpers.js';
 import { useTextBuffer } from './components/shared/text-buffer.js';
 import { useLogger } from './hooks/useLogger.js';
-import { useParamStream } from './hooks/useParamStream.js';
+import { useGeminiStream } from './hooks/useGeminiStream.js';
 import { useVim } from './hooks/vim.js';
 import { isBtwCommand } from './utils/commandUtils.js';
 import { type LoadedSettings, SettingScope } from '../config/settings.js';
@@ -165,7 +167,7 @@ export const AppContainer = (props: AppContainerProps) => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [embeddedShellFocused, setEmbeddedShellFocused] = useState(false);
 
-  const [geminiMdFileCount, setParamMdFileCount] = useState<number>(
+  const [geminiMdFileCount, setgeminiMdFileCount] = useState<number>(
     initializationResult.geminiMdFileCount,
   );
   const [shellModeActive, setShellModeActive] = useState(false);
@@ -195,15 +197,15 @@ export const AppContainer = (props: AppContainerProps) => {
   );
 
   extensionManager.setRequestChoicePlugin(
-    (marketplace) =>
+    (marketplace: ClaudeMarketplaceConfig) =>
       new Promise<string>((resolve, reject) => {
         addPluginChoiceRequest({
           marketplaceName: marketplace.name,
-          plugins: marketplace.plugins.map((p) => ({
+          plugins: marketplace.plugins.map((p: any) => ({
             name: p.name,
             description: p.description,
           })),
-          onSelect: (pluginName) => {
+          onSelect: (pluginName: string) => {
             resolve(pluginName);
           },
           onCancel: () => {
@@ -214,13 +216,13 @@ export const AppContainer = (props: AppContainerProps) => {
   );
 
   extensionManager.setRequestSetting(
-    (setting) =>
+    (setting: ExtensionSetting) =>
       new Promise<string>((resolve, reject) => {
         addSettingInputRequest({
           settingName: setting.name,
           settingDescription: setting.description,
           sensitive: setting.sensitive ?? false,
-          onSubmit: (value) => {
+          onSubmit: (value: string) => {
             resolve(value);
           },
           onCancel: () => {
@@ -627,7 +629,7 @@ export const AppContainer = (props: AppContainerProps) => {
     toggleVimEnabled,
     isProcessing,
     setIsProcessing,
-    setParamMdFileCount,
+    setgeminiMdFileCount,
     slashCommandActions,
     extensionsUpdateStateInternal,
     isConfigInitialized,
@@ -663,8 +665,8 @@ export const AppContainer = (props: AppContainerProps) => {
       );
 
       config.setUserMemory(memoryContent);
-      config.setParamMdFileCount(fileCount);
-      setParamMdFileCount(fileCount);
+      config.setGeminiMdFileCount(fileCount);
+      setgeminiMdFileCount(fileCount);
 
       historyManager.addItem(
         {
@@ -709,8 +711,8 @@ export const AppContainer = (props: AppContainerProps) => {
     handleApprovalModeChange,
     activePtyId,
     loopDetectionConfirmationRequest,
-  } = useParamStream(
-    config.getParamClient(),
+  } = useGeminiStream(
+    config.getGeminiClient(),
     historyManager.history,
     historyManager.addItem,
     config,
@@ -889,12 +891,12 @@ export const AppContainer = (props: AppContainerProps) => {
       ? Array.isArray(fromSettings)
         ? fromSettings
         : [fromSettings]
-      : getAllParamMdFilenames();
+      : getAllGeminiMdFilenames();
   }, [settings.merged.context?.fileName]);
   // Initial prompt handling
   const initialPrompt = useMemo(() => config.getQuestion(), [config]);
   const initialPromptSubmitted = useRef(false);
-  const geminiClient = config.getParamClient();
+  const geminiClient = config.getGeminiClient();
 
   useEffect(() => {
     if (activePtyId) {

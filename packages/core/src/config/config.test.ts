@@ -692,7 +692,7 @@ describe('Server Config (config.ts)', () => {
       });
       await config.initialize();
 
-      expect(paramLogger.prototype.logStartSessionEvent).toHaveBeenCalledOnce();
+      expect(ParamLogger.prototype.logStartSessionEvent).toHaveBeenCalledOnce();
     });
   });
 

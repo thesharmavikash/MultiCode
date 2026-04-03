@@ -347,7 +347,7 @@
               "type": "boolean",
               "default": true
             },
-            "respectparamIgnore": {
+            "respectParamIgnore": {
               "description": "Respect .paramignore files when searching",
               "type": "boolean",
               "default": true
@@ -586,7 +586,7 @@
           "additionalProperties": true
         },
         "runtimeOutputDir": {
-          "description": "Custom directory for runtime output (temp files, debug logs, session data, todos, etc.). Config files remain at ~/.param. Env var param_RUNTIME_DIR takes priority.",
+          "description": "Custom directory for runtime output (temp files, debug logs, session data, todos, etc.). Config files remain at ~/.param. Env var PARAM_RUNTIME_DIR takes priority.",
           "type": "string"
         },
         "tavilyApiKey": {

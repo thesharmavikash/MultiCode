@@ -4,7 +4,7 @@
   "description": "Param Core",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/paramLM/param-code.git"
+    "url": "git+https://github.com/thesharmavikash/MultiCode.git"
   },
   "type": "module",
   "main": "dist/index.js",

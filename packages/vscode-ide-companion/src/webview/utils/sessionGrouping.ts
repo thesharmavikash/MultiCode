@@ -6,5 +6,6 @@
  * Re-export session grouping utilities from webui for backward compatibility
  */
 
-export { groupSessionsByDate, getTimeAgo } from '@param-code/webui';
-export type { SessionGroup } from '@param-code/webui';
+export { groupSessionsByDate, getTimeAgo } from '@agent-param/webui';
+export type { SessionGroup } from '@agent-param/webui';
+

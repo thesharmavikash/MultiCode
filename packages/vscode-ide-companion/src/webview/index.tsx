@@ -9,7 +9,7 @@ import { App } from './App.js';
 import { VSCodePlatformProvider } from './context/VSCodePlatformProvider.js';
 
 // Import webui shared styles (CSS variables, component styles)
-import '@param-code/webui/styles.css';
+import '@agent-param/webui/styles.css';
 
 // VSCode-specific: Tailwind utilities + theme variables
 // eslint-disable-next-line import/no-internal-modules
@@ -26,3 +26,4 @@ if (container) {
     </VSCodePlatformProvider>,
   );
 }
+

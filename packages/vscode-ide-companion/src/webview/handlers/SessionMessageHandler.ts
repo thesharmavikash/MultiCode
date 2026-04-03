@@ -6,7 +6,7 @@
 
 import * as vscode from 'vscode';
 import { BaseMessageHandler } from './BaseMessageHandler.js';
-import type { ChatMessage } from '../../services/paramAgentManager.js';
+import type { ChatMessage } from '../../services/ParamAgentManager.js';
 import type { ImageAttachment } from '../../utils/imageSupport.js';
 import type { ApprovalModeValue } from '../../types/approvalModeValueTypes.js';
 import {
@@ -28,9 +28,9 @@ export class SessionMessageHandler extends BaseMessageHandler {
   canHandle(messageType: string): boolean {
     return [
       'sendMessage',
-      'newparamSession',
-      'switchparamSession',
-      'getparamSessions',
+      'newParamSession',
+      'switchParamSession',
+      'getParamSessions',
       'resumeSession',
       'cancelStreaming',
       // UI action: open a new chat tab (new WebviewPanel)
@@ -76,16 +76,16 @@ export class SessionMessageHandler extends BaseMessageHandler {
         );
         break;
 
-      case 'newparamSession':
-        await this.handleNewparamSession();
+      case 'newParamSession':
+        await this.handleNewParamSession();
         break;
 
-      case 'switchparamSession':
-        await this.handleSwitchparamSession((data?.sessionId as string) || '');
+      case 'switchParamSession':
+        await this.handleSwitchParamSession((data?.sessionId as string) || '');
         break;
 
-      case 'getparamSessions':
-        await this.handleGetparamSessions(
+      case 'getParamSessions':
+        await this.handleGetParamSessions(
           (data?.cursor as number | undefined) ?? undefined,
           (data?.size as number | undefined) ?? undefined,
         );
@@ -570,7 +570,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
   /**
    * Handle new param session request
    */
-  private async handleNewparamSession(): Promise<void> {
+  private async handleNewParamSession(): Promise<void> {
     try {
       console.log('[SessionMessageHandler] Creating new param session...');
 
@@ -628,7 +628,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
   /**
    * Handle switch param session request
    */
-  private async handleSwitchparamSession(sessionId: string): Promise<void> {
+  private async handleSwitchParamSession(sessionId: string): Promise<void> {
     try {
       console.log('[SessionMessageHandler] Switching to session:', sessionId);
 
@@ -644,7 +644,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
             await this.agentManager.getSessionMessages(sessionId);
           this.currentConversationId = sessionId;
           this.sendToWebView({
-            type: 'paramSessionSwitched',
+            type: 'ParamSessionSwitched',
             data: { sessionId, messages },
           });
           vscode.window.showInformationMessage(
@@ -681,7 +681,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
         // Set current id and clear UI first so replayed updates append afterwards
         this.currentConversationId = sessionId;
         this.sendToWebView({
-          type: 'paramSessionSwitched',
+          type: 'ParamSessionSwitched',
           data: { sessionId, messages: [], session: sessionDetails },
         });
 
@@ -732,7 +732,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
             this.currentConversationId = newAcpSessionId;
 
             this.sendToWebView({
-              type: 'paramSessionSwitched',
+              type: 'ParamSessionSwitched',
               data: { sessionId, messages, session: sessionDetails },
             });
 
@@ -776,7 +776,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
           // Offline view only
           this.currentConversationId = sessionId;
           this.sendToWebView({
-            type: 'paramSessionSwitched',
+            type: 'ParamSessionSwitched',
             data: { sessionId, messages, session: sessionDetails },
           });
           vscode.window.showWarningMessage(
@@ -813,7 +813,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
   /**
    * Handle get param sessions request
    */
-  private async handleGetparamSessions(
+  private async handleGetParamSessions(
     cursor?: number,
     size?: number,
   ): Promise<void> {
@@ -825,7 +825,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
       });
       const append = typeof cursor === 'number';
       this.sendToWebView({
-        type: 'paramSessionList',
+        type: 'ParamSessionList',
         data: {
           sessions: page.sessions,
           nextCursor: page.nextCursor,
@@ -897,7 +897,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
             await this.agentManager.getSessionMessages(sessionId);
           this.currentConversationId = sessionId;
           this.sendToWebView({
-            type: 'paramSessionSwitched',
+            type: 'ParamSessionSwitched',
             data: { sessionId, messages },
           });
           vscode.window.showInformationMessage(
@@ -914,7 +914,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
         // Pre-clear UI so replayed updates append afterwards
         this.currentConversationId = sessionId;
         this.sendToWebView({
-          type: 'paramSessionSwitched',
+          type: 'ParamSessionSwitched',
           data: { sessionId, messages: [] },
         });
 
@@ -924,7 +924,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
         this.isTitleSet = false;
 
         // Successfully loaded session, return early to avoid fallback logic
-        await this.handleGetparamSessions();
+        await this.handleGetParamSessions();
         return;
       } catch (acpError) {
         // Check for authentication/session expiration errors
@@ -943,7 +943,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
         }
       }
 
-      await this.handleGetparamSessions();
+      await this.handleGetParamSessions();
     } catch (error) {
       console.error('[SessionMessageHandler] Failed to resume session:', error);
 

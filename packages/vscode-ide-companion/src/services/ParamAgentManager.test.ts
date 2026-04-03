@@ -7,8 +7,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   extractSessionListItems,
-  QwenAgentManager,
-} from './qwenAgentManager.js';
+  ParamAgentManager,
+} from './ParamAgentManager.js';
 import type { ModelInfo } from '@agentclientprotocol/sdk';
 
 vi.mock('vscode', () => ({
@@ -59,9 +59,9 @@ describe('extractSessionListItems', () => {
   });
 });
 
-describe('QwenAgentManager.setModelFromUi', () => {
+describe('ParamAgentManager.setModelFromUi', () => {
   it('emits the selected model metadata from the available models list', async () => {
-    const manager = new QwenAgentManager();
+    const manager = new ParamAgentManager();
     const onModelChanged = vi.fn();
     manager.onModelChanged(onModelChanged);
 
@@ -103,3 +103,4 @@ describe('QwenAgentManager.setModelFromUi', () => {
     expect(onModelChanged).toHaveBeenCalledWith(selectedModel);
   });
 });
+

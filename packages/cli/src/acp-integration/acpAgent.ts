@@ -8,9 +8,9 @@ import {
   APPROVAL_MODE_INFO,
   APPROVAL_MODES,
   AuthType,
-  clearCachedCredentialFile,
+  clearParamCredentials,
   createDebugLogger,
-  paramOAuth2Event,
+  ParamOAuth2Event,
   paramOAuth2Events,
   MCPServerConfig,
   SessionService,
@@ -186,10 +186,10 @@ class paramAgent implements Agent {
     };
 
     if (method === AuthType.PARAM_OAUTH) {
-      paramOAuth2Events.once(paramOAuth2Event.AuthUri, authUriHandler);
+      paramOAuth2Events.once(ParamOAuth2Event.AuthUri, authUriHandler);
     }
 
-    await clearCachedCredentialFile();
+    await clearParamCredentials();
     try {
       await this.config.refreshAuth(method);
       this.settings.setValue(
@@ -199,7 +199,7 @@ class paramAgent implements Agent {
       );
     } finally {
       if (method === AuthType.PARAM_OAUTH) {
-        paramOAuth2Events.off(paramOAuth2Event.AuthUri, authUriHandler);
+        paramOAuth2Events.off(ParamOAuth2Event.AuthUri, authUriHandler);
       }
     }
   }

@@ -5,7 +5,7 @@
  */
 
 import * as vscode from 'vscode';
-import type { File } from '@param-code/param-code-core/src/ide/types.js';
+import type { File } from '@agent-param/param-core/src/ide/types.js';
 import { MAX_FILES, MAX_SELECTED_TEXT_LENGTH } from './constants.js';
 import {
   deactivateCurrentActiveFile,
@@ -117,3 +117,4 @@ export function updateNotebookCellSelection(
     file.selectedText = undefined;
   }
 }
+

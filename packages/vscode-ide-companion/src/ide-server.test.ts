@@ -38,7 +38,7 @@ vi.mock('node:os', async (importOriginal) => {
   };
 });
 
-vi.mock('@qwen-code/qwen-code-core/src/ide/detect-ide.js', () => ({
+vi.mock('@agent-param/param-core/src/ide/detect-ide.js', () => ({
   detectIdeFromEnv: vi.fn(() => ({ name: 'vscode', displayName: 'VS Code' })),
 }));
 
@@ -62,7 +62,7 @@ const vscodeMock = vi.hoisted(() => ({
 
 vi.mock('vscode', () => vscodeMock);
 
-vi.mock('@qwen-code/qwen-code-core/src/ide/detect-ide.js', () => ({
+vi.mock('@agent-param/param-core/src/ide/detect-ide.js', () => ({
   detectIdeFromEnv: vi.fn(() => ({
     name: 'vscode',
     displayName: 'VS Code',
@@ -534,3 +534,4 @@ describe('IDEServer HTTP endpoints', () => {
     expect(response.statusCode).toBe(400);
   });
 });
+

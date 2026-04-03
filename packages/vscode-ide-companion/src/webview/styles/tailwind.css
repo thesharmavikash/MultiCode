@@ -6,7 +6,7 @@
  * VSCode IDE Companion - Tailwind CSS
  * 
  * Only Tailwind directives and minimal VSCode-specific utilities.
- * Component styles are in @param-code/webui package.
+ * Component styles are in @agent-param/webui package.
  */
 
 @tailwind base;
@@ -25,3 +25,4 @@
     overflow: hidden;
   }
 }
+

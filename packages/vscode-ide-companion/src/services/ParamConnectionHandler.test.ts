@@ -12,11 +12,11 @@ vi.mock('vscode', () => ({
   },
 }));
 
-import { QwenConnectionHandler } from './qwenConnectionHandler.js';
+import { ParamConnectionHandler } from './ParamConnectionHandler.js';
 import type { AcpConnection } from './acpConnection.js';
 
-describe('QwenConnectionHandler', () => {
-  let handler: QwenConnectionHandler;
+describe('ParamConnectionHandler', () => {
+  let handler: ParamConnectionHandler;
   let mockConnection: AcpConnection;
   let mockGetConfiguration: ReturnType<typeof vi.fn>;
 
@@ -27,7 +27,7 @@ describe('QwenConnectionHandler', () => {
     >;
     mockGetConfiguration.mockReset();
 
-    handler = new QwenConnectionHandler();
+    handler = new ParamConnectionHandler();
     mockConnection = {
       connect: vi.fn().mockResolvedValue(undefined),
       newSession: vi.fn().mockResolvedValue({ sessionId: 'test-session' }),
@@ -134,3 +134,4 @@ describe('QwenConnectionHandler', () => {
     });
   });
 });
+

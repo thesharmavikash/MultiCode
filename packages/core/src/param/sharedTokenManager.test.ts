@@ -21,6 +21,7 @@ import type {
   TokenRefreshData,
   ErrorData,
 } from './paramOAuth2.js';
+import { PARAM_OAUTH_CONFIG } from './paramOAuth2.js';
 
 // Mock external dependencies
 vi.mock('node:fs', () => ({
@@ -80,6 +81,7 @@ function createMockParamClient(
       credentials = { ...credentials, ...creds };
     }),
     getCredentials: vi.fn(() => credentials),
+    getProviderConfig: vi.fn(() => PARAM_OAUTH_CONFIG),
     getAccessToken: vi.fn(),
     requestDeviceAuthorization: vi.fn(),
     pollDeviceToken: vi.fn(),

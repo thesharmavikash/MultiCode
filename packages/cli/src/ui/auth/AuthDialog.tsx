@@ -114,21 +114,21 @@ export function AuthDialog(): React.JSX.Element {
       description: t(
         'Free \u00B7 Up to 1,000 requests/day \u00B7 Param latest models',
       ),
-      value: AuthType.PARAM_OAUTH as MainOption,
+      value: AuthType.PARAM_OAUTH as any,
     },
     {
       key: AuthType.ANTHROPIC_OAUTH,
       title: t('Anthropic (Claude) OAuth'),
       label: t('Anthropic (Claude) OAuth'),
       description: t('Official Anthropic Authentication'),
-      value: AuthType.ANTHROPIC_OAUTH,
+      value: AuthType.ANTHROPIC_OAUTH as any,
     },
     {
       key: AuthType.OPENAI_OAUTH,
       title: t('OpenAI OAuth'),
       label: t('OpenAI OAuth'),
       description: t('Official OpenAI Authentication'),
-      value: AuthType.OPENAI_OAUTH,
+      value: AuthType.OPENAI_OAUTH as any,
     },
     {
       key: 'CODING_PLAN',

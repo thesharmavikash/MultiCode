@@ -7,7 +7,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useVSCode } from './useVSCode.js';
 import type { Conversation } from '../../services/conversationStore.js';
-import type { PermissionOption, PermissionToolCall } from '@param-code/webui';
+import type { PermissionOption, PermissionToolCall } from '@agent-param/webui';
 import type {
   ToolCallUpdate,
   UsageStatsPayload,
@@ -34,7 +34,7 @@ interface UseWebViewMessagesProps {
   // Session management
   sessionManagement: {
     currentSessionId: string | null;
-    setparamSessions: (
+    setParamSessions: (
       sessions:
         | Array<Record<string, unknown>>
         | ((
@@ -821,14 +821,14 @@ export const useWebViewMessages = ({
           break;
         }
 
-        case 'paramSessionList': {
+        case 'ParamSessionList': {
           const sessions =
             (message.data.sessions as Array<Record<string, unknown>>) || [];
           const append = Boolean(message.data.append);
           const nextCursor = message.data.nextCursor as number | undefined;
           const hasMore = Boolean(message.data.hasMore);
 
-          handlers.sessionManagement.setparamSessions(
+          handlers.sessionManagement.setParamSessions(
             (prev: Array<Record<string, unknown>>) =>
               append ? [...prev, ...sessions] : sessions,
           );
@@ -857,7 +857,7 @@ export const useWebViewMessages = ({
           break;
         }
 
-        case 'paramSessionSwitched':
+        case 'ParamSessionSwitched':
           handlers.sessionManagement.setShowSessionSelector(false);
           if (message.data.sessionId) {
             handlers.sessionManagement.setCurrentSessionId(
@@ -1047,3 +1047,4 @@ export const useWebViewMessages = ({
     return () => window.removeEventListener('message', handleMessage);
   }, [handleMessage, vscode]);
 };
+

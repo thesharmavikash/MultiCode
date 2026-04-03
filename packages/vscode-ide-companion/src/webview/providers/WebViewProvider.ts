@@ -5,7 +5,7 @@
  */
 
 import * as vscode from 'vscode';
-import { paramAgentManager } from '../../services/paramAgentManager.js';
+import { ParamAgentManager } from '../../services/ParamAgentManager.js';
 import { ConversationStore } from '../../services/conversationStore.js';
 import type {
   RequestPermissionRequest,
@@ -28,7 +28,7 @@ import { getErrorMessage } from '../../utils/errorMessage.js';
 export class WebViewProvider {
   private panelManager: PanelManager;
   private messageHandler: MessageHandler;
-  private agentManager: paramAgentManager;
+  private agentManager: ParamAgentManager;
   private conversationStore: ConversationStore;
   private disposables: vscode.Disposable[] = [];
   private agentInitialized = false; // Track if agent has been initialized
@@ -62,7 +62,7 @@ export class WebViewProvider {
     private context: vscode.ExtensionContext,
     private extensionUri: vscode.Uri,
   ) {
-    this.agentManager = new paramAgentManager();
+    this.agentManager = new ParamAgentManager();
     this.conversationStore = new ConversationStore(context);
     this.panelManager = new PanelManager(extensionUri, () => {
       // Panel dispose callback — unblock any pending ACP Promises
@@ -218,7 +218,7 @@ export class WebViewProvider {
       });
     });
 
-    // Note: Tool call updates are handled in handleSessionUpdate within paramAgentManager
+    // Note: Tool call updates are handled in handleSessionUpdate within ParamAgentManager
     // and sent via onStreamChunk callback
     this.agentManager.onToolCall((update) => {
       // Always surface tool calls; they are part of the live assistant flow.
@@ -1201,7 +1201,7 @@ export class WebViewProvider {
    * Context-aware handler for the "New Chat" action (openNewChatTab message).
    *
    * - View host (sidebar / secondary bar): resets the conversation in-place by
-   *   routing to the newparamSession handler (includes auth checks and UI clearing).
+   *   routing to the newParamSession handler (includes auth checks and UI clearing).
    * - Editor tab: returns false so the message falls through to
    *   SessionMessageHandler which opens a brand-new editor tab.
    *
@@ -1214,7 +1214,7 @@ export class WebViewProvider {
     if (message.type !== 'openNewChatTab' || !this.isViewHost) {
       return false;
     }
-    void this.messageHandler.route({ type: 'newparamSession', data: {} });
+    void this.messageHandler.route({ type: 'newParamSession', data: {} });
     return true;
   }
 

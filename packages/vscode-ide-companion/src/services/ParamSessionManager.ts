@@ -8,8 +8,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import * as crypto from 'crypto';
-import { getProjectHash } from '@param-code/param-code-core/src/utils/paths.js';
-import type { paramSession } from './paramSessionReader.js';
+import { getProjectHash } from '@agent-param/param-core/src/utils/paths.js';
+import type { ParamSession } from './ParamSessionReader.js';
 
 /**
  * param Session Manager
@@ -20,7 +20,7 @@ import type { paramSession } from './paramSessionReader.js';
  * This class is primarily used as a fallback mechanism for loading sessions
  * when ACP methods are unavailable or fail.
  */
-export class paramSessionManager {
+export class ParamSessionManager {
   private paramDir: string;
 
   constructor() {
@@ -53,24 +53,24 @@ export class paramSessionManager {
   async loadSession(
     sessionId: string,
     workingDir: string,
-  ): Promise<paramSession | null> {
+  ): Promise<ParamSession | null> {
     try {
       const sessionDir = this.getSessionDir(workingDir);
       const filename = `session-${sessionId}.json`;
       const filePath = path.join(sessionDir, filename);
 
       if (!fs.existsSync(filePath)) {
-        console.log(`[paramSessionManager] Session file not found: ${filePath}`);
+        console.log(`[ParamSessionManager] Session file not found: ${filePath}`);
         return null;
       }
 
       const content = fs.readFileSync(filePath, 'utf-8');
-      const session = JSON.parse(content) as paramSession;
+      const session = JSON.parse(content) as ParamSession;
 
-      console.log(`[paramSessionManager] Session loaded: ${filePath}`);
+      console.log(`[ParamSessionManager] Session loaded: ${filePath}`);
       return session;
     } catch (error) {
-      console.error('[paramSessionManager] Failed to load session:', error);
+      console.error('[ParamSessionManager] Failed to load session:', error);
       return null;
     }
   }
@@ -81,7 +81,7 @@ export class paramSessionManager {
    * @param workingDir - Current working directory
    * @returns Array of session objects
    */
-  async listSessions(workingDir: string): Promise<paramSession[]> {
+  async listSessions(workingDir: string): Promise<ParamSession[]> {
     try {
       const sessionDir = this.getSessionDir(workingDir);
 
@@ -95,16 +95,16 @@ export class paramSessionManager {
           (file) => file.startsWith('session-') && file.endsWith('.json'),
         );
 
-      const sessions: paramSession[] = [];
+      const sessions: ParamSession[] = [];
       for (const file of files) {
         try {
           const filePath = path.join(sessionDir, file);
           const content = fs.readFileSync(filePath, 'utf-8');
-          const session = JSON.parse(content) as paramSession;
+          const session = JSON.parse(content) as ParamSession;
           sessions.push(session);
         } catch (error) {
           console.error(
-            `[paramSessionManager] Failed to read session file ${file}:`,
+            `[ParamSessionManager] Failed to read session file ${file}:`,
             error,
           );
         }
@@ -118,7 +118,7 @@ export class paramSessionManager {
 
       return sessions;
     } catch (error) {
-      console.error('[paramSessionManager] Failed to list sessions:', error);
+      console.error('[ParamSessionManager] Failed to list sessions:', error);
       return [];
     }
   }
@@ -138,14 +138,15 @@ export class paramSessionManager {
 
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
-        console.log(`[paramSessionManager] Session deleted: ${filePath}`);
+        console.log(`[ParamSessionManager] Session deleted: ${filePath}`);
         return true;
       }
 
       return false;
     } catch (error) {
-      console.error('[paramSessionManager] Failed to delete session:', error);
+      console.error('[ParamSessionManager] Failed to delete session:', error);
       return false;
     }
   }
 }
+

@@ -4,14 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 /* eslint-env node */
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('tailwindcss').Config} */
 export default {
   // Use webui preset for shared theme configuration
-  presets: [require('@param-code/webui/tailwind.preset')],
+  presets: [require(path.resolve(__dirname, '../webui/tailwind.preset.cjs'))],
   content: [
     './src/webview/**/**/*.{js,jsx,ts,tsx}',
     // Include webui components to prevent Tailwind JIT from tree-shaking their classes
@@ -72,3 +77,4 @@ export default {
   },
   plugins: [],
 };
+

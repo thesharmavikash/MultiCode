@@ -6,7 +6,7 @@
 
 import type * as vscode from 'vscode';
 import type { IMessageHandler } from './BaseMessageHandler.js';
-import type { paramAgentManager } from '../../services/paramAgentManager.js';
+import type { ParamAgentManager } from '../../services/ParamAgentManager.js';
 import type { ConversationStore } from '../../services/conversationStore.js';
 import type {
   PermissionResponseMessage,
@@ -35,7 +35,7 @@ export class MessageRouter {
     | null = null;
 
   constructor(
-    agentManager: paramAgentManager,
+    agentManager: ParamAgentManager,
     conversationStore: ConversationStore,
     currentConversationId: string | null,
     sendToWebView: (message: unknown) => void,

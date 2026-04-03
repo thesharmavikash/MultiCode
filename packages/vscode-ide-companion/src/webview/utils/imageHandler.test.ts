@@ -26,9 +26,9 @@ vi.mock('fs/promises', () => ({
   unlink: mockUnlink,
 }));
 
-vi.mock('@qwen-code/qwen-code-core', async (importOriginal) => {
+vi.mock('@agent-param/param-core', async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import('@qwen-code/qwen-code-core')>();
+    await importOriginal<typeof import('@agent-param/param-core')>();
   return {
     ...actual,
     Storage: { getGlobalTempDir: () => '/mock/tmp' },
@@ -217,3 +217,4 @@ describe('pathEscaping', () => {
     expect(unescapePath(escapePath(originalPath))).toBe(originalPath);
   });
 });
+

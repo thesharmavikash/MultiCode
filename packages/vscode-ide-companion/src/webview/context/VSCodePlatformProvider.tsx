@@ -9,8 +9,8 @@
 
 import { useMemo, useCallback, useEffect, useRef } from 'react';
 import type { FC, ReactNode } from 'react';
-import { PlatformProvider } from '@param-code/webui';
-import type { PlatformContextValue } from '@param-code/webui';
+import { PlatformProvider } from '@agent-param/webui';
+import type { PlatformContextValue } from '@agent-param/webui';
 import { useVSCode } from '../hooks/useVSCode.js';
 import { generateIconUrl } from '../utils/resourceUrl.js';
 
@@ -169,3 +169,4 @@ export const VSCodePlatformProvider: FC<VSCodePlatformProviderProps> = ({
     </PlatformProvider>
   );
 };
+

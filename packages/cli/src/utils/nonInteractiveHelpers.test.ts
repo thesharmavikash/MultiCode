@@ -542,7 +542,7 @@ describe('buildSystemMessage', () => {
       model: 'test-model',
       permission_mode: 'auto',
       slash_commands: ['commit', 'compress', 'init', 'summary'],
-      qwen_code_version: '1.0.0',
+      param_code_version: '1.0.0',
       agents: [],
     });
   });
@@ -592,7 +592,7 @@ describe('buildSystemMessage', () => {
       ['init', 'summary'],
     );
 
-    expect(result.qwen_code_version).toBe('unknown');
+    expect(result.param_code_version).toBe('unknown');
   });
 
   it('should only include allowed built-in commands and all file commands', async () => {

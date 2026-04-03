@@ -53,7 +53,7 @@ export interface UsageStatsPayload {
   tokenLimit?: number | null;
 }
 
-export interface paramAgentCallbacks {
+export interface ParamAgentCallbacks {
   onMessage?: (message: ChatMessage) => void;
   onStreamChunk?: (chunk: string) => void;
   onThoughtChunk?: (chunk: string) => void;

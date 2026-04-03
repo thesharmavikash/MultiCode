@@ -8,9 +8,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import * as readline from 'readline';
-import { getProjectHash } from '@param-code/param-code-core/src/utils/paths.js';
+import { getProjectHash } from '@agent-param/param-core/src/utils/paths.js';
 
-export interface paramMessage {
+export interface ParamMessage {
   id: string;
   timestamp: string;
   type: 'user' | 'param';
@@ -27,19 +27,19 @@ export interface paramMessage {
   model?: string;
 }
 
-export interface paramSession {
+export interface ParamSession {
   sessionId: string;
   projectHash: string;
   startTime: string;
   lastUpdated: string;
-  messages: paramMessage[];
+  messages: ParamMessage[];
   filePath?: string;
   messageCount?: number;
   firstUserText?: string;
   cwd?: string;
 }
 
-export class paramSessionReader {
+export class ParamSessionReader {
   private paramDir: string;
 
   constructor() {
@@ -52,9 +52,9 @@ export class paramSessionReader {
   async getAllSessions(
     workingDir?: string,
     allProjects: boolean = false,
-  ): Promise<paramSession[]> {
+  ): Promise<ParamSession[]> {
     try {
-      const sessions: paramSession[] = [];
+      const sessions: ParamSession[] = [];
 
       if (!allProjects && workingDir) {
         // Current project only
@@ -66,7 +66,7 @@ export class paramSessionReader {
         // All projects
         const tmpDir = path.join(this.paramDir, 'tmp');
         if (!fs.existsSync(tmpDir)) {
-          console.log('[paramSessionReader] Tmp directory not found:', tmpDir);
+          console.log('[ParamSessionReader] Tmp directory not found:', tmpDir);
           return [];
         }
 
@@ -86,7 +86,7 @@ export class paramSessionReader {
 
       return sessions;
     } catch (error) {
-      console.error('[paramSessionReader] Failed to get sessions:', error);
+      console.error('[ParamSessionReader] Failed to get sessions:', error);
       return [];
     }
   }
@@ -94,8 +94,8 @@ export class paramSessionReader {
   /**
    * Read all sessions from specified directory
    */
-  private async readSessionsFromDir(chatsDir: string): Promise<paramSession[]> {
-    const sessions: paramSession[] = [];
+  private async readSessionsFromDir(chatsDir: string): Promise<ParamSession[]> {
+    const sessions: ParamSession[] = [];
 
     if (!fs.existsSync(chatsDir)) {
       return sessions;
@@ -115,12 +115,12 @@ export class paramSessionReader {
       const filePath = path.join(chatsDir, file);
       try {
         const content = fs.readFileSync(filePath, 'utf-8');
-        const session = JSON.parse(content) as paramSession;
+        const session = JSON.parse(content) as ParamSession;
         session.filePath = filePath;
         sessions.push(session);
       } catch (error) {
         console.error(
-          '[paramSessionReader] Failed to read session file:',
+          '[ParamSessionReader] Failed to read session file:',
           filePath,
           error,
         );
@@ -137,7 +137,7 @@ export class paramSessionReader {
         }
       } catch (error) {
         console.error(
-          '[paramSessionReader] Failed to read JSONL session file:',
+          '[ParamSessionReader] Failed to read JSONL session file:',
           filePath,
           error,
         );
@@ -153,7 +153,7 @@ export class paramSessionReader {
   async getSession(
     sessionId: string,
     _workingDir?: string,
-  ): Promise<paramSession | null> {
+  ): Promise<ParamSession | null> {
     // First try to find in all projects
     const sessions = await this.getAllSessions(undefined, true);
     const found = sessions.find((s) => s.sessionId === sessionId);
@@ -180,7 +180,7 @@ export class paramSessionReader {
   /**
    * Get session title (based on first user message)
    */
-  getSessionTitle(session: paramSession): string {
+  getSessionTitle(session: ParamSession): string {
     // Prefer cached prompt text to avoid loading messages for JSONL sessions
     if (session.firstUserText) {
       return (
@@ -207,7 +207,7 @@ export class paramSessionReader {
   private async readJsonlSession(
     filePath: string,
     includeMessages: boolean,
-  ): Promise<paramSession | null> {
+  ): Promise<ParamSession | null> {
     try {
       if (!fs.existsSync(filePath)) {
         return null;
@@ -220,7 +220,7 @@ export class paramSessionReader {
         crlfDelay: Infinity,
       });
 
-      const messages: paramMessage[] = [];
+      const messages: ParamMessage[] = [];
       const seenUuids = new Set<string>();
       let sessionId: string | undefined;
       let startTime: string | undefined;
@@ -297,7 +297,7 @@ export class paramSessionReader {
       };
     } catch (error) {
       console.error(
-        '[paramSessionReader] Failed to parse JSONL session:',
+        '[ParamSessionReader] Failed to parse JSONL session:',
         error,
       );
       return null;
@@ -346,8 +346,9 @@ export class paramSessionReader {
       }
       return false;
     } catch (error) {
-      console.error('[paramSessionReader] Failed to delete session:', error);
+      console.error('[ParamSessionReader] Failed to delete session:', error);
       return false;
     }
   }
 }
+

@@ -9,7 +9,7 @@ import * as fsp from 'fs/promises';
 import * as path from 'path';
 import { randomUUID } from 'node:crypto';
 import type { ContentBlock } from '@agentclientprotocol/sdk';
-import { Storage } from '@param-code/param-code-core';
+import { Storage } from '@agent-param/param-core';
 import type {
   ImageAttachment,
   SavedImageAttachment,
@@ -259,3 +259,4 @@ export function createImagePathResolver({
     });
   };
 }
+

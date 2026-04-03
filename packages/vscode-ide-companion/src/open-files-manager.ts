@@ -8,7 +8,7 @@ import * as vscode from 'vscode';
 import type {
   File,
   IdeContext,
-} from '@param-code/param-code-core/src/ide/types.js';
+} from '@agent-param/param-core/src/ide/types.js';
 import {
   isFileUri,
   isNotebookFileUri,
@@ -213,3 +213,4 @@ export class OpenFilesManager {
     };
   }
 }
+
