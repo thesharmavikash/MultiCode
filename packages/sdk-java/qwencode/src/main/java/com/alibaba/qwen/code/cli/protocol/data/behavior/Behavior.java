@@ -1,4 +1,4 @@
-package com.alibaba.qwen.code.cli.protocol.data.behavior;
+package com.alibaba.param.code.cli.protocol.data.behavior;
 
 import com.alibaba.fastjson2.annotation.JSONType;
 

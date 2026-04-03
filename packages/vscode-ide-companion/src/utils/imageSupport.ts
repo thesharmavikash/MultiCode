@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { isSupportedImageMimeType } from '@qwen-code/qwen-code-core/src/utils/request-tokenizer/supportedImageFormats.js';
+import { isSupportedImageMimeType } from '@param-code/param-code-core/src/utils/request-tokenizer/supportedImageFormats.js';
 
 // ---------- Types ----------
 

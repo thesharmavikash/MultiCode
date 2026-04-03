@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
- * Qwen Connection Handler
+ * param Connection Handler
  *
- * Handles Qwen Agent connection establishment, authentication, and session creation
+ * Handles param Agent connection establishment, authentication, and session creation
  */
 
 import * as vscode from 'vscode';
@@ -23,7 +23,7 @@ import { getErrorMessage } from '../utils/errorMessage.js';
 import type { ModelInfo } from '@agentclientprotocol/sdk';
 import type { ApprovalModeValue } from '../types/approvalModeValueTypes.js';
 
-export interface QwenConnectionResult {
+export interface paramConnectionResult {
   sessionCreated: boolean;
   requiresAuth: boolean;
   modelInfo?: ModelInfo;
@@ -37,12 +37,12 @@ export interface QwenConnectionResult {
 }
 
 /**
- * Qwen Connection Handler class
+ * param Connection Handler class
  * Handles connection, authentication, and session initialization
  */
-export class QwenConnectionHandler {
+export class paramConnectionHandler {
   /**
-   * Connect to Qwen service and establish session
+   * Connect to param service and establish session
    *
    * @param connection - ACP connection instance
    * @param workingDir - Working directory
@@ -55,9 +55,9 @@ export class QwenConnectionHandler {
     options?: {
       autoAuthenticate?: boolean;
     },
-  ): Promise<QwenConnectionResult> {
+  ): Promise<paramConnectionResult> {
     const connectId = Date.now();
-    console.log(`[QwenAgentManager] 🚀 CONNECT() CALLED - ID: ${connectId}`);
+    console.log(`[paramAgentManager] 🚀 CONNECT() CALLED - ID: ${connectId}`);
     const autoAuthenticate = options?.autoAuthenticate ?? true;
     let sessionCreated = false;
     let requiresAuth = false;
@@ -80,7 +80,7 @@ export class QwenConnectionHandler {
     if (proxyUrl) {
       extraArgs.push('--proxy', proxyUrl);
       console.log(
-        '[QwenAgentManager] Using proxy from VSCode settings:',
+        '[paramAgentManager] Using proxy from VSCode settings:',
         proxyUrl,
       );
     }
@@ -96,12 +96,12 @@ export class QwenConnectionHandler {
     // Create new session if unable to restore
     if (!sessionRestored) {
       console.log(
-        '[QwenAgentManager] no sessionRestored, Creating new session...',
+        '[paramAgentManager] no sessionRestored, Creating new session...',
       );
 
       try {
         console.log(
-          '[QwenAgentManager] Creating new session (letting CLI handle authentication)...',
+          '[paramAgentManager] Creating new session (letting CLI handle authentication)...',
         );
         const newSessionResult = await this.newSessionWithRetry(
           connection,
@@ -121,7 +121,7 @@ export class QwenConnectionHandler {
         ) {
           availableModels = modelState.availableModels;
           console.log(
-            '[QwenAgentManager] Extracted availableModels from session/new:',
+            '[paramAgentManager] Extracted availableModels from session/new:',
             availableModels.map((m) => m.modelId),
           );
         }
@@ -129,7 +129,7 @@ export class QwenConnectionHandler {
         currentModeId = modeState?.currentModeId;
         availableModes = modeState?.availableModes;
 
-        console.log('[QwenAgentManager] New session created successfully');
+        console.log('[paramAgentManager] New session created successfully');
         sessionCreated = true;
       } catch (sessionError) {
         const needsAuth =
@@ -138,13 +138,13 @@ export class QwenConnectionHandler {
         if (needsAuth) {
           requiresAuth = true;
           console.log(
-            '[QwenAgentManager] Session creation requires authentication; waiting for user-triggered login.',
+            '[paramAgentManager] Session creation requires authentication; waiting for user-triggered login.',
           );
         } else {
           console.log(
             `\n⚠️ [SESSION FAILED] newSessionWithRetry threw error\n`,
           );
-          console.log(`[QwenAgentManager] Error details:`, sessionError);
+          console.log(`[paramAgentManager] Error details:`, sessionError);
           throw sessionError;
         }
       }
@@ -153,7 +153,7 @@ export class QwenConnectionHandler {
     }
 
     console.log(`\n========================================`);
-    console.log(`[QwenAgentManager] ✅ CONNECT() COMPLETED SUCCESSFULLY`);
+    console.log(`[paramAgentManager] ✅ CONNECT() COMPLETED SUCCESSFULLY`);
     console.log(`========================================\n`);
     return {
       sessionCreated,
@@ -184,31 +184,31 @@ export class QwenConnectionHandler {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         console.log(
-          `[QwenAgentManager] Creating session (attempt ${attempt}/${maxRetries})...`,
+          `[paramAgentManager] Creating session (attempt ${attempt}/${maxRetries})...`,
         );
         const res = await connection.newSession(workingDir);
-        console.log('[QwenAgentManager] Session created successfully');
+        console.log('[paramAgentManager] Session created successfully');
         return res;
       } catch (error) {
         lastError = error;
         const errorMessage = getErrorMessage(error);
         console.error(
-          `[QwenAgentManager] Session creation attempt ${attempt} failed:`,
+          `[paramAgentManager] Session creation attempt ${attempt} failed:`,
           errorMessage,
         );
 
-        // If Qwen reports that authentication is required, try to
+        // If param reports that authentication is required, try to
         // authenticate on-the-fly once and retry without waiting.
         const requiresAuth = isAuthenticationRequiredError(error);
         if (requiresAuth) {
           if (!autoAuthenticate) {
             console.log(
-              '[QwenAgentManager] Authentication required but auto-authentication is disabled. Propagating error.',
+              '[paramAgentManager] Authentication required but auto-authentication is disabled. Propagating error.',
             );
             throw error;
           }
           console.log(
-            '[QwenAgentManager] Qwen requires authentication. Authenticating and retrying session/new...',
+            '[paramAgentManager] param requires authentication. Authenticating and retrying session/new...',
           );
           try {
             await connection.authenticate(authMethod);
@@ -217,17 +217,17 @@ export class QwenConnectionHandler {
             // Add a slight delay to ensure auth state is settled
             await new Promise((resolve) => setTimeout(resolve, 300));
             console.log(
-              '[QwenAgentManager] newSessionWithRetry Authentication successful',
+              '[paramAgentManager] newSessionWithRetry Authentication successful',
             );
             // Retry immediately after successful auth
             const res = await connection.newSession(workingDir);
             console.log(
-              '[QwenAgentManager] Session created successfully after auth',
+              '[paramAgentManager] Session created successfully after auth',
             );
             return res;
           } catch (authErr) {
             console.error(
-              '[QwenAgentManager] Re-authentication failed:',
+              '[paramAgentManager] Re-authentication failed:',
               authErr,
             );
             // Fall through to retry logic below
@@ -239,7 +239,7 @@ export class QwenConnectionHandler {
         }
 
         const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
-        console.log(`[QwenAgentManager] Retrying in ${delay}ms...`);
+        console.log(`[paramAgentManager] Retrying in ${delay}ms...`);
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }

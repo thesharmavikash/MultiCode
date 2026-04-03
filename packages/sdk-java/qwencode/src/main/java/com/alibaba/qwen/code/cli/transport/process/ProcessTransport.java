@@ -1,9 +1,9 @@
-package com.alibaba.qwen.code.cli.transport.process;
+package com.alibaba.param.code.cli.transport.process;
 
-import com.alibaba.qwen.code.cli.transport.Transport;
-import com.alibaba.qwen.code.cli.transport.TransportOptions;
-import com.alibaba.qwen.code.cli.utils.MyConcurrentUtils;
-import com.alibaba.qwen.code.cli.utils.Timeout;
+import com.alibaba.param.code.cli.transport.Transport;
+import com.alibaba.param.code.cli.transport.TransportOptions;
+import com.alibaba.param.code.cli.utils.MyConcurrentUtils;
+import com.alibaba.param.code.cli.utils.Timeout;
 
 import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Implementation of the Transport interface that communicates with the Qwen CLI via a process.
+ * Implementation of the Transport interface that communicates with the param CLI via a process.
  *
  * @author skyfire
  * @version $Id: 0.0.1

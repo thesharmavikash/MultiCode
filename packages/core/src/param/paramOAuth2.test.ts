@@ -16,14 +16,14 @@ import {
   isDeviceTokenPending,
   isDeviceTokenSuccess,
   isErrorResponse,
-  qwenOAuth2Events,
-  QwenOAuth2Event,
-  QwenOAuth2Client,
+  paramOAuth2Events,
+  ParamOAuth2Event,
+  ParamOAuth2Client,
   type DeviceAuthorizationResponse,
   type DeviceTokenResponse,
   type ErrorData,
-  type QwenCredentials,
-} from './qwenOAuth2.js';
+  type paramCredentials,
+} from './paramOAuth2.js';
 import {
   SharedTokenManager,
   TokenManagerError,
@@ -31,8 +31,8 @@ import {
 } from './sharedTokenManager.js';
 
 interface MockSharedTokenManager {
-  getValidCredentials(qwenClient: QwenOAuth2Client): Promise<QwenCredentials>;
-  getCurrentCredentials(): QwenCredentials | null;
+  getValidCredentials(paramClient: ParamOAuth2Client): Promise<paramCredentials>;
+  getCurrentCredentials(): paramCredentials | null;
   clearCache(): void;
 }
 
@@ -49,10 +49,10 @@ vi.mock('./sharedTokenManager.js', () => ({
     }
 
     async getValidCredentials(
-      qwenClient: QwenOAuth2Client,
-    ): Promise<QwenCredentials> {
+      paramClient: ParamOAuth2Client,
+    ): Promise<paramCredentials> {
       // Try to get credentials from the client first
-      const clientCredentials = qwenClient.getCredentials();
+      const clientCredentials = paramClient.getCredentials();
       if (clientCredentials && clientCredentials.access_token) {
         return clientCredentials;
       }
@@ -67,7 +67,7 @@ vi.mock('./sharedTokenManager.js', () => ({
       };
     }
 
-    getCurrentCredentials(): QwenCredentials | null {
+    getCurrentCredentials(): paramCredentials | null {
       // Return null to let the client manage its own credentials
       return null;
     }
@@ -283,13 +283,13 @@ describe('Type Guards', () => {
   });
 });
 
-describe('QwenOAuth2Client', () => {
-  let client: QwenOAuth2Client;
+describe('ParamOAuth2Client', () => {
+  let client: ParamOAuth2Client;
   let originalFetch: typeof global.fetch;
 
   beforeEach(() => {
     // Create client instance
-    client = new QwenOAuth2Client();
+    client = new ParamOAuth2Client();
 
     // Mock fetch
     originalFetch = global.fetch;
@@ -493,7 +493,7 @@ describe('QwenOAuth2Client', () => {
       (
         client as unknown as {
           sharedManager: {
-            getValidCredentials: () => Promise<QwenCredentials>;
+            getValidCredentials: () => Promise<paramCredentials>;
           };
         }
       ).sharedManager = {
@@ -516,7 +516,7 @@ describe('QwenOAuth2Client', () => {
       (
         client as unknown as {
           sharedManager: {
-            getValidCredentials: () => Promise<QwenCredentials>;
+            getValidCredentials: () => Promise<paramCredentials>;
           };
         }
       ).sharedManager = {
@@ -737,7 +737,7 @@ describe('QwenOAuth2Client', () => {
   });
 });
 
-describe('getQwenOAuthClient', () => {
+describe('getParamOAuthClient', () => {
   let mockConfig: Config;
   let originalFetch: typeof global.fetch;
 
@@ -772,8 +772,8 @@ describe('getQwenOAuthClient', () => {
     const originalGetInstance = SharedTokenManager.getInstance;
     SharedTokenManager.getInstance = vi.fn().mockReturnValue(mockTokenManager);
 
-    const client = await import('./qwenOAuth2.js').then((module) =>
-      module.getQwenOAuthClient(mockConfig),
+    const client = await import('./paramOAuth2.js').then((module) =>
+      module.getParamOAuthClient(mockConfig),
     );
 
     expect(client).toBeInstanceOf(Object);
@@ -805,8 +805,8 @@ describe('getQwenOAuthClient', () => {
 
     // The function should handle the invalid cached credentials and throw the expected error
     await expect(
-      import('./qwenOAuth2.js').then((module) =>
-        module.getQwenOAuthClient(mockConfig),
+      import('./paramOAuth2.js').then((module) =>
+        module.getParamOAuthClient(mockConfig),
       ),
     ).rejects.toThrow('Device authorization flow failed');
 
@@ -828,8 +828,8 @@ describe('getQwenOAuthClient', () => {
     vi.mocked(global.fetch).mockResolvedValue({ ok: true } as Response);
 
     await expect(
-      import('./qwenOAuth2.js').then((module) =>
-        module.getQwenOAuthClient(mockConfig, {
+      import('./paramOAuth2.js').then((module) =>
+        module.getParamOAuthClient(mockConfig, {
           requireCachedCredentials: true,
         }),
       ),
@@ -864,12 +864,12 @@ describe('getQwenOAuthClient', () => {
 
     vi.mocked(global.fetch).mockRejectedValue(fetchError);
 
-    const emitSpy = vi.spyOn(qwenOAuth2Events, 'emit');
+    const emitSpy = vi.spyOn(paramOAuth2Events, 'emit');
 
     let thrownError: unknown;
     try {
-      const { getQwenOAuthClient } = await import('./qwenOAuth2.js');
-      await getQwenOAuthClient(mockConfig);
+      const { getParamOAuthClient } = await import('./paramOAuth2.js');
+      await getParamOAuthClient(mockConfig);
     } catch (error: unknown) {
       thrownError = error;
     }
@@ -885,7 +885,7 @@ describe('getQwenOAuthClient', () => {
     expect((thrownError as Error).message).toContain('--proxy');
 
     expect(emitSpy).toHaveBeenCalledWith(
-      QwenOAuth2Event.AuthProgress,
+      ParamOAuth2Event.AuthProgress,
       'error',
       expect.stringContaining('NODE_EXTRA_CA_CERTS'),
     );
@@ -897,7 +897,7 @@ describe('getQwenOAuthClient', () => {
 
 describe('CredentialsClearRequiredError', () => {
   it('should create error with correct name and message', async () => {
-    const { CredentialsClearRequiredError } = await import('./qwenOAuth2.js');
+    const { CredentialsClearRequiredError } = await import('./paramOAuth2.js');
 
     const message = 'Test error message';
     const originalError = { status: 400, response: 'Bad Request' };
@@ -910,7 +910,7 @@ describe('CredentialsClearRequiredError', () => {
   });
 
   it('should work without originalError', async () => {
-    const { CredentialsClearRequiredError } = await import('./qwenOAuth2.js');
+    const { CredentialsClearRequiredError } = await import('./paramOAuth2.js');
 
     const message = 'Test error message';
     const error = new CredentialsClearRequiredError(message);
@@ -921,46 +921,46 @@ describe('CredentialsClearRequiredError', () => {
   });
 });
 
-describe('clearQwenCredentials', () => {
+describe('clearParamCredentials', () => {
   it('should successfully clear credentials file', async () => {
     const { promises: fs } = await import('node:fs');
-    const { clearQwenCredentials } = await import('./qwenOAuth2.js');
+    const { clearParamCredentials } = await import('./paramOAuth2.js');
 
     vi.mocked(fs.unlink).mockResolvedValue(undefined);
 
-    await expect(clearQwenCredentials()).resolves.not.toThrow();
+    await expect(clearParamCredentials()).resolves.not.toThrow();
     expect(fs.unlink).toHaveBeenCalled();
   });
 
   it('should handle file not found error gracefully', async () => {
     const { promises: fs } = await import('node:fs');
-    const { clearQwenCredentials } = await import('./qwenOAuth2.js');
+    const { clearParamCredentials } = await import('./paramOAuth2.js');
 
     const notFoundError = new Error('File not found');
     (notFoundError as Error & { code: string }).code = 'ENOENT';
     vi.mocked(fs.unlink).mockRejectedValue(notFoundError);
 
-    await expect(clearQwenCredentials()).resolves.not.toThrow();
+    await expect(clearParamCredentials()).resolves.not.toThrow();
   });
 
   it('should handle other file system errors gracefully', async () => {
     const { promises: fs } = await import('node:fs');
-    const { clearQwenCredentials } = await import('./qwenOAuth2.js');
+    const { clearParamCredentials } = await import('./paramOAuth2.js');
 
     const permissionError = new Error('Permission denied');
     vi.mocked(fs.unlink).mockRejectedValue(permissionError);
 
     // Should not throw but may log warning
-    await expect(clearQwenCredentials()).resolves.not.toThrow();
+    await expect(clearParamCredentials()).resolves.not.toThrow();
   });
 });
 
-describe('QwenOAuth2Client - Additional Error Scenarios', () => {
-  let client: QwenOAuth2Client;
+describe('ParamOAuth2Client - Additional Error Scenarios', () => {
+  let client: ParamOAuth2Client;
   let originalFetch: typeof global.fetch;
 
   beforeEach(() => {
-    client = new QwenOAuth2Client();
+    client = new ParamOAuth2Client();
     originalFetch = global.fetch;
     global.fetch = vi.fn();
   });
@@ -994,7 +994,7 @@ describe('QwenOAuth2Client - Additional Error Scenarios', () => {
   });
 });
 
-describe('getQwenOAuthClient - Enhanced Error Scenarios', () => {
+describe('getParamOAuthClient - Enhanced Error Scenarios', () => {
   let mockConfig: Config;
   let originalFetch: typeof global.fetch;
 
@@ -1045,8 +1045,8 @@ describe('getQwenOAuthClient - Enhanced Error Scenarios', () => {
     vi.mocked(global.fetch).mockResolvedValue(mockAuthResponse as Response);
 
     await expect(
-      import('./qwenOAuth2.js').then((module) =>
-        module.getQwenOAuthClient(mockConfig),
+      import('./paramOAuth2.js').then((module) =>
+        module.getParamOAuthClient(mockConfig),
       ),
     ).rejects.toThrow('Device authorization flow failed');
 
@@ -1094,8 +1094,8 @@ describe('getQwenOAuthClient - Enhanced Error Scenarios', () => {
       .mockResolvedValue(mockPendingResponse as Response);
 
     await expect(
-      import('./qwenOAuth2.js').then((module) =>
-        module.getQwenOAuthClient(mockConfig),
+      import('./paramOAuth2.js').then((module) =>
+        module.getParamOAuthClient(mockConfig),
       ),
     ).rejects.toThrow('Authorization timeout, please restart the process.');
 
@@ -1143,8 +1143,8 @@ describe('getQwenOAuthClient - Enhanced Error Scenarios', () => {
       .mockResolvedValue(mockRateLimitResponse as Response);
 
     await expect(
-      import('./qwenOAuth2.js').then((module) =>
-        module.getQwenOAuthClient(mockConfig),
+      import('./paramOAuth2.js').then((module) =>
+        module.getParamOAuthClient(mockConfig),
       ),
     ).rejects.toThrow(
       'Too many requests. The server is rate limiting our requests. Please select a different authentication method or try again later.',
@@ -1181,8 +1181,8 @@ describe('getQwenOAuthClient - Enhanced Error Scenarios', () => {
     global.fetch = vi.fn().mockResolvedValue(mockAuthResponse as Response);
 
     await expect(
-      import('./qwenOAuth2.js').then((module) =>
-        module.getQwenOAuthClient(mockConfig),
+      import('./paramOAuth2.js').then((module) =>
+        module.getParamOAuthClient(mockConfig),
       ),
     ).rejects.toThrow('Device authorization flow failed');
 
@@ -1240,8 +1240,8 @@ describe('authWithQwenDeviceFlow - Comprehensive Testing', () => {
     global.fetch = vi.fn().mockResolvedValue(mockAuthResponse as Response);
 
     await expect(
-      import('./qwenOAuth2.js').then((module) =>
-        module.getQwenOAuthClient(mockConfig),
+      import('./paramOAuth2.js').then((module) =>
+        module.getParamOAuthClient(mockConfig),
       ),
     ).rejects.toThrow('Device authorization flow failed');
 
@@ -1280,8 +1280,8 @@ describe('authWithQwenDeviceFlow - Comprehensive Testing', () => {
       .mockResolvedValueOnce(mockAuthResponse as Response)
       .mockResolvedValue(mockTokenResponse as Response);
 
-    const client = await import('./qwenOAuth2.js').then((module) =>
-      module.getQwenOAuthClient(mockConfig),
+    const client = await import('./paramOAuth2.js').then((module) =>
+      module.getParamOAuthClient(mockConfig),
     );
 
     expect(client).toBeInstanceOf(Object);
@@ -1327,8 +1327,8 @@ describe('authWithQwenDeviceFlow - Comprehensive Testing', () => {
       .mockResolvedValue(mock401Response as Response);
 
     await expect(
-      import('./qwenOAuth2.js').then((module) =>
-        module.getQwenOAuthClient(mockConfig),
+      import('./paramOAuth2.js').then((module) =>
+        module.getParamOAuthClient(mockConfig),
       ),
     ).rejects.toThrow(
       'Device code expired or invalid, please restart the authorization process.',
@@ -1383,8 +1383,8 @@ describe('authWithQwenDeviceFlow - Comprehensive Testing', () => {
       .mockResolvedValueOnce(mockAuthResponse as Response)
       .mockResolvedValue(mockTokenResponse as Response);
 
-    const client = await import('./qwenOAuth2.js').then((module) =>
-      module.getQwenOAuthClient(mockConfig),
+    const client = await import('./paramOAuth2.js').then((module) =>
+      module.getParamOAuthClient(mockConfig),
     );
 
     expect(client).toBeInstanceOf(Object);
@@ -1451,8 +1451,8 @@ describe('Browser Launch and Error Handling', () => {
       .mockResolvedValueOnce(mockAuthResponse as Response)
       .mockResolvedValue(mockTokenResponse as Response);
 
-    const client = await import('./qwenOAuth2.js').then((module) =>
-      module.getQwenOAuthClient(mockConfig),
+    const client = await import('./paramOAuth2.js').then((module) =>
+      module.getParamOAuthClient(mockConfig),
     );
 
     expect(client).toBeInstanceOf(Object);
@@ -1504,8 +1504,8 @@ describe('Browser Launch and Error Handling', () => {
       .mockResolvedValueOnce(mockAuthResponse as Response)
       .mockResolvedValue(mockTokenResponse as Response);
 
-    const client = await import('./qwenOAuth2.js').then((module) =>
-      module.getQwenOAuthClient(mockConfig),
+    const client = await import('./paramOAuth2.js').then((module) =>
+      module.getParamOAuthClient(mockConfig),
     );
 
     expect(client).toBeInstanceOf(Object);
@@ -1513,16 +1513,16 @@ describe('Browser Launch and Error Handling', () => {
 });
 
 describe('Event Emitter Integration', () => {
-  it('should export qwenOAuth2Events as EventEmitter', async () => {
-    const { qwenOAuth2Events } = await import('./qwenOAuth2.js');
-    expect(qwenOAuth2Events).toBeInstanceOf(EventEmitter);
+  it('should export paramOAuth2Events as EventEmitter', async () => {
+    const { paramOAuth2Events } = await import('./paramOAuth2.js');
+    expect(paramOAuth2Events).toBeInstanceOf(EventEmitter);
   });
 
   it('should define correct event enum values', async () => {
-    const { QwenOAuth2Event } = await import('./qwenOAuth2.js');
-    expect(QwenOAuth2Event.AuthUri).toBe('auth-uri');
-    expect(QwenOAuth2Event.AuthProgress).toBe('auth-progress');
-    expect(QwenOAuth2Event.AuthCancel).toBe('auth-cancel');
+    const { ParamOAuth2Event } = await import('./paramOAuth2.js');
+    expect(ParamOAuth2Event.AuthUri).toBe('auth-uri');
+    expect(ParamOAuth2Event.AuthProgress).toBe('auth-progress');
+    expect(ParamOAuth2Event.AuthCancel).toBe('auth-cancel');
   });
 });
 
@@ -1596,13 +1596,13 @@ describe('Utility Functions', () => {
 
       const expectedPath = path.join(os.homedir(), '.qwen', 'oauth_creds.json');
 
-      // Since this is a private function, we test it indirectly through clearQwenCredentials
+      // Since this is a private function, we test it indirectly through clearParamCredentials
       const { promises: fs } = await import('node:fs');
-      const { clearQwenCredentials } = await import('./qwenOAuth2.js');
+      const { clearParamCredentials } = await import('./paramOAuth2.js');
 
       vi.mocked(fs.unlink).mockResolvedValue(undefined);
 
-      await clearQwenCredentials();
+      await clearParamCredentials();
 
       expect(fs.unlink).toHaveBeenCalledWith(expectedPath);
     });
@@ -1610,10 +1610,10 @@ describe('Utility Functions', () => {
 });
 
 describe('Credential Caching Functions', () => {
-  describe('cacheQwenCredentials', () => {
+  describe('cacheparamCredentials', () => {
     it('should create directory and write credentials to file', async () => {
-      // Mock the internal cacheQwenCredentials function by creating client and calling refresh
-      const client = new QwenOAuth2Client();
+      // Mock the internal cacheparamCredentials function by creating client and calling refresh
+      const client = new ParamOAuth2Client();
       client.setCredentials({
         refresh_token: 'test-refresh',
       });
@@ -1640,11 +1640,11 @@ describe('Credential Caching Functions', () => {
 });
 
 describe('Enhanced Error Handling and Edge Cases', () => {
-  let client: QwenOAuth2Client;
+  let client: ParamOAuth2Client;
   let originalFetch: typeof global.fetch;
 
   beforeEach(() => {
-    client = new QwenOAuth2Client();
+    client = new ParamOAuth2Client();
     originalFetch = global.fetch;
     global.fetch = vi.fn();
   });
@@ -1654,7 +1654,7 @@ describe('Enhanced Error Handling and Edge Cases', () => {
     vi.clearAllMocks();
   });
 
-  describe('QwenOAuth2Client getAccessToken enhanced scenarios', () => {
+  describe('ParamOAuth2Client getAccessToken enhanced scenarios', () => {
     it('should return undefined when SharedTokenManager fails (no fallback)', async () => {
       // Set up client with valid credentials (but we don't use fallback anymore)
       client.setCredentials({
@@ -1666,7 +1666,7 @@ describe('Enhanced Error Handling and Edge Cases', () => {
       (
         client as unknown as {
           sharedManager: {
-            getValidCredentials: () => Promise<QwenCredentials>;
+            getValidCredentials: () => Promise<paramCredentials>;
           };
         }
       ).sharedManager = {
@@ -1693,7 +1693,7 @@ describe('Enhanced Error Handling and Edge Cases', () => {
       (
         client as unknown as {
           sharedManager: {
-            getValidCredentials: () => Promise<QwenCredentials>;
+            getValidCredentials: () => Promise<paramCredentials>;
           };
         }
       ).sharedManager = {
@@ -1715,7 +1715,7 @@ describe('Enhanced Error Handling and Edge Cases', () => {
       (
         client as unknown as {
           sharedManager: {
-            getValidCredentials: () => Promise<QwenCredentials>;
+            getValidCredentials: () => Promise<paramCredentials>;
           };
         }
       ).sharedManager = {
@@ -1897,7 +1897,7 @@ describe('Enhanced Error Handling and Edge Cases', () => {
   });
 
   describe('Enhanced refreshAccessToken scenarios', () => {
-    it('should call clearQwenCredentials on 400 error', async () => {
+    it('should call clearParamCredentials on 400 error', async () => {
       client.setCredentials({
         refresh_token: 'expired-refresh',
       });
@@ -1921,7 +1921,7 @@ describe('Enhanced Error Handling and Edge Cases', () => {
     });
 
     it('should throw CredentialsClearRequiredError on 400 error', async () => {
-      const { CredentialsClearRequiredError } = await import('./qwenOAuth2.js');
+      const { CredentialsClearRequiredError } = await import('./paramOAuth2.js');
 
       client.setCredentials({
         refresh_token: 'expired-refresh',
@@ -2006,11 +2006,11 @@ describe('Enhanced Error Handling and Edge Cases', () => {
   });
 });
 
-describe('SharedTokenManager Integration in QwenOAuth2Client', () => {
-  let client: QwenOAuth2Client;
+describe('SharedTokenManager Integration in ParamOAuth2Client', () => {
+  let client: ParamOAuth2Client;
 
   beforeEach(() => {
-    client = new QwenOAuth2Client();
+    client = new ParamOAuth2Client();
   });
 
   it('should use SharedTokenManager instance in constructor', () => {
@@ -2020,7 +2020,7 @@ describe('SharedTokenManager Integration in QwenOAuth2Client', () => {
     expect(sharedManager).toBeDefined();
   });
 
-  it('should handle TokenManagerError types correctly in getQwenOAuthClient', async () => {
+  it('should handle TokenManagerError types correctly in getParamOAuthClient', async () => {
     const mockConfig = {
       isBrowserLaunchSuppressed: vi.fn().mockReturnValue(true),
       isInteractive: vi.fn().mockReturnValue(true),
@@ -2080,8 +2080,8 @@ describe('SharedTokenManager Integration in QwenOAuth2Client', () => {
         .mockResolvedValue(mockTokenResponse as Response);
 
       try {
-        await import('./qwenOAuth2.js').then((module) =>
-          module.getQwenOAuthClient(mockConfig),
+        await import('./paramOAuth2.js').then((module) =>
+          module.getParamOAuthClient(mockConfig),
         );
       } catch {
         // Expected to fail in test environment
@@ -2096,7 +2096,7 @@ describe('SharedTokenManager Integration in QwenOAuth2Client', () => {
 describe('Constants and Configuration', () => {
   it('should have correct OAuth endpoints', async () => {
     // Test that the constants are properly defined by checking they're used in requests
-    const client = new QwenOAuth2Client();
+    const client = new ParamOAuth2Client();
 
     const mockResponse = {
       ok: true,
@@ -2122,7 +2122,7 @@ describe('Constants and Configuration', () => {
   });
 
   it('should use correct client ID in requests', async () => {
-    const client = new QwenOAuth2Client();
+    const client = new ParamOAuth2Client();
 
     const mockResponse = {
       ok: true,
@@ -2151,7 +2151,7 @@ describe('Constants and Configuration', () => {
 
   it('should use correct default scope', async () => {
     // Test the default scope constant by checking it's used in device flow
-    const client = new QwenOAuth2Client();
+    const client = new ParamOAuth2Client();
 
     const mockResponse = {
       ok: true,

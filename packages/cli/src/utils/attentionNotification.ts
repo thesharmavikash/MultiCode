@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2025 Qwen
+ * Copyright 2025 param
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import process from 'node:process';
-import { createDebugLogger } from '@qwen-code/qwen-code-core';
+import { createDebugLogger } from '@agent-param/param-core';
 
 export enum AttentionNotificationReason {
   ToolApproval = 'tool_approval',

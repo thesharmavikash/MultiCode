@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2025 Qwen
+ * Copyright 2025 param
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ToolDisplayNames, ToolNames } from '../tools/tool-names.js';
+import { ToolNames } from '../tools/tool-names.js';
 import type { SubagentConfig } from './types.js';
 
 /**
@@ -28,7 +28,7 @@ Your strengths:
 - Performing multi-step research tasks
 
 Guidelines:
-- For file searches: search broadly when you don't know where something lives. Use ${ToolNames.READ_FILE} when you know the specific file path.
+- For file searches: search broadly when you don't know where something lives. Use \${ToolNames.READ_FILE} when you know the specific file path.
 - For analysis: Start broad and narrow down. Use multiple search strategies if the first doesn't yield results.
 - Be thorough: Check multiple locations, consider different naming conventions, look for related files.
 - NEVER create files unless they're absolutely necessary for achieving your goal. ALWAYS prefer editing an existing file to creating a new one.
@@ -49,8 +49,8 @@ Notes:
 
 === CRITICAL: READ-ONLY MODE - NO FILE MODIFICATIONS ===
 This is a READ-ONLY exploration task. You are STRICTLY PROHIBITED from:
-- Creating new files (no ${ToolDisplayNames.WRITE_FILE}, touch, or file creation of any kind)
-- Modifying existing files (no ${ToolDisplayNames.EDIT} operations)
+- Creating new files (no write_file, touch, or file creation of any kind)
+- Modifying existing files (no edit operations)
 - Deleting files (no rm or deletion)
 - Moving or copying files (no mv or cp)
 - Creating temporary files anywhere, including /tmp
@@ -65,11 +65,11 @@ Your strengths:
 - Reading and analyzing file contents
 
 Guidelines:
-- Use ${ToolDisplayNames.GLOB} for broad file pattern matching
-- Use ${ToolDisplayNames.GREP} for searching file contents with regex
-- Use ${ToolDisplayNames.READ_FILE} when you know the specific file path you need to read
-- Use ${ToolDisplayNames.SHELL} ONLY for read-only operations (ls, git status, git log, git diff, find, cat, head, tail)
-- NEVER use ${ToolDisplayNames.SHELL} for: mkdir, touch, rm, cp, mv, git add, git commit, npm install, pip install, or any file creation/modification
+- Use glob for broad file pattern matching
+- Use grep_search for searching file contents with regex
+- Use read_file when you know the specific file path you need to read
+- Use run_shell_command ONLY for read-only operations (ls, git status, git log, git diff, find, cat, head, tail)
+- NEVER use run_shell_command for: mkdir, touch, rm, cp, mv, git add, git commit, npm install, pip install, or any file creation/modification
 - Adapt your search approach based on the thoroughness level specified by the caller
 - Return file paths as absolute paths in your final response
 - For clear communication, avoid using emojis
@@ -110,7 +110,7 @@ Notes:
     return this.BUILTIN_AGENTS.map((agent) => ({
       ...agent,
       level: 'builtin' as const,
-      filePath: `<builtin:${agent.name}>`,
+      filePath: `<builtin:\${agent.name}>`,
       isBuiltin: true,
     }));
   }
@@ -132,7 +132,7 @@ Notes:
     return {
       ...agent,
       level: 'builtin' as const,
-      filePath: `<builtin:${agent.name}>`,
+      filePath: `<builtin:\${agent.name}>`,
       isBuiltin: true,
     };
   }

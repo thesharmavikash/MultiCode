@@ -18,9 +18,9 @@ vi.mock('./utils.js', () => ({
   }),
 }));
 
-vi.mock('@qwen-code/qwen-code-core', async (importOriginal) => {
+vi.mock('@agent-param/param-core', async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import('@qwen-code/qwen-code-core')>();
+    await importOriginal<typeof import('@agent-param/param-core')>();
   return {
     ...actual,
     FatalConfigError: class FatalConfigError extends Error {

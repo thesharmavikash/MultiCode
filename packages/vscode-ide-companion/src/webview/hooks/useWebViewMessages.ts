@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { useEffect, useRef, useCallback } from 'react';
 import { useVSCode } from './useVSCode.js';
 import type { Conversation } from '../../services/conversationStore.js';
-import type { PermissionOption, PermissionToolCall } from '@qwen-code/webui';
+import type { PermissionOption, PermissionToolCall } from '@param-code/webui';
 import type {
   ToolCallUpdate,
   UsageStatsPayload,
@@ -34,7 +34,7 @@ interface UseWebViewMessagesProps {
   // Session management
   sessionManagement: {
     currentSessionId: string | null;
-    setQwenSessions: (
+    setparamSessions: (
       sessions:
         | Array<Record<string, unknown>>
         | ((
@@ -384,11 +384,11 @@ export const useWebViewMessages = ({
           handlers.messageHandling.clearWaitingForResponse();
           const errorMsg =
             (message?.data?.message as string) ||
-            'Failed to connect to Qwen agent.';
+            'Failed to connect to param agent.';
 
           handlers.messageHandling.addMessage({
             role: 'assistant',
-            content: `Failed to connect to Qwen agent: ${errorMsg}\nYou can still use the chat UI, but messages won't be sent to AI.`,
+            content: `Failed to connect to param agent: ${errorMsg}\nYou can still use the chat UI, but messages won't be sent to AI.`,
             timestamp: Date.now(),
           });
           // Set authentication state to false
@@ -821,14 +821,14 @@ export const useWebViewMessages = ({
           break;
         }
 
-        case 'qwenSessionList': {
+        case 'paramSessionList': {
           const sessions =
             (message.data.sessions as Array<Record<string, unknown>>) || [];
           const append = Boolean(message.data.append);
           const nextCursor = message.data.nextCursor as number | undefined;
           const hasMore = Boolean(message.data.hasMore);
 
-          handlers.sessionManagement.setQwenSessions(
+          handlers.sessionManagement.setparamSessions(
             (prev: Array<Record<string, unknown>>) =>
               append ? [...prev, ...sessions] : sessions,
           );
@@ -857,7 +857,7 @@ export const useWebViewMessages = ({
           break;
         }
 
-        case 'qwenSessionSwitched':
+        case 'paramSessionSwitched':
           handlers.sessionManagement.setShowSessionSelector(false);
           if (message.data.sessionId) {
             handlers.sessionManagement.setCurrentSessionId(
@@ -924,7 +924,7 @@ export const useWebViewMessages = ({
           // Reset the VS Code tab title to default label
           vscode.postMessage({
             type: 'updatePanelTitle',
-            data: { title: 'Qwen Code' },
+            data: { title: 'param Code' },
           });
           lastPlanSnapshotRef.current = null;
           break;

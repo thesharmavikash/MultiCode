@@ -1,7 +1,7 @@
 {
-  "name": "@qwen-code/webui",
+  "name": "@param-code/webui",
   "version": "0.14.0",
-  "description": "Shared UI components for Qwen Code packages",
+  "description": "Shared UI components for param Code packages",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -70,11 +70,11 @@
     "@vitest/coverage-v8": "^3.2.4"
   },
   "keywords": [
-    "qwen",
+    "param",
     "ui",
     "components",
     "shared"
   ],
-  "author": "Qwen Team",
+  "author": "param Team",
   "license": "MIT"
 }

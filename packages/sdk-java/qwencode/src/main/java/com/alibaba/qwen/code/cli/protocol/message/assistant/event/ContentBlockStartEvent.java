@@ -1,8 +1,8 @@
-package com.alibaba.qwen.code.cli.protocol.message.assistant.event;
+package com.alibaba.param.code.cli.protocol.message.assistant.event;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.alibaba.fastjson2.annotation.JSONType;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.block.ContentBlock;
+import com.alibaba.param.code.cli.protocol.message.assistant.block.ContentBlock;
 
 /**
  * Represents a content block start event during message streaming.

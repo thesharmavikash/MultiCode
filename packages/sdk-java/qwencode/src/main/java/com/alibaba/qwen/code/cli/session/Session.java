@@ -1,4 +1,4 @@
-package com.alibaba.qwen.code.cli.session;
+package com.alibaba.param.code.cli.session;
 
 import java.util.Optional;
 
@@ -6,36 +6,36 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONReader.Feature;
 import com.alibaba.fastjson2.TypeReference;
-import com.alibaba.qwen.code.cli.protocol.data.Capabilities;
-import com.alibaba.qwen.code.cli.protocol.data.PermissionMode;
-import com.alibaba.qwen.code.cli.protocol.message.SDKResultMessage;
-import com.alibaba.qwen.code.cli.protocol.message.SDKSystemMessage;
-import com.alibaba.qwen.code.cli.protocol.message.SDKUserMessage;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.SDKAssistantMessage;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.SDKPartialAssistantMessage;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.CLIControlInitializeRequest;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.CLIControlInitializeResponse;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.CLIControlInterruptRequest;
-import com.alibaba.qwen.code.cli.protocol.message.control.CLIControlRequest;
-import com.alibaba.qwen.code.cli.protocol.message.control.CLIControlResponse;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.CLIControlSetModelRequest;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.CLIControlSetPermissionModeRequest;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.ControlRequestPayload;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.ControlResponsePayload;
-import com.alibaba.qwen.code.cli.session.event.consumers.SessionEventConsumers;
-import com.alibaba.qwen.code.cli.session.exception.SessionControlException;
-import com.alibaba.qwen.code.cli.session.exception.SessionSendPromptException;
-import com.alibaba.qwen.code.cli.transport.Transport;
-import com.alibaba.qwen.code.cli.transport.TransportOptions;
-import com.alibaba.qwen.code.cli.utils.MyConcurrentUtils;
-import com.alibaba.qwen.code.cli.utils.Timeout;
+import com.alibaba.param.code.cli.protocol.data.Capabilities;
+import com.alibaba.param.code.cli.protocol.data.PermissionMode;
+import com.alibaba.param.code.cli.protocol.message.SDKResultMessage;
+import com.alibaba.param.code.cli.protocol.message.SDKSystemMessage;
+import com.alibaba.param.code.cli.protocol.message.SDKUserMessage;
+import com.alibaba.param.code.cli.protocol.message.assistant.SDKAssistantMessage;
+import com.alibaba.param.code.cli.protocol.message.assistant.SDKPartialAssistantMessage;
+import com.alibaba.param.code.cli.protocol.message.control.payload.CLIControlInitializeRequest;
+import com.alibaba.param.code.cli.protocol.message.control.payload.CLIControlInitializeResponse;
+import com.alibaba.param.code.cli.protocol.message.control.payload.CLIControlInterruptRequest;
+import com.alibaba.param.code.cli.protocol.message.control.CLIControlRequest;
+import com.alibaba.param.code.cli.protocol.message.control.CLIControlResponse;
+import com.alibaba.param.code.cli.protocol.message.control.payload.CLIControlSetModelRequest;
+import com.alibaba.param.code.cli.protocol.message.control.payload.CLIControlSetPermissionModeRequest;
+import com.alibaba.param.code.cli.protocol.message.control.payload.ControlRequestPayload;
+import com.alibaba.param.code.cli.protocol.message.control.payload.ControlResponsePayload;
+import com.alibaba.param.code.cli.session.event.consumers.SessionEventConsumers;
+import com.alibaba.param.code.cli.session.exception.SessionControlException;
+import com.alibaba.param.code.cli.session.exception.SessionSendPromptException;
+import com.alibaba.param.code.cli.transport.Transport;
+import com.alibaba.param.code.cli.transport.TransportOptions;
+import com.alibaba.param.code.cli.utils.MyConcurrentUtils;
+import com.alibaba.param.code.cli.utils.Timeout;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Manages a session with the Qwen Code CLI, handling communication, sending prompts, and processing responses.
+ * Manages a session with the param Code CLI, handling communication, sending prompts, and processing responses.
  *
  * @author skyfire
  * @version $Id: 0.0.1
@@ -63,7 +63,7 @@ public class Session {
      * Constructs a new session with the specified transport.
      *
      * @param transport The transport layer to use for communication
-     * @throws com.alibaba.qwen.code.cli.session.exception.SessionControlException if the transport is not available
+     * @throws com.alibaba.param.code.cli.session.exception.SessionControlException if the transport is not available
      */
     public Session(Transport transport) throws SessionControlException {
         if (transport == null || !transport.isAvailable()) {
@@ -76,7 +76,7 @@ public class Session {
     /**
      * Starts the session by initializing communication with the CLI.
      *
-     * @throws com.alibaba.qwen.code.cli.session.exception.SessionControlException if initialization fails
+     * @throws com.alibaba.param.code.cli.session.exception.SessionControlException if initialization fails
      */
     public void start() throws SessionControlException {
         try {
@@ -95,7 +95,7 @@ public class Session {
     /**
      * Closes the session and releases resources.
      *
-     * @throws com.alibaba.qwen.code.cli.session.exception.SessionControlException if closing fails
+     * @throws com.alibaba.param.code.cli.session.exception.SessionControlException if closing fails
      */
     public void close() throws SessionControlException {
         try {
@@ -109,7 +109,7 @@ public class Session {
      * Interrupts the current operation in the CLI.
      *
      * @return An optional boolean indicating success of the interrupt operation
-     * @throws com.alibaba.qwen.code.cli.session.exception.SessionControlException if the operation fails
+     * @throws com.alibaba.param.code.cli.session.exception.SessionControlException if the operation fails
      */
     public Optional<Boolean> interrupt() throws SessionControlException {
         checkAvailable();
@@ -121,7 +121,7 @@ public class Session {
      *
      * @param modelName The name of the model to use
      * @return An optional boolean indicating success of the operation
-     * @throws com.alibaba.qwen.code.cli.session.exception.SessionControlException if the operation fails
+     * @throws com.alibaba.param.code.cli.session.exception.SessionControlException if the operation fails
      */
     public Optional<Boolean> setModel(String modelName) throws SessionControlException {
         checkAvailable();
@@ -135,7 +135,7 @@ public class Session {
      *
      * @param permissionMode The permission mode to use
      * @return An optional boolean indicating success of the operation
-     * @throws com.alibaba.qwen.code.cli.session.exception.SessionControlException if the operation fails
+     * @throws com.alibaba.param.code.cli.session.exception.SessionControlException if the operation fails
      */
     public Optional<Boolean> setPermissionMode(PermissionMode permissionMode) throws SessionControlException {
         checkAvailable();
@@ -163,7 +163,7 @@ public class Session {
     /**
      * Continues the current session.
      *
-     * @throws com.alibaba.qwen.code.cli.session.exception.SessionControlException if the operation fails
+     * @throws com.alibaba.param.code.cli.session.exception.SessionControlException if the operation fails
      */
     public void continueSession() throws SessionControlException {
         resumeSession(getSessionId());
@@ -173,7 +173,7 @@ public class Session {
      * Resumes a session with the specified ID.
      *
      * @param sessionId The ID of the session to resume
-     * @throws com.alibaba.qwen.code.cli.session.exception.SessionControlException if the operation fails
+     * @throws com.alibaba.param.code.cli.session.exception.SessionControlException if the operation fails
      */
     public void resumeSession(String sessionId) throws SessionControlException {
         if (StringUtils.isNotBlank(sessionId)) {
@@ -187,8 +187,8 @@ public class Session {
      *
      * @param prompt The prompt to send to the CLI
      * @param sessionEventConsumers Consumers for handling different types of events
-     * @throws com.alibaba.qwen.code.cli.session.exception.SessionSendPromptException if sending the prompt fails
-     * @throws com.alibaba.qwen.code.cli.session.exception.SessionControlException if a control operation fails
+     * @throws com.alibaba.param.code.cli.session.exception.SessionSendPromptException if sending the prompt fails
+     * @throws com.alibaba.param.code.cli.session.exception.SessionControlException if a control operation fails
      */
     public void sendPrompt(String prompt, SessionEventConsumers sessionEventConsumers) throws SessionSendPromptException, SessionControlException {
         checkAvailable();

@@ -36,15 +36,15 @@ export class ExtensionStorage {
       const tmpDir = os.tmpdir();
       if (!tmpDir) {
         // Ultimate fallback when both os.homedir and os.tmpdir are mocked
-        return '/tmp/.qwen/extensions';
+        return '/tmp/.param/extensions';
       }
-      return path.join(tmpDir, '.qwen', 'extensions');
+      return path.join(tmpDir, '.param', 'extensions');
     }
     const storage = new Storage(homeDir);
-    return storage.getExtensionsDir();
+    return storage.getExtensionsDirs()[0];
   }
 
   static async createTmpDir(): Promise<string> {
-    return await fs.promises.mkdtemp(path.join(os.tmpdir(), 'qwen-extension'));
+    return await fs.promises.mkdtemp(path.join(os.tmpdir(), 'param-extension'));
   }
 }

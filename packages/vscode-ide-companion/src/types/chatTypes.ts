@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 import type {
@@ -53,7 +53,7 @@ export interface UsageStatsPayload {
   tokenLimit?: number | null;
 }
 
-export interface QwenAgentCallbacks {
+export interface paramAgentCallbacks {
   onMessage?: (message: ChatMessage) => void;
   onStreamChunk?: (chunk: string) => void;
   onThoughtChunk?: (chunk: string) => void;

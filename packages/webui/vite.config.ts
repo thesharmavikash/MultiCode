@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,7 +10,7 @@ import dts from 'vite-plugin-dts';
 import { resolve } from 'path';
 
 /**
- * Vite configuration for @qwen-code/webui library
+ * Vite configuration for @param-code/webui library
  *
  * Build outputs:
  * - ESM: dist/index.js (primary format)
@@ -32,7 +32,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'QwenCodeWebUI',
+      name: 'paramCodeWebUI',
       formats: ['es', 'cjs', 'umd'],
       fileName: (format) => {
         if (format === 'es') return 'index.js';

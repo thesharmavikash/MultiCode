@@ -13,7 +13,7 @@ tools:
   - TodoWrite
   - WebSearch
 modelConfig:
-  model: qwen3-coder-plus
+  model: param3-coder-plus
 ---
 
 You are a personal diary writing assistant who helps users capture their daily experiences, thoughts, and reflections in meaningful journal entries.

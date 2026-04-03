@@ -1,4 +1,4 @@
-package com.alibaba.qwen.code.cli.protocol.message;
+package com.alibaba.param.code.cli.protocol.message;
 
 import java.util.List;
 import java.util.Map;
@@ -59,10 +59,10 @@ public class SDKSystemMessage extends MessageBase {
     @JSONField(name = "slash_commands")
     private List<String> slashCommands;
     /**
-     * Qwen Code version.
+     * param Code version.
      */
-    @JSONField(name = "qwen_code_version")
-    private String qwenCodeVersion;
+    @JSONField(name = "param_code_version")
+    private String paramCodeVersion;
     /**
      * Output style.
      */
@@ -275,21 +275,21 @@ public class SDKSystemMessage extends MessageBase {
     }
 
     /**
-     * Gets the Qwen Code version.
+     * Gets the param Code version.
      *
-     * @return The Qwen Code version
+     * @return The param Code version
      */
-    public String getQwenCodeVersion() {
-        return qwenCodeVersion;
+    public String getparamCodeVersion() {
+        return paramCodeVersion;
     }
 
     /**
-     * Sets the Qwen Code version.
+     * Sets the param Code version.
      *
-     * @param qwenCodeVersion The Qwen Code version
+     * @param paramCodeVersion The param Code version
      */
-    public void setQwenCodeVersion(String qwenCodeVersion) {
-        this.qwenCodeVersion = qwenCodeVersion;
+    public void setparamCodeVersion(String paramCodeVersion) {
+        this.paramCodeVersion = paramCodeVersion;
     }
 
     /**

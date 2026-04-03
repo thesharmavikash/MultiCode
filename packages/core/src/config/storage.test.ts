@@ -10,7 +10,7 @@ import * as path from 'node:path';
 import { Storage } from './storage.js';
 
 describe('Storage – getGlobalSettingsPath', () => {
-  it('returns path to ~/.qwen/settings.json', () => {
+  it('returns path to ~/.param/settings.json', () => {
     const expected = path.join(os.homedir(), '.qwen', 'settings.json');
     expect(Storage.getGlobalSettingsPath()).toBe(expected);
   });
@@ -20,22 +20,22 @@ describe('Storage – additional helpers', () => {
   const projectRoot = '/tmp/project';
   const storage = new Storage(projectRoot);
 
-  it('getWorkspaceSettingsPath returns project/.qwen/settings.json', () => {
+  it('getWorkspaceSettingsPath returns project/.param/settings.json', () => {
     const expected = path.join(projectRoot, '.qwen', 'settings.json');
     expect(storage.getWorkspaceSettingsPath()).toBe(expected);
   });
 
-  it('getUserCommandsDir returns ~/.qwen/commands', () => {
+  it('getUserCommandsDir returns ~/.param/commands', () => {
     const expected = path.join(os.homedir(), '.qwen', 'commands');
     expect(Storage.getUserCommandsDir()).toBe(expected);
   });
 
-  it('getProjectCommandsDir returns project/.qwen/commands', () => {
+  it('getProjectCommandsDir returns project/.param/commands', () => {
     const expected = path.join(projectRoot, '.qwen', 'commands');
     expect(storage.getProjectCommandsDir()).toBe(expected);
   });
 
-  it('getMcpOAuthTokensPath returns ~/.qwen/mcp-oauth-tokens.json', () => {
+  it('getMcpOAuthTokensPath returns ~/.param/mcp-oauth-tokens.json', () => {
     const expected = path.join(os.homedir(), '.qwen', 'mcp-oauth-tokens.json');
     expect(Storage.getMcpOAuthTokensPath()).toBe(expected);
   });
@@ -60,8 +60,8 @@ describe('Storage – getRuntimeBaseDir / setRuntimeBaseDir', () => {
     }
   });
 
-  it('defaults to getGlobalQwenDir() when nothing is configured', () => {
-    expect(Storage.getRuntimeBaseDir()).toBe(Storage.getGlobalQwenDir());
+  it('defaults to getGlobalParamDir() when nothing is configured', () => {
+    expect(Storage.getRuntimeBaseDir()).toBe(Storage.getGlobalParamDir());
   });
 
   it('uses setRuntimeBaseDir value when set with absolute path', () => {
@@ -136,19 +136,19 @@ describe('Storage – getRuntimeBaseDir / setRuntimeBaseDir', () => {
     expect(Storage.getRuntimeBaseDir()).toBe(customDir);
 
     Storage.setRuntimeBaseDir(null);
-    expect(Storage.getRuntimeBaseDir()).toBe(Storage.getGlobalQwenDir());
+    expect(Storage.getRuntimeBaseDir()).toBe(Storage.getGlobalParamDir());
   });
 
   it('resets to default when setRuntimeBaseDir is called with undefined', () => {
     Storage.setRuntimeBaseDir(path.resolve('custom'));
     Storage.setRuntimeBaseDir(undefined);
-    expect(Storage.getRuntimeBaseDir()).toBe(Storage.getGlobalQwenDir());
+    expect(Storage.getRuntimeBaseDir()).toBe(Storage.getGlobalParamDir());
   });
 
   it('resets to default when setRuntimeBaseDir is called with empty string', () => {
     Storage.setRuntimeBaseDir(path.resolve('custom'));
     Storage.setRuntimeBaseDir('');
-    expect(Storage.getRuntimeBaseDir()).toBe(Storage.getGlobalQwenDir());
+    expect(Storage.getRuntimeBaseDir()).toBe(Storage.getGlobalParamDir());
   });
 
   it('handles bare tilde (~) as home directory', () => {
@@ -242,7 +242,7 @@ describe('Storage – runtime path methods use getRuntimeBaseDir', () => {
 
 describe('Storage – config paths remain at ~/.qwen regardless of runtime dir', () => {
   const originalEnv = process.env['QWEN_RUNTIME_DIR'];
-  const globalQwenDir = Storage.getGlobalQwenDir();
+  const globalQwenDir = Storage.getGlobalParamDir();
 
   beforeEach(() => {
     Storage.setRuntimeBaseDir(path.resolve('custom-runtime'));
@@ -304,7 +304,7 @@ describe('Storage – config paths remain at ~/.qwen regardless of runtime dir',
     expect(Storage.getGlobalBinDir()).toBe(path.join(globalQwenDir, 'bin'));
   });
 
-  it('getUserSkillsDirs still includes ~/.qwen/skills', () => {
+  it('getUserSkillsDirs still includes ~/.param/skills', () => {
     const storage = new Storage('/tmp/project');
     const skillsDirs = storage.getUserSkillsDirs();
     expect(

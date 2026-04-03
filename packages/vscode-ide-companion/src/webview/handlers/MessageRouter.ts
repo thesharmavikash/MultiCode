@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import type * as vscode from 'vscode';
 import type { IMessageHandler } from './BaseMessageHandler.js';
-import type { QwenAgentManager } from '../../services/qwenAgentManager.js';
+import type { paramAgentManager } from '../../services/paramAgentManager.js';
 import type { ConversationStore } from '../../services/conversationStore.js';
 import type {
   PermissionResponseMessage,
@@ -35,7 +35,7 @@ export class MessageRouter {
     | null = null;
 
   constructor(
-    agentManager: QwenAgentManager,
+    agentManager: paramAgentManager,
     conversationStore: ConversationStore,
     currentConversationId: string | null,
     sendToWebView: (message: unknown) => void,

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,7 +20,7 @@
 
 import { AuthType } from '../core/contentGenerator.js';
 import type { ContentGeneratorConfig } from '../core/contentGenerator.js';
-import { DEFAULT_QWEN_MODEL } from '../config/models.js';
+import { DEFAULT_PARAM_MODEL } from '../config/models.js';
 import {
   resolveField,
   resolveOptionalField,
@@ -38,7 +38,7 @@ import {
 import {
   AUTH_ENV_MAPPINGS,
   DEFAULT_MODELS,
-  QWEN_OAUTH_ALLOWED_MODELS,
+  PARAM_OAUTH_ALLOWED_MODELS,
   MODEL_GENERATION_CONFIG_FIELDS,
 } from './constants.js';
 import type { ModelConfig as ModelProviderConfig } from './types.js';
@@ -123,9 +123,9 @@ export function resolveModelConfig(
   const warnings: string[] = [];
   const sources: ConfigSources = {};
 
-  // Special handling for Qwen OAuth
-  if (authType === AuthType.QWEN_OAUTH) {
-    return resolveQwenOAuthConfig(input, warnings);
+  // Special handling for param OAuth
+  if (authType === AuthType.PARAM_OAUTH) {
+    return resolveparamOAuthConfig(input, warnings);
   }
 
   // Get auth-specific env var mappings.
@@ -270,18 +270,18 @@ export function resolveModelConfig(
 }
 
 /**
- * Special resolver for Qwen OAuth authentication.
- * Qwen OAuth has fixed model options and uses dynamic tokens.
+ * Special resolver for param OAuth authentication.
+ * param OAuth has fixed model options and uses dynamic tokens.
  */
-function resolveQwenOAuthConfig(
+function resolveparamOAuthConfig(
   input: ModelConfigSourcesInput,
   warnings: string[],
 ): ModelConfigResolutionResult {
   const { cli, settings, proxy, modelProvider } = input;
   const sources: ConfigSources = {};
 
-  // Qwen OAuth only allows specific models
-  const allowedModels = new Set<string>(QWEN_OAUTH_ALLOWED_MODELS);
+  // param OAuth only allows specific models
+  const allowedModels = new Set<string>(PARAM_OAUTH_ALLOWED_MODELS);
 
   // Determine requested model
   const requestedModel = cli?.model || settings?.model;
@@ -301,15 +301,15 @@ function resolveQwenOAuthConfig(
         ? ` Note: vision-model has been removed since coder-model now supports vision capabilities.`
         : '';
       warnings.push(
-        `Warning: Unsupported Qwen OAuth model '${requestedModel}', falling back to '${DEFAULT_QWEN_MODEL}'.${extraMessage}`,
+        `Warning: Unsupported param OAuth model '${requestedModel}', falling back to '${DEFAULT_PARAM_MODEL}'.${extraMessage}`,
       );
     }
-    resolvedModel = DEFAULT_QWEN_MODEL;
-    modelSource = defaultSource(`fallback to '${DEFAULT_QWEN_MODEL}'`);
+    resolvedModel = DEFAULT_PARAM_MODEL;
+    modelSource = defaultSource(`fallback to '${DEFAULT_PARAM_MODEL}'`);
   }
 
   sources['model'] = modelSource;
-  sources['apiKey'] = computedSource('Qwen OAuth dynamic token');
+  sources['apiKey'] = computedSource('param OAuth dynamic token');
   sources['authType'] = computedSource('provided by caller');
 
   if (proxy) {
@@ -320,15 +320,15 @@ function resolveQwenOAuthConfig(
   const generationConfig = resolveGenerationConfig(
     settings?.generationConfig,
     modelProvider?.generationConfig,
-    AuthType.QWEN_OAUTH,
+    AuthType.PARAM_OAUTH,
     resolvedModel,
     sources,
   );
 
   const config: ContentGeneratorConfig = {
-    authType: AuthType.QWEN_OAUTH,
+    authType: AuthType.PARAM_OAUTH,
     model: resolvedModel,
-    apiKey: 'QWEN_OAUTH_DYNAMIC_TOKEN',
+    apiKey: 'PARAM_OAUTH_DYNAMIC_TOKEN',
     proxy,
     ...generationConfig,
   };

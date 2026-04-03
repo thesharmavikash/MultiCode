@@ -1,10 +1,10 @@
-package com.alibaba.qwen.code.cli.transport;
+package com.alibaba.param.code.cli.transport;
 
 import java.util.List;
 import java.util.Map;
 
-import com.alibaba.qwen.code.cli.protocol.data.PermissionMode;
-import com.alibaba.qwen.code.cli.utils.Timeout;
+import com.alibaba.param.code.cli.protocol.data.PermissionMode;
+import com.alibaba.param.code.cli.utils.Timeout;
 
 /**
  * Configuration options for the transport layer.
@@ -14,9 +14,9 @@ import com.alibaba.qwen.code.cli.utils.Timeout;
  */
 public class TransportOptions implements Cloneable {
     /**
-     * Path to the Qwen executable.
+     * Path to the param executable.
      */
-    private String pathToQwenExecutable;
+    private String pathToparamExecutable;
     /**
      * Current working directory for the CLI process.
      */
@@ -75,22 +75,22 @@ public class TransportOptions implements Cloneable {
     private List<String> otherOptions;
 
     /**
-     * Gets the path to the Qwen executable.
+     * Gets the path to the param executable.
      *
-     * @return The path to the Qwen executable
+     * @return The path to the param executable
      */
-    public String getPathToQwenExecutable() {
-        return pathToQwenExecutable;
+    public String getPathToparamExecutable() {
+        return pathToparamExecutable;
     }
 
     /**
-     * Sets the path to the Qwen executable.
+     * Sets the path to the param executable.
      *
-     * @param pathToQwenExecutable The path to the Qwen executable
+     * @param pathToparamExecutable The path to the param executable
      * @return This instance for method chaining
      */
-    public TransportOptions setPathToQwenExecutable(String pathToQwenExecutable) {
-        this.pathToQwenExecutable = pathToQwenExecutable;
+    public TransportOptions setPathToparamExecutable(String pathToparamExecutable) {
+        this.pathToparamExecutable = pathToparamExecutable;
         return this;
     }
 

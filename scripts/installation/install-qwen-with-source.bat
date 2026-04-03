@@ -1,9 +1,9 @@
 @echo off
-REM Script to install Node.js and Qwen Code with source information
+REM Script to install Node.js and param Code with source information
 REM This script handles the installation process and sets the installation source
 REM
-REM Usage: install-qwen-with-source.bat --source <source>
-REM        install-qwen-with-source.bat -s <source>
+REM Usage: install-param-with-source.bat --source <source>
+REM        install-param-with-source.bat -s <source>
 REM
 
 setlocal enabledelayedexpansion
@@ -35,7 +35,7 @@ goto parse_args
 :end_parse
 
 echo ===========================================
-echo Qwen Code Installation Script with Source Tracking
+echo param Code Installation Script with Source Tracking
 echo ===========================================
 echo.
 echo INFO: Installation source: %SOURCE%
@@ -55,13 +55,13 @@ if !ERRORLEVEL! EQU 0 (
     
     if !MAJOR_VERSION! GEQ 20 (
         echo INFO: Node.js version !NODE_VERSION! is sufficient. Skipping Node.js installation.
-        goto :InstallQwenCode
+        goto :InstallparamCode
     ) else (
         echo INFO: Node.js version !NODE_VERSION! is too low. Need version 20 or higher.
         echo INFO: Installing Node.js 20+
         call :InstallNodeJSDirectly
         if !ERRORLEVEL! NEQ 0 (
-            echo ERROR: Failed to install Node.js. Cannot continue with Qwen Code installation.
+            echo ERROR: Failed to install Node.js. Cannot continue with param Code installation.
             exit /b 1
         )
     )
@@ -69,14 +69,14 @@ if !ERRORLEVEL! EQU 0 (
     echo INFO: Node.js not found. Installing Node.js 20+
     call :InstallNodeJSDirectly
     if !ERRORLEVEL! NEQ 0 (
-        echo ERROR: Failed to install Node.js. Cannot continue with Qwen Code installation.
+        echo ERROR: Failed to install Node.js. Cannot continue with param Code installation.
         exit /b 1
     )
 )
 
-:InstallQwenCode
+:InstallparamCode
 
-REM Verify npm is available before installing Qwen Code
+REM Verify npm is available before installing param Code
 REM Always use full path to npm to avoid local node_modules conflicts
 set "NODEJS_PATH=C:\Program Files\nodejs"
 set "NODEJS_PATH_X86=C:\Program Files (x86)\nodejs"
@@ -98,25 +98,25 @@ if exist "!NODEJS_PATH!\npm.cmd" (
     set "NPM_CMD=npm"
 )
 
-REM Install Qwen Code with source information
-echo INFO: Installing Qwen Code with source: %SOURCE%
-echo INFO: Running: %NPM_CMD% install -g @qwen-code/qwen-code@latest --registry https://registry.npmmirror.com
-call "%NPM_CMD%" install -g @qwen-code/qwen-code@latest --registry https://registry.npmmirror.com
+REM Install param Code with source information
+echo INFO: Installing param Code with source: %SOURCE%
+echo INFO: Running: %NPM_CMD% install -g @param-code/param-code@latest --registry https://registry.npmmirror.com
+call "%NPM_CMD%" install -g @param-code/param-code@latest --registry https://registry.npmmirror.com
 
 if %ERRORLEVEL% EQU 0 (
-    echo SUCCESS: Qwen Code installed successfully!
+    echo SUCCESS: param Code installed successfully!
 ) else (
-    echo ERROR: Failed to install Qwen Code.
+    echo ERROR: Failed to install param Code.
     exit /b 1
 )
 
 REM Create source.json only if --source or -s was explicitly provided
 if not "!SOURCE!"=="unknown" (
-    echo INFO: Creating source.json in %USERPROFILE%\.qwen...
+    echo INFO: Creating source.json in %USERPROFILE%\.param...
 
-    set "QWEN_DIR=%USERPROFILE%\.qwen"
-    if not exist "!QWEN_DIR!" (
-        mkdir "!QWEN_DIR!"
+    set "param_DIR=%USERPROFILE%\.param"
+    if not exist "!param_DIR!" (
+        mkdir "!param_DIR!"
     )
 
     REM Create the source.json file with the installation source
@@ -124,26 +124,26 @@ if not "!SOURCE!"=="unknown" (
     echo {
     echo   "source": "!SOURCE!"
     echo }
-    ) > "!QWEN_DIR!\source.json"
+    ) > "!param_DIR!\source.json"
 
-    echo SUCCESS: Installation source saved to %USERPROFILE%\.qwen\source.json
+    echo SUCCESS: Installation source saved to %USERPROFILE%\.param\source.json
 )
 
 REM Verify installation
-call :CheckCommandExists qwen
+call :CheckCommandExists param
 if %ERRORLEVEL% EQU 0 (
-    echo SUCCESS: Qwen Code is available as 'qwen' command.
-    call qwen --version
+    echo SUCCESS: param Code is available as 'param' command.
+    call param --version
     echo.
-    echo INFO: Starting Qwen Code...
+    echo INFO: Starting param Code...
     echo.
-    call qwen
+    call param
 ) else (
-    echo WARNING: Qwen Code may not be in PATH. Please check your npm global bin directory.
+    echo WARNING: param Code may not be in PATH. Please check your npm global bin directory.
     echo.
     echo ===========================================
     echo SUCCESS: Installation completed!
-    echo The source information is stored in %USERPROFILE%\.qwen\source.json
+    echo The source information is stored in %USERPROFILE%\.param\source.json
     echo.
     echo ===========================================
 )
@@ -167,7 +167,7 @@ REM ============================================================
 echo INFO: Downloading Node.js LTS (20.x) from official website
 
 REM Create temp directory for download
-set "TEMP_DIR=%TEMP%\qwen-nodejs-install"
+set "TEMP_DIR=%TEMP%\param-nodejs-install"
 if not exist "%TEMP_DIR%" mkdir "%TEMP_DIR%"
 
 REM Determine architecture

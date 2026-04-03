@@ -1,9 +1,9 @@
-# Makefile for qwen-code
+# Makefile for param-code
 
 .PHONY: help install build build-sandbox build-all test lint format preflight clean start debug release run-npx create-alias
 
 help:
-	@echo "Makefile for qwen-code"
+	@echo "Makefile for param-code"
 	@echo ""
 	@echo "Usage:"
 	@echo "  make install          - Install npm dependencies"
@@ -14,11 +14,11 @@ help:
 	@echo "  make format           - Format the code"
 	@echo "  make preflight        - Run formatting, linting, and tests"
 	@echo "  make clean            - Remove generated files"
-	@echo "  make start            - Start the Qwen Code CLI"
-	@echo "  make debug            - Start the Qwen Code CLI in debug mode"
+	@echo "  make start            - Start the param Code CLI"
+	@echo "  make debug            - Start the param Code CLI in debug mode"
 	@echo ""
 	@echo "  make run-npx          - Run the CLI using npx (for testing the published package)"
-	@echo "  make create-alias     - Create a 'qwen' alias for your shell"
+	@echo "  make create-alias     - Create a 'param' alias for your shell"
 
 install:
 	npm install
@@ -53,7 +53,7 @@ debug:
 
 
 run-npx:
-	npx https://github.com/QwenLM/qwen-code
+	npx https://github.com/paramLM/param-code
 
 create-alias:
 	scripts/create_alias.sh

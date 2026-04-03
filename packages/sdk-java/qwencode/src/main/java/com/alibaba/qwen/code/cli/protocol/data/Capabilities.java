@@ -1,9 +1,9 @@
-package com.alibaba.qwen.code.cli.protocol.data;
+package com.alibaba.param.code.cli.protocol.data;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 
 /**
- * Represents the capabilities of the Qwen Code CLI.
+ * Represents the capabilities of the param Code CLI.
  *
  * @author skyfire
  * @version $Id: 0.0.1

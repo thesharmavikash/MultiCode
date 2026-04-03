@@ -15,7 +15,7 @@ declare global {
 const ReactDOM = window.ReactDOM;
 const React = window.React;
 
-declare const QwenCodeWebUI: {
+declare const paramCodeWebUI: {
   ChatViewer: (props: {
     messages: unknown[];
     autoScroll: boolean;
@@ -27,7 +27,7 @@ declare const QwenCodeWebUI: {
   }) => React.ReactNode;
 };
 
-const { ChatViewer, PlatformProvider } = QwenCodeWebUI;
+const { ChatViewer, PlatformProvider } = paramCodeWebUI;
 
 const logoSvgWithGradient = (() => {
   if (!logoSvg) {
@@ -35,11 +35,11 @@ const logoSvgWithGradient = (() => {
   }
 
   const gradientDef =
-    '<defs><linearGradient id="qwen-logo-gradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#60a5fa" /><stop offset="100%" stop-color="#a855f7" /></linearGradient></defs>';
+    '<defs><linearGradient id="param-logo-gradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#60a5fa" /><stop offset="100%" stop-color="#a855f7" /></linearGradient></defs>';
 
   const withDefs = logoSvg.replace(/<svg([^>]*)>/, `<svg$1>${gradientDef}`);
 
-  return withDefs.replace(/fill="[^"]*"/, 'fill="url(#qwen-logo-gradient)"');
+  return withDefs.replace(/fill="[^"]*"/, 'fill="url(#param-logo-gradient)"');
 })();
 
 const App = () => {
@@ -61,8 +61,8 @@ const App = () => {
             dangerouslySetInnerHTML={{ __html: logoSvgWithGradient }}
           />
           <div className="logo">
-            <div className="logo-text" data-text="QWEN">
-              <span className="logo-text-inner">QWEN</span>
+            <div className="logo-text" data-text="param">
+              <span className="logo-text-inner">param</span>
             </div>
           </div>
         </div>

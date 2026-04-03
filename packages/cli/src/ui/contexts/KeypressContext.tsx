@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Config } from '@qwen-code/qwen-code-core';
+import type { Config } from '@agent-param/param-core';
 import {
   KittySequenceOverflowEvent,
   logKittySequenceOverflow,
   createDebugLogger,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-param/param-core';
 import { useStdin } from 'ink';
 import type React from 'react';
 import {

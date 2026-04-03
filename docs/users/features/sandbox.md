@@ -1,19 +1,19 @@
 # Sandbox
 
-This document explains how to run Qwen Code inside a sandbox to reduce risk when tools execute shell commands or modify files.
+This document explains how to run param Code inside a sandbox to reduce risk when tools execute shell commands or modify files.
 
 ## Prerequisites
 
-Before using sandboxing, you need to install and set up Qwen Code:
+Before using sandboxing, you need to install and set up param Code:
 
 ```bash
-npm install -g @qwen-code/qwen-code
+npm install -g @param-code/param-code
 ```
 
 To verify the installation
 
 ```bash
-qwen --version
+param --version
 ```
 
 ## Overview of sandboxing
@@ -29,7 +29,7 @@ The benefits of sandboxing include:
 
 > [!note]
 >
-> **Naming note:** Some sandbox-related environment variables may have used the `GEMINI_*` prefix historically. All new environment variables use the `QWEN_*` prefix.
+> **Naming note:** Some sandbox-related environment variables may have used the `GEMINI_*` prefix historically. All new environment variables use the `param_*` prefix.
 
 ## Sandboxing methods
 
@@ -47,9 +47,9 @@ Lightweight, built-in sandboxing using `sandbox-exec`.
 
 Cross-platform sandboxing with complete process isolation.
 
-By default, Qwen Code uses a published sandbox image (configured in the CLI package) and will pull it as needed.
+By default, param Code uses a published sandbox image (configured in the CLI package) and will pull it as needed.
 
-The container sandbox mounts your workspace and your `~/.qwen` directory into the container so auth and settings persist between runs.
+The container sandbox mounts your workspace and your `~/.param` directory into the container so auth and settings persist between runs.
 
 **Best for**: Strong isolation on any OS, consistent tooling inside a known image.
 
@@ -65,11 +65,11 @@ The container sandbox mounts your workspace and your `~/.qwen` directory into th
 
 ```bash
 # Enable sandboxing with command flag
-qwen -s -p "analyze the code structure"
+param -s -p "analyze the code structure"
 
 # Or enable sandboxing for your shell session (recommended for CI / scripts)
-export QWEN_SANDBOX=true   # true auto-picks a provider (see notes below)
-qwen -p "run the test suite"
+export param_SANDBOX=true   # true auto-picks a provider (see notes below)
+param -p "run the test suite"
 
 # Configure in settings.json
 {
@@ -83,28 +83,28 @@ qwen -p "run the test suite"
 >
 > **Provider selection notes:**
 >
-> - On **macOS**, `QWEN_SANDBOX=true` typically selects `sandbox-exec` (Seatbelt) if available.
-> - On **Linux/Windows**, `QWEN_SANDBOX=true` requires `docker` or `podman` to be installed.
-> - To force a provider, set `QWEN_SANDBOX=docker|podman|sandbox-exec`.
+> - On **macOS**, `param_SANDBOX=true` typically selects `sandbox-exec` (Seatbelt) if available.
+> - On **Linux/Windows**, `param_SANDBOX=true` requires `docker` or `podman` to be installed.
+> - To force a provider, set `param_SANDBOX=docker|podman|sandbox-exec`.
 
 ## Configuration
 
 ### Enable sandboxing (in order of precedence)
 
-1. **Environment variable**: `QWEN_SANDBOX=true|false|docker|podman|sandbox-exec`
+1. **Environment variable**: `param_SANDBOX=true|false|docker|podman|sandbox-exec`
 2. **Command flag / argument**: `-s`, `--sandbox`, or `--sandbox=<provider>`
 3. **Settings file**: `tools.sandbox` in your `settings.json` (e.g., `{"tools": {"sandbox": true}}`).
 
 > [!important]
 >
-> If `QWEN_SANDBOX` is set, it **overrides** the CLI flag and `settings.json`.
+> If `param_SANDBOX` is set, it **overrides** the CLI flag and `settings.json`.
 
 ### Configure the sandbox image (Docker/Podman)
 
 - **CLI flag**: `--sandbox-image <image>`
-- **Environment variable**: `QWEN_SANDBOX_IMAGE=<image>`
+- **Environment variable**: `param_SANDBOX_IMAGE=<image>`
 
-If you don’t set either, Qwen Code uses the default image configured in the CLI package (for example `ghcr.io/qwenlm/qwen-code:<version>`).
+If you don’t set either, param Code uses the default image configured in the CLI package (for example `ghcr.io/paramlm/param-code:<version>`).
 
 ### macOS Seatbelt profiles
 
@@ -125,7 +125,7 @@ Built-in profiles (set via `SEATBELT_PROFILE` env var):
 
 To use a custom Seatbelt profile:
 
-1. Create a file named `.qwen/sandbox-macos-<profile_name>.sb` in your project.
+1. Create a file named `.param/sandbox-macos-<profile_name>.sb` in your project.
 2. Set `SEATBELT_PROFILE=<profile_name>`.
 
 ### Custom Sandbox Flags
@@ -150,7 +150,7 @@ export SANDBOX_FLAGS="--flag1 --flag2=value"
 
 If you want to restrict outbound network access to an allowlist, you can run a local proxy alongside the sandbox:
 
-- Set `QWEN_SANDBOX_PROXY_COMMAND=<command>`
+- Set `param_SANDBOX_PROXY_COMMAND=<command>`
 - The command must start a proxy server that listens on `:::8877`
 
 This is especially useful with `*-proxied` Seatbelt profiles.
@@ -159,7 +159,7 @@ For a working allowlist-style proxy example, see: [Example Proxy Script](/develo
 
 ## Linux UID/GID handling
 
-On Linux, Qwen Code defaults to enabling UID/GID mapping so the sandbox runs as your user (and reuses the mounted `~/.qwen`). Override with:
+On Linux, param Code defaults to enabling UID/GID mapping so the sandbox runs as your user (and reuses the mounted `~/.param`). Override with:
 
 ```bash
 export SANDBOX_SET_UID_GID=true   # Force host UID/GID
@@ -178,17 +178,17 @@ export SANDBOX_SET_UID_GID=false  # Disable UID/GID mapping
 
 **Missing commands**
 
-- Container sandbox: add them via `.qwen/sandbox.Dockerfile` or `.qwen/sandbox.bashrc`.
+- Container sandbox: add them via `.param/sandbox.Dockerfile` or `.param/sandbox.bashrc`.
 - Seatbelt: your host binaries are used, but the sandbox may restrict access to some paths.
 
 **Java not available in Docker sandbox**
 
-The official Qwen Code Docker image is intentionally minimal to keep the image small, secure, and fast to pull. Different users require different language runtimes (Java, Python, Node.js, etc.), and bundling all environments into a single image is not practical. Therefore, Java is **not included by default** in the Docker sandbox.
+The official param Code Docker image is intentionally minimal to keep the image small, secure, and fast to pull. Different users require different language runtimes (Java, Python, Node.js, etc.), and bundling all environments into a single image is not practical. Therefore, Java is **not included by default** in the Docker sandbox.
 
-If your workflow requires Java, you can extend the base image by creating a `.qwen/sandbox.Dockerfile` in your project:
+If your workflow requires Java, you can extend the base image by creating a `.param/sandbox.Dockerfile` in your project:
 
 ```dockerfile
-FROM ghcr.io/qwenlm/qwen-code:latest
+FROM ghcr.io/paramlm/param-code:latest
 
 RUN apt-get update && \
     apt-get install -y openjdk-17-jre && \
@@ -199,7 +199,7 @@ RUN apt-get update && \
 Then rebuild the sandbox image:
 
 ```bash
-QWEN_SANDBOX=docker BUILD_SANDBOX=1 qwen -s
+param_SANDBOX=docker BUILD_SANDBOX=1 param -s
 ```
 
 For more details on customizing the sandbox, see [Customizing the sandbox environment](/developers/tools/sandbox).
@@ -212,19 +212,19 @@ For more details on customizing the sandbox, see [Customizing the sandbox enviro
 ### Debug mode
 
 ```bash
-DEBUG=1 qwen -s -p "debug command"
+DEBUG=1 param -s -p "debug command"
 ```
 
-**Note:** If you have `DEBUG=true` in a project's `.env` file, it won't affect the CLI due to automatic exclusion. Use `.qwen/.env` files for Qwen Code-specific debug settings.
+**Note:** If you have `DEBUG=true` in a project's `.env` file, it won't affect the CLI due to automatic exclusion. Use `.param/.env` files for param Code-specific debug settings.
 
 ### Inspect sandbox
 
 ```bash
 # Check environment
-qwen -s -p "run shell command: env | grep SANDBOX"
+param -s -p "run shell command: env | grep SANDBOX"
 
 # List mounts
-qwen -s -p "run shell command: mount | grep workspace"
+param -s -p "run shell command: mount | grep workspace"
 ```
 
 ## Security notes

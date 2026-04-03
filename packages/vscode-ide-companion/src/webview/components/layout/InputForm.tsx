@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  *
  * InputForm adapter for VSCode - wraps webui InputForm with local type handling
@@ -8,11 +8,11 @@
  */
 
 import type { ClipboardEvent, FC, ReactNode } from 'react';
-import { InputForm as BaseInputForm, getEditModeIcon } from '@qwen-code/webui';
+import { InputForm as BaseInputForm, getEditModeIcon } from '@param-code/webui';
 import type {
   InputFormProps as BaseInputFormProps,
   EditModeInfo,
-} from '@qwen-code/webui';
+} from '@param-code/webui';
 import type { CompletionItem } from '../../../types/completionItemTypes.js';
 import { getApprovalModeInfoFromString } from '../../../types/acpTypes.js';
 import type { ApprovalModeValue } from '../../../types/approvalModeValueTypes.js';

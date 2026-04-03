@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -113,7 +113,7 @@ export class AcpConnection {
 
     if (!fs.existsSync(cliEntryPath)) {
       throw new Error(
-        `Bundled Qwen CLI entry not found at ${cliEntryPath}. The extension may not have been packaged correctly.`,
+        `Bundled param CLI entry not found at ${cliEntryPath}. The extension may not have been packaged correctly.`,
       );
     }
 
@@ -146,9 +146,9 @@ export class AcpConnection {
         message.toLowerCase().includes('error') &&
         !message.includes('Loaded cached')
       ) {
-        console.error(`[ACP qwen]:`, message);
+        console.error(`[ACP param]:`, message);
       } else {
-        console.log(`[ACP qwen]:`, message);
+        console.log(`[ACP param]:`, message);
       }
     });
 
@@ -158,7 +158,7 @@ export class AcpConnection {
 
     this.child!.on('exit', (code: number | null, signal: string | null) => {
       console.error(
-        `[ACP qwen] Process exited with code: ${code}, signal: ${signal}`,
+        `[ACP param] Process exited with code: ${code}, signal: ${signal}`,
       );
       this.lastExitCode = code;
       this.lastExitSignal = signal;
@@ -169,7 +169,7 @@ export class AcpConnection {
         : '';
       rejectOnExit?.(
         new Error(
-          `Qwen ACP process exited unexpectedly (exit code: ${code}, signal: ${signal})${stderrSuffix}`,
+          `param ACP process exited unexpectedly (exit code: ${code}, signal: ${signal})${stderrSuffix}`,
         ),
       );
 
@@ -195,7 +195,7 @@ export class AcpConnection {
         ? `\nCLI stderr: ${stderrOutput.slice(-500)}`
         : '';
       throw new Error(
-        `Qwen ACP process failed to start (exit code: ${code}, signal: ${signal})${stderrSuffix}`,
+        `param ACP process failed to start (exit code: ${code}, signal: ${signal})${stderrSuffix}`,
       );
     }
 

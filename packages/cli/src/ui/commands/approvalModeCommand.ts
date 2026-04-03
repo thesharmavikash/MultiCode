@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen
+ * Copyright 2025 param
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,8 +12,8 @@ import type {
 } from './types.js';
 import { CommandKind } from './types.js';
 import { t } from '../../i18n/index.js';
-import type { ApprovalMode } from '@qwen-code/qwen-code-core';
-import { APPROVAL_MODES } from '@qwen-code/qwen-code-core';
+import type { ApprovalMode } from '@agent-param/param-core';
+import { APPROVAL_MODES } from '@agent-param/param-core';
 
 /**
  * Parses the argument string and returns the corresponding ApprovalMode if valid.

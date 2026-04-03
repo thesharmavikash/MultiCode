@@ -21,16 +21,16 @@ import type { SlashCommand, SlashCommandActionReturn } from './types.js';
 import { CommandKind } from './types.js';
 import { getUrlOpenCommand } from '../../ui/utils/commandUtils.js';
 import { t } from '../../i18n/index.js';
-import { createDebugLogger } from '@qwen-code/qwen-code-core';
+import { createDebugLogger } from '@agent-param/param-core';
 
 const debugLogger = createDebugLogger('SETUP_GITHUB');
 
 export const GITHUB_WORKFLOW_PATHS = [
-  'qwen-dispatch/qwen-dispatch.yml',
-  'qwen-assistant/qwen-invoke.yml',
-  'issue-triage/qwen-triage.yml',
-  'issue-triage/qwen-scheduled-triage.yml',
-  'pr-review/qwen-review.yml',
+  'param-dispatch/param-dispatch.yml',
+  'param-assistant/param-invoke.yml',
+  'issue-triage/param-triage.yml',
+  'issue-triage/param-scheduled-triage.yml',
+  'pr-review/param-review.yml',
 ];
 
 // Generate OS-specific commands to open the GitHub pages needed for setup.
@@ -53,9 +53,9 @@ function getOpenUrlsCommands(readmeUrl: string): string[] {
   return commands;
 }
 
-// Add Qwen Code specific entries to .gitignore file
+// Add param Code specific entries to .gitignore file
 export async function updateGitignore(gitRepoRoot: string): Promise<void> {
-  const gitignoreEntries = ['.qwen/', 'gha-creds-*.json'];
+  const gitignoreEntries = ['.param/', 'gha-creds-*.json'];
 
   const gitignorePath = path.join(gitRepoRoot, '.gitignore');
   try {
@@ -133,7 +133,7 @@ export const setupGithubCommand: SlashCommand = {
     // Get the latest release tag from GitHub
     const proxy = context?.services?.config?.getProxy();
     const releaseTag = await getLatestGitHubRelease(proxy);
-    const readmeUrl = `https://github.com/QwenLM/qwen-code-action/blob/${releaseTag}/README.md#quick-start`;
+    const readmeUrl = `https://github.com/paramLM/param-code-action/blob/${releaseTag}/README.md#quick-start`;
 
     // Create the .github/workflows directory to download the files into
     const githubWorkflowsDir = path.join(gitRepoRoot, '.github', 'workflows');
@@ -155,7 +155,7 @@ export const setupGithubCommand: SlashCommand = {
     for (const workflow of GITHUB_WORKFLOW_PATHS) {
       downloads.push(
         (async () => {
-          const endpoint = `https://raw.githubusercontent.com/QwenLM/qwen-code-action/refs/tags/${releaseTag}/examples/workflows/${workflow}`;
+          const endpoint = `https://raw.githubusercontent.com/paramLM/param-code-action/refs/tags/${releaseTag}/examples/workflows/${workflow}`;
           const response = await fetch(endpoint, {
             method: 'GET',
             dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
@@ -216,7 +216,7 @@ export const setupGithubCommand: SlashCommand = {
       toolName: 'run_shell_command',
       toolArgs: {
         description:
-          'Setting up GitHub Actions to triage issues and review PRs with Qwen.',
+          'Setting up GitHub Actions to triage issues and review PRs with param.',
         command,
         is_background: false,
       },

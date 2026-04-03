@@ -19,7 +19,7 @@ January 14, 2026
 ```xml
 <dependency>
     <groupId>com.alibaba</groupId>
-    <artifactId>qwencode-sdk</artifactId>
+    <artifactId>paramcode-sdk</artifactId>
     <version>0.0.2-alpha</version>
 </dependency>
 ```
@@ -28,14 +28,14 @@ January 14, 2026
 
 ### Summary
 
-This release includes updates to the Qwen Code Java SDK with improved session management, enhanced transport options, and better error handling capabilities.
+This release includes updates to the param Code Java SDK with improved session management, enhanced transport options, and better error handling capabilities.
 
 ### Maven Configuration
 
 ```xml
 <dependency>
     <groupId>com.alibaba</groupId>
-    <artifactId>qwencode-sdk</artifactId>
+    <artifactId>paramcode-sdk</artifactId>
     <version>0.0.1-alpha</version>
 </dependency>
 ```
@@ -43,7 +43,7 @@ This release includes updates to the Qwen Code Java SDK with improved session ma
 #### Gradle Configuration
 
 ```gradle
-implementation 'com.alibaba:qwencode-sdk:0.0.1-alpha'
+implementation 'com.alibaba:paramcode-sdk:0.0.1-alpha'
 ```
 
 ### Release Date
@@ -133,7 +133,7 @@ Planned improvements for upcoming releases:
 
 1. **Enhanced Security**: Additional authentication mechanisms and secure credential handling
 2. **Performance Optimization**: Improved memory usage and faster response times
-3. **Extended API Coverage**: More comprehensive coverage of Qwen Code CLI features
+3. **Extended API Coverage**: More comprehensive coverage of param Code CLI features
 4. **Better Documentation**: Expanded examples and API reference materials
 5. **Improved Error Recovery**: More robust handling of connection failures and retries
 
@@ -141,7 +141,7 @@ Planned improvements for upcoming releases:
 
 For support, bug reports, or contributions:
 
-- Issue Tracker: https://github.com/QwenLM/qwen-code/issues
+- Issue Tracker: https://github.com/paramLM/param-code/issues
 - Documentation: Refer to README.md and Javadoc
 - Contributions: Pull requests are welcome following the project's contribution guidelines
 

@@ -5,7 +5,7 @@
  */
 
 import { Box } from 'ink';
-import { AuthType } from '@qwen-code/qwen-code-core';
+import { AuthType } from '@agent-param/param-core';
 import { Header, AuthDisplayType } from './Header.js';
 import { Tips } from './Tips.js';
 import { useSettings } from '../contexts/SettingsContext.js';
@@ -35,8 +35,12 @@ function getAuthDisplayType(
   }
 
   switch (authType) {
-    case AuthType.QWEN_OAUTH:
-      return AuthDisplayType.QWEN_OAUTH;
+    case AuthType.PARAM_OAUTH:
+      return AuthDisplayType.PARAM_OAUTH;
+    case AuthType.OPENAI_OAUTH:
+      return AuthDisplayType.OPENAI_OAUTH;
+    case AuthType.ANTHROPIC_OAUTH:
+      return AuthDisplayType.ANTHROPIC_OAUTH;
     default:
       return AuthDisplayType.API_KEY;
   }

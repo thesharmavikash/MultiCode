@@ -1,7 +1,7 @@
-package com.alibaba.qwen.code.cli.protocol.message;
+package com.alibaba.param.code.cli.protocol.message;
 
 /**
- * Represents a message in the Qwen Code protocol.
+ * Represents a message in the param Code protocol.
  *
  * @author skyfire
  * @version $Id: 0.0.1

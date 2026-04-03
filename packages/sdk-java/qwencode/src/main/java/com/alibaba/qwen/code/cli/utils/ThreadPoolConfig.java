@@ -1,4 +1,4 @@
-package com.alibaba.qwen.code.cli.utils;
+package com.alibaba.param.code.cli.utils;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
@@ -24,7 +24,7 @@ public class ThreadPoolConfig {
 
                 @Override
                 public Thread newThread(Runnable r) {
-                    Thread t = new Thread(r, "qwen_code_cli-pool-" + threadNumber.getAndIncrement());
+                    Thread t = new Thread(r, "param_code_cli-pool-" + threadNumber.getAndIncrement());
                     t.setDaemon(false);
                     return t;
                 }

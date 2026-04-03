@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import type { ExportSessionData } from '../types.js';
-import { EXPORT_HTML_TEMPLATE as HTML_TEMPLATE } from '@qwen-code/web-templates';
+import { EXPORT_HTML_TEMPLATE as HTML_TEMPLATE } from '@param-code/web-templates';
 
 /**
  * Escapes JSON for safe embedding in HTML.

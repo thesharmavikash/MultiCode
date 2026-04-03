@@ -1,7 +1,7 @@
-package com.alibaba.qwen.code.cli.transport.process;
+package com.alibaba.param.code.cli.transport.process;
 
-import com.alibaba.qwen.code.cli.transport.TransportOptions;
-import com.alibaba.qwen.code.cli.utils.Timeout;
+import com.alibaba.param.code.cli.transport.TransportOptions;
+import com.alibaba.param.code.cli.utils.Timeout;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -65,7 +65,7 @@ class TransportOptionsAdapter {
      */
     String[] buildCommandArgs() {
         List<String> args = new ArrayList<>(
-                Arrays.asList(transportOptions.getPathToQwenExecutable(), "--input-format", "stream-json", "--output-format",
+                Arrays.asList(transportOptions.getPathToparamExecutable(), "--input-format", "stream-json", "--output-format",
                         "stream-json", "--channel=SDK"));
 
         if (StringUtils.isNotBlank(transportOptions.getModel())) {
@@ -129,8 +129,8 @@ class TransportOptionsAdapter {
                 .map(TransportOptions::clone)
                 .orElse(new TransportOptions());
 
-        if (StringUtils.isBlank(transportOptions.getPathToQwenExecutable())) {
-            transportOptions.setPathToQwenExecutable("qwen");
+        if (StringUtils.isBlank(transportOptions.getPathToparamExecutable())) {
+            transportOptions.setPathToparamExecutable("param");
         }
 
         if (StringUtils.isBlank(transportOptions.getCwd())) {

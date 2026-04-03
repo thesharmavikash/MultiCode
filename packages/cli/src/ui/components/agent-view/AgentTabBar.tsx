@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,7 +20,7 @@
 
 import { Box, Text } from 'ink';
 import { useState, useEffect, useCallback } from 'react';
-import { AgentStatus, AgentEventType } from '@qwen-code/qwen-code-core';
+import { AgentStatus, AgentEventType } from '@agent-param/param-core';
 import {
   useAgentViewState,
   useAgentViewActions,

@@ -6,18 +6,18 @@
 
 import type { CommandModule, Argv } from 'yargs';
 import {
-  handleQwenAuth,
+  handleparamAuth,
   runInteractiveAuth,
   showAuthStatus,
 } from './auth/handler.js';
 import { t } from '../i18n/index.js';
 
 // Define subcommands separately
-const qwenOauthCommand = {
-  command: 'qwen-oauth',
-  describe: t('Authenticate using Qwen OAuth'),
+const paramOauthCommand = {
+  command: 'param-oauth',
+  describe: t('Authenticate using param OAuth'),
   handler: async () => {
-    await handleQwenAuth('qwen-oauth', {});
+    await handleparamAuth('param-oauth', {});
   },
 };
 
@@ -42,10 +42,10 @@ const codePlanCommand = {
 
     // If region and key are provided, use them directly
     if (region && key) {
-      await handleQwenAuth('coding-plan', { region, key });
+      await handleparamAuth('coding-plan', { region, key });
     } else {
       // Otherwise, prompt interactively
-      await handleQwenAuth('coding-plan', {});
+      await handleparamAuth('coding-plan', {});
     }
   },
 };
@@ -61,11 +61,11 @@ const statusCommand = {
 export const authCommand: CommandModule = {
   command: 'auth',
   describe: t(
-    'Configure Qwen authentication information with Qwen-OAuth or Alibaba Cloud Coding Plan',
+    'Configure param authentication information with param-OAuth or Alibaba Cloud Coding Plan',
   ),
   builder: (yargs: Argv) =>
     yargs
-      .command(qwenOauthCommand)
+      .command(paramOauthCommand)
       .command(codePlanCommand)
       .command(statusCommand)
       .demandCommand(0) // Don't require a subcommand

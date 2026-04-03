@@ -54,10 +54,12 @@ export interface ContentGenerator {
 
 export enum AuthType {
   USE_OPENAI = 'openai',
-  QWEN_OAUTH = 'qwen-oauth',
+  OPENAI_OAUTH = 'openai-oauth',
+  PARAM_OAUTH = 'param-oauth',
   USE_GEMINI = 'gemini',
   USE_VERTEX_AI = 'vertex-ai',
   USE_ANTHROPIC = 'anthropic',
+  ANTHROPIC_OAUTH = 'anthropic-oauth',
 }
 
 /**
@@ -221,8 +223,8 @@ export function validateModelConfig(
 ): ModelConfigValidationResult {
   const errors: Error[] = [];
 
-  // Qwen OAuth doesn't need validation - it uses dynamic tokens
-  if (config.authType === AuthType.QWEN_OAUTH) {
+  // param OAuth doesn't need validation - it uses dynamic tokens
+  if (config.authType === AuthType.PARAM_OAUTH) {
     return { valid: true, errors: [] };
   }
 
@@ -311,21 +313,29 @@ export async function createContentGenerator(
       './openaiContentGenerator/index.js'
     );
     baseGenerator = createOpenAIContentGenerator(generatorConfig, config);
-  } else if (authType === AuthType.QWEN_OAUTH) {
-    const { getQwenOAuthClient: getQwenOauthClient } = await import(
-      '../qwen/qwenOAuth2.js'
+  } else if (
+    authType === AuthType.PARAM_OAUTH ||
+    authType === AuthType.OPENAI_OAUTH ||
+    authType === AuthType.ANTHROPIC_OAUTH
+  ) {
+    const { getParamOAuthClient: getParamOauthClient } = await import(
+      '../param/paramOAuth2.js'
     );
-    const { QwenContentGenerator } = await import(
-      '../qwen/qwenContentGenerator.js'
+    const { ParamContentGenerator } = await import(
+      '../param/paramContentGenerator.js'
     );
 
     try {
-      const qwenClient = await getQwenOauthClient(
-        config,
-        isInitialAuth ? { requireCachedCredentials: true } : undefined,
-      );
-      baseGenerator = new QwenContentGenerator(
-        qwenClient,
+      let provider: 'param' | 'anthropic' | 'openai' = 'param';
+      if (authType === AuthType.OPENAI_OAUTH) provider = 'openai';
+      if (authType === AuthType.ANTHROPIC_OAUTH) provider = 'anthropic';
+
+      const paramClient = await getParamOauthClient(config, {
+        requireCachedCredentials: isInitialAuth ? true : undefined,
+        provider,
+      });
+      baseGenerator = new ParamContentGenerator(
+        paramClient,
         generatorConfig,
         config,
       );

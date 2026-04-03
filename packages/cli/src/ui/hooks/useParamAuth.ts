@@ -1,18 +1,18 @@
 /**
  * @license
- * Copyright 2025 Qwen
+ * Copyright 2025 param
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { useState, useCallback, useEffect } from 'react';
 import {
   AuthType,
-  qwenOAuth2Events,
-  QwenOAuth2Event,
+  paramOAuth2Events,
+  paramOAuth2Event,
   type DeviceAuthorizationData,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-param/param-core';
 
-export interface QwenAuthState {
+export interface paramAuthState {
   deviceAuth: DeviceAuthorizationData | null;
   authStatus:
     | 'idle'
@@ -24,23 +24,26 @@ export interface QwenAuthState {
   authMessage: string | null;
 }
 
-export const useQwenAuth = (
+export const useParamAuth = (
   pendingAuthType: AuthType | undefined,
   isAuthenticating: boolean,
 ) => {
-  const [qwenAuthState, setQwenAuthState] = useState<QwenAuthState>({
+  const [paramAuthState, setparamAuthState] = useState<paramAuthState>({
     deviceAuth: null,
     authStatus: 'idle',
     authMessage: null,
   });
 
-  const isQwenAuth = pendingAuthType === AuthType.QWEN_OAUTH;
+  const isParamAuth =
+    pendingAuthType === AuthType.PARAM_OAUTH ||
+    pendingAuthType === AuthType.ANTHROPIC_OAUTH ||
+    pendingAuthType === AuthType.OPENAI_OAUTH;
 
   // Set up event listeners when authentication starts
   useEffect(() => {
-    if (!isQwenAuth || !isAuthenticating) {
-      // Reset state when not authenticating or not Qwen auth
-      setQwenAuthState({
+    if (!isParamAuth || !isAuthenticating) {
+      // Reset state when not authenticating or not param auth
+      setparamAuthState({
         deviceAuth: null,
         authStatus: 'idle',
         authMessage: null,
@@ -48,14 +51,14 @@ export const useQwenAuth = (
       return;
     }
 
-    setQwenAuthState((prev) => ({
+    setparamAuthState((prev) => ({
       ...prev,
       authStatus: 'idle',
     }));
 
     // Set up event listeners
     const handleDeviceAuth = (deviceAuth: DeviceAuthorizationData) => {
-      setQwenAuthState((prev) => ({
+      setparamAuthState((prev) => ({
         ...prev,
         deviceAuth: {
           verification_uri: deviceAuth.verification_uri,
@@ -72,7 +75,7 @@ export const useQwenAuth = (
       status: 'success' | 'error' | 'polling' | 'timeout' | 'rate_limit',
       message?: string,
     ) => {
-      setQwenAuthState((prev) => ({
+      setparamAuthState((prev) => ({
         ...prev,
         authStatus: status,
         authMessage: message || null,
@@ -80,21 +83,21 @@ export const useQwenAuth = (
     };
 
     // Add event listeners
-    qwenOAuth2Events.on(QwenOAuth2Event.AuthUri, handleDeviceAuth);
-    qwenOAuth2Events.on(QwenOAuth2Event.AuthProgress, handleAuthProgress);
+    paramOAuth2Events.on(paramOAuth2Event.AuthUri, handleDeviceAuth);
+    paramOAuth2Events.on(paramOAuth2Event.AuthProgress, handleAuthProgress);
 
     // Cleanup event listeners when component unmounts or auth finishes
     return () => {
-      qwenOAuth2Events.off(QwenOAuth2Event.AuthUri, handleDeviceAuth);
-      qwenOAuth2Events.off(QwenOAuth2Event.AuthProgress, handleAuthProgress);
+      paramOAuth2Events.off(paramOAuth2Event.AuthUri, handleDeviceAuth);
+      paramOAuth2Events.off(paramOAuth2Event.AuthProgress, handleAuthProgress);
     };
-  }, [isQwenAuth, isAuthenticating]);
+  }, [isParamAuth, isAuthenticating]);
 
-  const cancelQwenAuth = useCallback(() => {
+  const cancelparamAuth = useCallback(() => {
     // Emit cancel event to stop polling
-    qwenOAuth2Events.emit(QwenOAuth2Event.AuthCancel);
+    paramOAuth2Events.emit(paramOAuth2Event.AuthCancel);
 
-    setQwenAuthState({
+    setparamAuthState({
       deviceAuth: null,
       authStatus: 'idle',
       authMessage: null,
@@ -102,7 +105,7 @@ export const useQwenAuth = (
   }, []);
 
   return {
-    qwenAuthState,
-    cancelQwenAuth,
+    paramAuthState,
+    cancelparamAuth,
   };
 };

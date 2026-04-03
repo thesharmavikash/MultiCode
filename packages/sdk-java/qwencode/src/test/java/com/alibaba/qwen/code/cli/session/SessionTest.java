@@ -1,28 +1,28 @@
-package com.alibaba.qwen.code.cli.session;
+package com.alibaba.param.code.cli.session;
 
 import java.util.concurrent.TimeUnit;
 
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.qwen.code.cli.QwenCodeCli;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantUsage;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.PermissionMode;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.TextAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolResultAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.behavior.Behavior.Operation;
-import com.alibaba.qwen.code.cli.protocol.message.SDKResultMessage;
-import com.alibaba.qwen.code.cli.protocol.message.SDKSystemMessage;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.SDKAssistantMessage;
-import com.alibaba.qwen.code.cli.protocol.message.control.CLIControlResponse;
-import com.alibaba.qwen.code.cli.session.event.consumers.AssistantContentSimpleConsumers;
-import com.alibaba.qwen.code.cli.session.event.consumers.SessionEventConsumers;
-import com.alibaba.qwen.code.cli.session.event.consumers.SessionEventSimpleConsumers;
-import com.alibaba.qwen.code.cli.session.exception.SessionControlException;
-import com.alibaba.qwen.code.cli.session.exception.SessionSendPromptException;
-import com.alibaba.qwen.code.cli.transport.TransportOptions;
-import com.alibaba.qwen.code.cli.utils.Timeout;
+import com.alibaba.param.code.cli.paramCodeCli;
+import com.alibaba.param.code.cli.protocol.data.AssistantUsage;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent;
+import com.alibaba.param.code.cli.protocol.data.PermissionMode;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.TextAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolResultAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.behavior.Behavior.Operation;
+import com.alibaba.param.code.cli.protocol.message.SDKResultMessage;
+import com.alibaba.param.code.cli.protocol.message.SDKSystemMessage;
+import com.alibaba.param.code.cli.protocol.message.assistant.SDKAssistantMessage;
+import com.alibaba.param.code.cli.protocol.message.control.CLIControlResponse;
+import com.alibaba.param.code.cli.session.event.consumers.AssistantContentSimpleConsumers;
+import com.alibaba.param.code.cli.session.event.consumers.SessionEventConsumers;
+import com.alibaba.param.code.cli.session.event.consumers.SessionEventSimpleConsumers;
+import com.alibaba.param.code.cli.session.exception.SessionControlException;
+import com.alibaba.param.code.cli.session.exception.SessionSendPromptException;
+import com.alibaba.param.code.cli.transport.TransportOptions;
+import com.alibaba.param.code.cli.utils.Timeout;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class SessionTest {
 
     @Test
     void partialSendPromptSuccessfully() throws SessionControlException, SessionSendPromptException {
-        Session session = QwenCodeCli.newSession(new TransportOptions().setIncludePartialMessages(true));
+        Session session = paramCodeCli.newSession(new TransportOptions().setIncludePartialMessages(true));
         session.sendPrompt("in the dir src/test/temp/, create file empty file test.touch", new SessionEventSimpleConsumers() {
         }.setAssistantContentConsumer(new AssistantContentSimpleConsumers() {
             @Override
@@ -71,7 +71,7 @@ class SessionTest {
 
     @Test
     void setPermissionModeSuccessfully() throws SessionControlException, SessionSendPromptException {
-        Session session = QwenCodeCli.newSession(new TransportOptions());
+        Session session = paramCodeCli.newSession(new TransportOptions());
 
         log.info(session.setPermissionMode(PermissionMode.YOLO).map(s -> s ? "setPermissionMode 1 success" : "setPermissionMode 1 error")
                 .orElse("setPermissionMode 1 unknown"));
@@ -93,21 +93,21 @@ class SessionTest {
 
     @Test
     void sendPromptAndSetModelSuccessfully() throws SessionControlException, SessionSendPromptException {
-        Session session = QwenCodeCli.newSession(new TransportOptions());
+        Session session = paramCodeCli.newSession(new TransportOptions());
 
-        log.info(session.setModel("qwen3-coder-flash").map(s -> s ? "setModel 1 success" : "setModel 1 error").orElse("setModel 1 unknown"));
+        log.info(session.setModel("param3-coder-flash").map(s -> s ? "setModel 1 success" : "setModel 1 error").orElse("setModel 1 unknown"));
         writeSplitLine("setModel 1 end");
 
         session.sendPrompt("hello world", new SessionEventSimpleConsumers());
         writeSplitLine("prompt 1 end");
 
-        log.info(session.setModel("qwen3-coder-plus").map(s -> s ? "setModel 2 success" : "setModel 2 error").orElse("setModel 2 unknown"));
+        log.info(session.setModel("param3-coder-plus").map(s -> s ? "setModel 2 success" : "setModel 2 error").orElse("setModel 2 unknown"));
         writeSplitLine("setModel 1 end");
 
         session.sendPrompt("Check how many files are in the current directory", new SessionEventSimpleConsumers());
         writeSplitLine("prompt 2 end");
 
-        log.info(session.setModel("qwen3-max").map(s -> s ? "setModel 3 success" : "setModel 3 error").orElse("setModel 3 unknown"));
+        log.info(session.setModel("param3-max").map(s -> s ? "setModel 3 success" : "setModel 3 error").orElse("setModel 3 unknown"));
         writeSplitLine("setModel 1 end");
 
         session.sendPrompt("Check how many xml files are in the current directory", new SessionEventSimpleConsumers());
@@ -118,7 +118,7 @@ class SessionTest {
 
     @Test
     void sendPromptAndInterruptContinueSuccessfully() throws SessionControlException, SessionSendPromptException {
-        Session session = QwenCodeCli.newSession();
+        Session session = paramCodeCli.newSession();
 
         SessionEventConsumers sessionEventConsumers = new SessionEventSimpleConsumers() {
 
@@ -176,8 +176,8 @@ class SessionTest {
         String json
                 = "{\"type\":\"assistant\",\"uuid\":\"ed8374fe-a4eb-4fc0-9780-9bd2fd831cda\","
                 + "\"session_id\":\"166badc0-e6d3-4978-ae47-4ccd51c468ef\",\"message\":{\"content\":[{\"text\":\"Hello! How can I help you with the"
-                + " Qwen Code SDK for Java today?\",\"type\":\"text\"}],\"id\":\"ed8374fe-a4eb-4fc0-9780-9bd2fd831cda\","
-                + "\"model\":\"qwen3-coder-plus\",\"role\":\"assistant\",\"type\":\"message\",\"usage\":{\"cache_read_input_tokens\":12766,"
+                + " param Code SDK for Java today?\",\"type\":\"text\"}],\"id\":\"ed8374fe-a4eb-4fc0-9780-9bd2fd831cda\","
+                + "\"model\":\"param3-coder-plus\",\"role\":\"assistant\",\"type\":\"message\",\"usage\":{\"cache_read_input_tokens\":12766,"
                 + "\"input_tokens\":12770,\"output_tokens\":17,\"total_tokens\":12787}}}";
         SDKAssistantMessage assistantMessage = JSON.parseObject(json, SDKAssistantMessage.class);
         log.info("the assistantMessage: {}", assistantMessage);

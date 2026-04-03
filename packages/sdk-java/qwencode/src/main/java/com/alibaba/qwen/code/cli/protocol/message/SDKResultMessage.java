@@ -1,13 +1,13 @@
-package com.alibaba.qwen.code.cli.protocol.message;
+package com.alibaba.param.code.cli.protocol.message;
 
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.alibaba.fastjson2.annotation.JSONType;
-import com.alibaba.qwen.code.cli.protocol.data.CLIPermissionDenial;
-import com.alibaba.qwen.code.cli.protocol.data.ExtendedUsage;
-import com.alibaba.qwen.code.cli.protocol.data.Usage;
+import com.alibaba.param.code.cli.protocol.data.CLIPermissionDenial;
+import com.alibaba.param.code.cli.protocol.data.ExtendedUsage;
+import com.alibaba.param.code.cli.protocol.data.Usage;
 
 /**
  * Represents a result message from the SDK.

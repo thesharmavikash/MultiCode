@@ -427,7 +427,7 @@ const DISPLAY_NAME_TO_VERB: Readonly<Record<string, string>> = {
  * Strip the glob suffix (e.g. `/**`) and the leading `//` from an absolute
  * path specifier so it reads cleanly in a UI label.
  *
- * `//Users/mochi/.qwen/**` → `/Users/mochi/.qwen/`
+ * `//Users/mochi/.param/**` → `/Users/mochi/.param/`
  * `/src/**`                → `src/`
  */
 function cleanPathSpecifier(specifier: string): string {
@@ -452,7 +452,7 @@ function cleanPathSpecifier(specifier: string): string {
  * description instead of raw rule syntax.
  *
  * Examples:
- *   `["Read(//Users/mochi/.qwen/**)"]`  → `"read files in /Users/mochi/.qwen/"`
+ *   `["Read(//Users/mochi/.param/**)"]`  → `"read files in /Users/mochi/.param/"`
  *   `["Bash(git *)"]`                    → `"run 'git *' commands"`
  *   `["WebFetch(github.com)"]`            → `"fetch from github.com"`
  *   `["Read"]`                            → `"read files"`

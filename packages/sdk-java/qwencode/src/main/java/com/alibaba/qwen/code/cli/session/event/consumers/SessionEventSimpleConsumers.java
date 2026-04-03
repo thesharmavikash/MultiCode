@@ -1,33 +1,33 @@
-package com.alibaba.qwen.code.cli.session.event.consumers;
+package com.alibaba.param.code.cli.session.event.consumers;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.TextAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolResultAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantUsage;
-import com.alibaba.qwen.code.cli.protocol.data.behavior.Allow;
-import com.alibaba.qwen.code.cli.protocol.data.behavior.Behavior;
-import com.alibaba.qwen.code.cli.protocol.message.SDKResultMessage;
-import com.alibaba.qwen.code.cli.protocol.message.SDKSystemMessage;
-import com.alibaba.qwen.code.cli.protocol.message.SDKUserMessage;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.SDKAssistantMessage;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.SDKPartialAssistantMessage;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.block.ContentBlock;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.event.ContentBlockDeltaEvent;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.event.StreamEvent;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.CLIControlPermissionRequest;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.CLIControlPermissionResponse;
-import com.alibaba.qwen.code.cli.protocol.message.control.CLIControlRequest;
-import com.alibaba.qwen.code.cli.protocol.message.control.CLIControlResponse;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.ControlRequestPayload;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.ControlResponsePayload;
-import com.alibaba.qwen.code.cli.session.Session;
-import com.alibaba.qwen.code.cli.utils.MyConcurrentUtils;
-import com.alibaba.qwen.code.cli.utils.Timeout;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.TextAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolResultAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantUsage;
+import com.alibaba.param.code.cli.protocol.data.behavior.Allow;
+import com.alibaba.param.code.cli.protocol.data.behavior.Behavior;
+import com.alibaba.param.code.cli.protocol.message.SDKResultMessage;
+import com.alibaba.param.code.cli.protocol.message.SDKSystemMessage;
+import com.alibaba.param.code.cli.protocol.message.SDKUserMessage;
+import com.alibaba.param.code.cli.protocol.message.assistant.SDKAssistantMessage;
+import com.alibaba.param.code.cli.protocol.message.assistant.SDKPartialAssistantMessage;
+import com.alibaba.param.code.cli.protocol.message.assistant.block.ContentBlock;
+import com.alibaba.param.code.cli.protocol.message.assistant.event.ContentBlockDeltaEvent;
+import com.alibaba.param.code.cli.protocol.message.assistant.event.StreamEvent;
+import com.alibaba.param.code.cli.protocol.message.control.payload.CLIControlPermissionRequest;
+import com.alibaba.param.code.cli.protocol.message.control.payload.CLIControlPermissionResponse;
+import com.alibaba.param.code.cli.protocol.message.control.CLIControlRequest;
+import com.alibaba.param.code.cli.protocol.message.control.CLIControlResponse;
+import com.alibaba.param.code.cli.protocol.message.control.payload.ControlRequestPayload;
+import com.alibaba.param.code.cli.protocol.message.control.payload.ControlResponsePayload;
+import com.alibaba.param.code.cli.session.Session;
+import com.alibaba.param.code.cli.utils.MyConcurrentUtils;
+import com.alibaba.param.code.cli.utils.Timeout;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
@@ -91,8 +91,8 @@ public class SessionEventSimpleConsumers implements SessionEventConsumers {
     /**
      * <p>consumeAssistantContent.</p>
      *
-     * @param session a {@link com.alibaba.qwen.code.cli.session.Session} object.
-     * @param assistantContent a {@link com.alibaba.qwen.code.cli.protocol.data.AssistantContent} object.
+     * @param session a {@link com.alibaba.param.code.cli.session.Session} object.
+     * @param assistantContent a {@link com.alibaba.param.code.cli.protocol.data.AssistantContent} object.
      */
     protected void consumeAssistantContent(Session session, AssistantContent<?> assistantContent) {
         if (assistantContent instanceof TextAssistantContent) {

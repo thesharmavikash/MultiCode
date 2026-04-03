@@ -16,12 +16,12 @@ import type {
   ToolMcpConfirmationDetails,
   Config,
   EditorType,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-param/param-core';
 import {
   IdeClient,
   ToolConfirmationOutcome,
   buildHumanReadableRuleLabel,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-param/param-core';
 import type { RadioSelectItem } from '../shared/RadioButtonSelect.js';
 import { RadioButtonSelect } from '../shared/RadioButtonSelect.js';
 import { MaxSizedBox } from '../shared/MaxSizedBox.js';

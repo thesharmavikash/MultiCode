@@ -36,16 +36,16 @@ import {
   ideContextStore,
   createDebugLogger,
   getErrorMessage,
-  getAllGeminiMdFilenames,
+  getAllParamMdFilenames,
   ShellExecutionService,
   Storage,
   SessionEndReason,
   SessionStartSource,
   type PermissionMode,
-} from '@qwen-code/qwen-code-core';
+} from '@param-code/param-code-core';
 import { buildResumedHistoryItems } from './utils/resumeHistoryUtils.js';
 import { validateAuthMethod } from '../config/auth.js';
-import { loadHierarchicalGeminiMemory } from '../config/config.js';
+import { loadHierarchicalParamMemory } from '../config/config.js';
 import process from 'node:process';
 import { useHistory } from './hooks/useHistoryManager.js';
 import { useMemoryMonitor } from './hooks/useMemoryMonitor.js';
@@ -70,7 +70,7 @@ import { computeWindowTitle } from '../utils/windowTitle.js';
 import { clearScreen } from '../utils/stdioHelpers.js';
 import { useTextBuffer } from './components/shared/text-buffer.js';
 import { useLogger } from './hooks/useLogger.js';
-import { useGeminiStream } from './hooks/useGeminiStream.js';
+import { useParamStream } from './hooks/useParamStream.js';
 import { useVim } from './hooks/vim.js';
 import { isBtwCommand } from './utils/commandUtils.js';
 import { type LoadedSettings, SettingScope } from '../config/settings.js';
@@ -165,7 +165,7 @@ export const AppContainer = (props: AppContainerProps) => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [embeddedShellFocused, setEmbeddedShellFocused] = useState(false);
 
-  const [geminiMdFileCount, setGeminiMdFileCount] = useState<number>(
+  const [geminiMdFileCount, setParamMdFileCount] = useState<number>(
     initializationResult.geminiMdFileCount,
   );
   const [shellModeActive, setShellModeActive] = useState(false);
@@ -454,7 +454,7 @@ export const AppContainer = (props: AppContainerProps) => {
     isAuthDialogOpen,
     isAuthenticating,
     pendingAuthType,
-    qwenAuthState,
+    paramAuthState,
     handleAuthSelect,
     handleCodingPlanSubmit,
     handleAlibabaStandardSubmit,
@@ -627,7 +627,7 @@ export const AppContainer = (props: AppContainerProps) => {
     toggleVimEnabled,
     isProcessing,
     setIsProcessing,
-    setGeminiMdFileCount,
+    setParamMdFileCount,
     slashCommandActions,
     extensionsUpdateStateInternal,
     isConfigInitialized,
@@ -646,12 +646,12 @@ export const AppContainer = (props: AppContainerProps) => {
     historyManager.addItem(
       {
         type: MessageType.INFO,
-        text: 'Refreshing hierarchical memory (QWEN.md or other context files)...',
+        text: 'Refreshing hierarchical memory (param.md or other context files)...',
       },
       Date.now(),
     );
     try {
-      const { memoryContent, fileCount } = await loadHierarchicalGeminiMemory(
+      const { memoryContent, fileCount } = await loadHierarchicalParamMemory(
         process.cwd(),
         settings.merged.context?.loadFromIncludeDirectories
           ? config.getWorkspaceContext().getDirectories()
@@ -663,8 +663,8 @@ export const AppContainer = (props: AppContainerProps) => {
       );
 
       config.setUserMemory(memoryContent);
-      config.setGeminiMdFileCount(fileCount);
-      setGeminiMdFileCount(fileCount);
+      config.setParamMdFileCount(fileCount);
+      setParamMdFileCount(fileCount);
 
       historyManager.addItem(
         {
@@ -702,15 +702,15 @@ export const AppContainer = (props: AppContainerProps) => {
     streamingState,
     submitQuery,
     initError,
-    pendingHistoryItems: pendingGeminiHistoryItems,
+    pendingHistoryItems: pendingParamHistoryItems,
     thought,
     cancelOngoingRequest,
     retryLastPrompt,
     handleApprovalModeChange,
     activePtyId,
     loopDetectionConfirmationRequest,
-  } = useGeminiStream(
-    config.getGeminiClient(),
+  } = useParamStream(
+    config.getParamClient(),
     historyManager.history,
     historyManager.addItem,
     config,
@@ -795,7 +795,7 @@ export const AppContainer = (props: AppContainerProps) => {
   cancelHandlerRef.current = useCallback(() => {
     const pendingHistoryItems = [
       ...pendingSlashCommandHistoryItems,
-      ...pendingGeminiHistoryItems,
+      ...pendingParamHistoryItems,
     ];
     if (isToolExecuting(pendingHistoryItems)) {
       buffer.setText(''); // Just clear the prompt
@@ -820,7 +820,7 @@ export const AppContainer = (props: AppContainerProps) => {
     getQueuedMessagesText,
     clearQueue,
     pendingSlashCommandHistoryItems,
-    pendingGeminiHistoryItems,
+    pendingParamHistoryItems,
   ]);
 
   const handleClearScreen = useCallback(() => {
@@ -889,12 +889,12 @@ export const AppContainer = (props: AppContainerProps) => {
       ? Array.isArray(fromSettings)
         ? fromSettings
         : [fromSettings]
-      : getAllGeminiMdFilenames();
+      : getAllParamMdFilenames();
   }, [settings.merged.context?.fileName]);
   // Initial prompt handling
   const initialPrompt = useMemo(() => config.getQuestion(), [config]);
   const initialPromptSubmitted = useRef(false);
-  const geminiClient = config.getGeminiClient();
+  const geminiClient = config.getParamClient();
 
   useEffect(() => {
     if (activePtyId) {
@@ -1382,7 +1382,7 @@ export const AppContainer = (props: AppContainerProps) => {
 
   useKeypress(handleGlobalKeypress, { isActive: true });
 
-  // Update terminal title with Qwen Code status and thoughts
+  // Update terminal title with Param Code status and thoughts
   useEffect(() => {
     // Respect both showStatusInTitle and hideWindowTitle settings
     if (
@@ -1409,7 +1409,7 @@ export const AppContainer = (props: AppContainerProps) => {
       lastTitleRef.current = paddedTitle;
       stdout.write(`\x1b]2;${paddedTitle}\x07`);
     }
-    // Note: We don't need to reset the window title on exit because Qwen Code is already doing that elsewhere
+    // Note: We don't need to reset the window title on exit because Param Code is already doing that elsewhere
   }, [
     streamingState,
     thought,
@@ -1466,8 +1466,8 @@ export const AppContainer = (props: AppContainerProps) => {
   });
 
   const pendingHistoryItems = useMemo(
-    () => [...pendingSlashCommandHistoryItems, ...pendingGeminiHistoryItems],
-    [pendingSlashCommandHistoryItems, pendingGeminiHistoryItems],
+    () => [...pendingSlashCommandHistoryItems, ...pendingParamHistoryItems],
+    [pendingSlashCommandHistoryItems, pendingParamHistoryItems],
   );
 
   const uiState: UIState = useMemo(
@@ -1481,8 +1481,8 @@ export const AppContainer = (props: AppContainerProps) => {
       authError,
       isAuthDialogOpen,
       pendingAuthType,
-      // Qwen OAuth state
-      qwenAuthState,
+      // Param OAuth state
+      paramAuthState,
       editorError,
       isEditorDialogOpen,
       debugMessage,
@@ -1507,7 +1507,7 @@ export const AppContainer = (props: AppContainerProps) => {
       geminiMdFileCount,
       streamingState,
       initError,
-      pendingGeminiHistoryItems,
+      pendingParamHistoryItems,
       thought,
       shellModeActive,
       userMessages,
@@ -1583,8 +1583,8 @@ export const AppContainer = (props: AppContainerProps) => {
       authError,
       isAuthDialogOpen,
       pendingAuthType,
-      // Qwen OAuth state
-      qwenAuthState,
+      // Param OAuth state
+      paramAuthState,
       editorError,
       isEditorDialogOpen,
       debugMessage,
@@ -1609,7 +1609,7 @@ export const AppContainer = (props: AppContainerProps) => {
       geminiMdFileCount,
       streamingState,
       initError,
-      pendingGeminiHistoryItems,
+      pendingParamHistoryItems,
       thought,
       shellModeActive,
       userMessages,

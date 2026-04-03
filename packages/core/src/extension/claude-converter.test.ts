@@ -9,7 +9,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as os from 'node:os';
 import {
-  convertClaudeToQwenConfig,
+  convertClaudeAgentConfig,
   mergeClaudeConfigs,
   isClaudePluginConfig,
   convertClaudePluginPackage,
@@ -20,40 +20,43 @@ import {
 import { HookType } from '../hooks/types.js';
 import { performVariableReplacement } from './variables.js';
 
-describe('convertClaudeToQwenConfig', () => {
+describe('convertClaudeAgentConfig', () => {
   it('should convert basic Claude config', () => {
     const claudeConfig: ClaudePluginConfig = {
       name: 'claude-plugin',
       version: '1.0.0',
+      description: 'test',
     };
 
-    const result = convertClaudeToQwenConfig(claudeConfig);
+    const result = convertClaudeAgentConfig(claudeConfig);
 
-    expect(result.name).toBe('claude-plugin');
-    expect(result.version).toBe('1.0.0');
+    expect(result['name']).toBe('claude-plugin');
+    expect(result['version']).toBe('1.0.0');
   });
 
   it('should convert config with basic fields only', () => {
     const claudeConfig: ClaudePluginConfig = {
       name: 'full-plugin',
       version: '1.0.0',
+      description: 'test',
       commands: 'commands',
       agents: ['agents/agent1.md'],
       skills: ['skills/skill1'],
     };
 
-    const result = convertClaudeToQwenConfig(claudeConfig);
+    const result = convertClaudeAgentConfig(claudeConfig);
 
     // Commands, skills, agents are collected as directories, not in config
-    expect(result.name).toBe('full-plugin');
-    expect(result.version).toBe('1.0.0');
-    expect(result.mcpServers).toBeUndefined();
+    expect(result['name']).toBe('full-plugin');
+    expect(result['version']).toBe('1.0.0');
+    expect(result['mcpServers']).toBeUndefined();
   });
 
   it('should preserve lspServers configuration', () => {
     const claudeConfig: ClaudePluginConfig = {
       name: 'lsp-plugin',
       version: '1.0.0',
+      description: 'test',
       lspServers: {
         typescript: {
           command: 'typescript-language-server',
@@ -65,17 +68,18 @@ describe('convertClaudeToQwenConfig', () => {
       },
     };
 
-    const result = convertClaudeToQwenConfig(claudeConfig);
+    const result = convertClaudeAgentConfig(claudeConfig);
 
-    expect(result.lspServers).toEqual(claudeConfig.lspServers);
+    expect(result['lspServers']).toEqual(claudeConfig.lspServers);
   });
 
   it('should throw error for missing name', () => {
     const invalidConfig = {
       version: '1.0.0',
+      description: 'test',
     } as ClaudePluginConfig;
 
-    expect(() => convertClaudeToQwenConfig(invalidConfig)).toThrow();
+    expect(() => convertClaudeAgentConfig(invalidConfig)).toThrow();
   });
 });
 
@@ -91,6 +95,7 @@ describe('mergeClaudeConfigs', () => {
     const pluginConfig: ClaudePluginConfig = {
       name: 'plugin-name',
       version: '1.0.0',
+      description: 'test',
       commands: 'commands',
     };
 
@@ -418,7 +423,7 @@ describe('convertClaudePluginPackage', () => {
       'crlf-agents-plugin',
     );
 
-    // Verify: agent file was properly parsed and converted into .qwen/agents folder structure
+    // Verify: agent file was properly parsed and converted into .param/agents folder structure
     const convertedAgentsDir = path.join(result.convertedDir, 'agents');
     expect(fs.existsSync(convertedAgentsDir)).toBe(true);
 
@@ -539,9 +544,9 @@ describe('performVariableReplacement for Claude extensions', () => {
     performVariableReplacement(extDir);
 
     const result = fs.readFileSync(path.join(extDir, 'setup.sh'), 'utf-8');
-    expect(result).toContain('$HOME/.qwen/config');
-    expect(result).toContain('~/.qwen/cache');
-    expect(result).toContain('./.qwen/local');
+    expect(result).toContain('$HOME/.param/config');
+    expect(result).toContain('~/.param/cache');
+    expect(result).toContain('./.param/local');
     expect(result).not.toContain('.claude');
   });
 

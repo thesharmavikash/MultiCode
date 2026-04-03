@@ -1,4 +1,4 @@
-package com.alibaba.qwen.code.cli.utils;
+package com.alibaba.param.code.cli.utils;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;

@@ -1,10 +1,10 @@
-package com.alibaba.qwen.code.cli.protocol.message.assistant;
+package com.alibaba.param.code.cli.protocol.message.assistant;
 
 import java.util.List;
 
 import com.alibaba.fastjson2.annotation.JSONField;
-import com.alibaba.qwen.code.cli.protocol.data.Usage;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.block.ContentBlock;
+import com.alibaba.param.code.cli.protocol.data.Usage;
+import com.alibaba.param.code.cli.protocol.message.assistant.block.ContentBlock;
 
 /**
  * Represents an API assistant message.

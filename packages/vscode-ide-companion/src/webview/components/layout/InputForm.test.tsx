@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,7 +14,7 @@ import { ApprovalMode } from '../../../types/acpTypes.js';
 import type { CompletionItem } from '../../../types/completionItemTypes.js';
 import { InputForm } from './InputForm.js';
 
-vi.mock('@qwen-code/webui', async () => {
+vi.mock('@param-code/webui', async () => {
   const actual = await vi.importActual(
     '../../../../../webui/src/components/layout/InputForm.tsx',
   );

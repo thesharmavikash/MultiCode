@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import * as vscode from 'vscode';
 import { BaseMessageHandler } from './BaseMessageHandler.js';
-import type { ChatMessage } from '../../services/qwenAgentManager.js';
+import type { ChatMessage } from '../../services/paramAgentManager.js';
 import type { ImageAttachment } from '../../utils/imageSupport.js';
 import type { ApprovalModeValue } from '../../types/approvalModeValueTypes.js';
 import {
@@ -28,9 +28,9 @@ export class SessionMessageHandler extends BaseMessageHandler {
   canHandle(messageType: string): boolean {
     return [
       'sendMessage',
-      'newQwenSession',
-      'switchQwenSession',
-      'getQwenSessions',
+      'newparamSession',
+      'switchparamSession',
+      'getparamSessions',
       'resumeSession',
       'cancelStreaming',
       // UI action: open a new chat tab (new WebviewPanel)
@@ -76,16 +76,16 @@ export class SessionMessageHandler extends BaseMessageHandler {
         );
         break;
 
-      case 'newQwenSession':
-        await this.handleNewQwenSession();
+      case 'newparamSession':
+        await this.handleNewparamSession();
         break;
 
-      case 'switchQwenSession':
-        await this.handleSwitchQwenSession((data?.sessionId as string) || '');
+      case 'switchparamSession':
+        await this.handleSwitchparamSession((data?.sessionId as string) || '');
         break;
 
-      case 'getQwenSessions':
-        await this.handleGetQwenSessions(
+      case 'getparamSessions':
+        await this.handleGetparamSessions(
           (data?.cursor as number | undefined) ?? undefined,
           (data?.size as number | undefined) ?? undefined,
         );
@@ -100,7 +100,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
         // This does not alter the current conversation in this tab; the new tab
         // will initialize its own state and (optionally) create a new session.
         try {
-          await vscode.commands.executeCommand('qwenCode.openNewChatTab');
+          await vscode.commands.executeCommand('paramCode.openNewChatTab');
         } catch (error) {
           console.error(
             '[SessionMessageHandler] Failed to open new chat tab:',
@@ -226,7 +226,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
       if (this.loginHandler) {
         await this.loginHandler();
       } else {
-        await vscode.commands.executeCommand('qwen-code.login');
+        await vscode.commands.executeCommand('param-code.login');
       }
       return true;
     }
@@ -250,7 +250,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
       if (this.loginHandler) {
         await this.loginHandler();
       } else {
-        await vscode.commands.executeCommand('qwen-code.login');
+        await vscode.commands.executeCommand('param-code.login');
       }
       return 'login';
     }
@@ -421,7 +421,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
       console.warn('[SessionMessageHandler] Agent not connected');
 
       // Show non-modal notification with Login button
-      await this.promptLogin('You need to login first to use Qwen Code.');
+      await this.promptLogin('You need to login first to use param Code.');
       return;
     }
 
@@ -439,7 +439,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
         const errorMsg = this.getErrorMessage(createErr);
         if (this.shouldPromptLogin(createErr)) {
           await this.promptLogin(
-            'Your login session has expired or is invalid. Please login again to continue using Qwen Code.',
+            'Your login session has expired or is invalid. Please login again to continue using param Code.',
           );
           return;
         }
@@ -522,7 +522,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
       ) {
         // Show a more user-friendly error message for expired sessions
         await this.promptLogin(
-          'Your login session has expired or is invalid. Please login again to continue using Qwen Code.',
+          'Your login session has expired or is invalid. Please login again to continue using param Code.',
         );
 
         // Send a specific error to the webview for better UI handling
@@ -568,11 +568,11 @@ export class SessionMessageHandler extends BaseMessageHandler {
   }
 
   /**
-   * Handle new Qwen session request
+   * Handle new param session request
    */
-  private async handleNewQwenSession(): Promise<void> {
+  private async handleNewparamSession(): Promise<void> {
     try {
-      console.log('[SessionMessageHandler] Creating new Qwen session...');
+      console.log('[SessionMessageHandler] Creating new param session...');
 
       // Ensure connection (login) before creating a new session
       if (!this.agentManager.isConnected) {
@@ -626,9 +626,9 @@ export class SessionMessageHandler extends BaseMessageHandler {
   }
 
   /**
-   * Handle switch Qwen session request
+   * Handle switch param session request
    */
-  private async handleSwitchQwenSession(sessionId: string): Promise<void> {
+  private async handleSwitchparamSession(sessionId: string): Promise<void> {
     try {
       console.log('[SessionMessageHandler] Switching to session:', sessionId);
 
@@ -644,7 +644,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
             await this.agentManager.getSessionMessages(sessionId);
           this.currentConversationId = sessionId;
           this.sendToWebView({
-            type: 'qwenSessionSwitched',
+            type: 'paramSessionSwitched',
             data: { sessionId, messages },
           });
           vscode.window.showInformationMessage(
@@ -681,7 +681,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
         // Set current id and clear UI first so replayed updates append afterwards
         this.currentConversationId = sessionId;
         this.sendToWebView({
-          type: 'qwenSessionSwitched',
+          type: 'paramSessionSwitched',
           data: { sessionId, messages: [], session: sessionDetails },
         });
 
@@ -732,7 +732,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
             this.currentConversationId = newAcpSessionId;
 
             this.sendToWebView({
-              type: 'qwenSessionSwitched',
+              type: 'paramSessionSwitched',
               data: { sessionId, messages, session: sessionDetails },
             });
 
@@ -776,7 +776,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
           // Offline view only
           this.currentConversationId = sessionId;
           this.sendToWebView({
-            type: 'qwenSessionSwitched',
+            type: 'paramSessionSwitched',
             data: { sessionId, messages, session: sessionDetails },
           });
           vscode.window.showWarningMessage(
@@ -811,9 +811,9 @@ export class SessionMessageHandler extends BaseMessageHandler {
   }
 
   /**
-   * Handle get Qwen sessions request
+   * Handle get param sessions request
    */
-  private async handleGetQwenSessions(
+  private async handleGetparamSessions(
     cursor?: number,
     size?: number,
   ): Promise<void> {
@@ -825,7 +825,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
       });
       const append = typeof cursor === 'number';
       this.sendToWebView({
-        type: 'qwenSessionList',
+        type: 'paramSessionList',
         data: {
           sessions: page.sessions,
           nextCursor: page.nextCursor,
@@ -897,7 +897,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
             await this.agentManager.getSessionMessages(sessionId);
           this.currentConversationId = sessionId;
           this.sendToWebView({
-            type: 'qwenSessionSwitched',
+            type: 'paramSessionSwitched',
             data: { sessionId, messages },
           });
           vscode.window.showInformationMessage(
@@ -914,7 +914,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
         // Pre-clear UI so replayed updates append afterwards
         this.currentConversationId = sessionId;
         this.sendToWebView({
-          type: 'qwenSessionSwitched',
+          type: 'paramSessionSwitched',
           data: { sessionId, messages: [] },
         });
 
@@ -924,7 +924,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
         this.isTitleSet = false;
 
         // Successfully loaded session, return early to avoid fallback logic
-        await this.handleGetQwenSessions();
+        await this.handleGetparamSessions();
         return;
       } catch (acpError) {
         // Check for authentication/session expiration errors
@@ -943,7 +943,7 @@ export class SessionMessageHandler extends BaseMessageHandler {
         }
       }
 
-      await this.handleGetQwenSessions();
+      await this.handleGetparamSessions();
     } catch (error) {
       console.error('[SessionMessageHandler] Failed to resume session:', error);
 

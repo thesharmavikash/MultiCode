@@ -485,21 +485,21 @@ describe('ReadFileTool', () => {
       }
     });
 
-    describe('with .qwenignore', () => {
+    describe('with .paramignore', () => {
       beforeEach(async () => {
         await fsp.writeFile(
-          path.join(tempRootDir, '.qwenignore'),
+          path.join(tempRootDir, '.paramignore'),
           ['foo.*', 'ignored/'].join('\n'),
         );
       });
 
-      it('should throw error if path is ignored by a .qwenignore pattern', async () => {
+      it('should throw error if path is ignored by a .paramignore pattern', async () => {
         const ignoredFilePath = path.join(tempRootDir, 'foo.bar');
         await fsp.writeFile(ignoredFilePath, 'content', 'utf-8');
         const params: ReadFileToolParams = {
           file_path: ignoredFilePath,
         };
-        const expectedError = `File path '${ignoredFilePath}' is ignored by .qwenignore pattern(s).`;
+        const expectedError = `File path '${ignoredFilePath}' is ignored by .paramignore pattern(s).`;
         expect(() => tool.build(params)).toThrow(expectedError);
       });
 
@@ -511,7 +511,7 @@ describe('ReadFileTool', () => {
         const params: ReadFileToolParams = {
           file_path: ignoredFilePath,
         };
-        const expectedError = `File path '${ignoredFilePath}' is ignored by .qwenignore pattern(s).`;
+        const expectedError = `File path '${ignoredFilePath}' is ignored by .paramignore pattern(s).`;
         expect(() => tool.build(params)).toThrow(expectedError);
       });
 

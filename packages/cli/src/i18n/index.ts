@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen team
+ * Copyright 2025 param team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -34,12 +34,12 @@ const getBuiltinLocalesDir = (): string => {
 };
 
 const getUserLocalesDir = (): string =>
-  path.join(homedir(), '.qwen', 'locales');
+  path.join(homedir(), '.param', 'locales');
 
 /**
  * Get the path to the user's custom locales directory.
  * Users can place custom language packs (e.g., es.js, fr.js) in this directory.
- * @returns The path to ~/.qwen/locales
+ * @returns The path to ~/.param/locales
  */
 export function getUserLocalesDirectory(): string {
   return getUserLocalesDir();
@@ -55,7 +55,7 @@ const getLocalePath = (
 
 // Language detection
 export function detectSystemLanguage(): SupportedLanguage {
-  const envLang = process.env['QWEN_CODE_LANG'] || process.env['LANG'];
+  const envLang = process.env['param_CODE_LANG'] || process.env['LANG'];
   if (envLang) {
     for (const lang of SUPPORTED_LANGUAGES) {
       if (envLang.startsWith(lang.code)) return lang.code;

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen
+ * Copyright 2025 param
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -8,7 +8,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Box, Text } from 'ink';
 import { theme } from '../../../semantic-colors.js';
 import { useKeypress } from '../../../hooks/useKeypress.js';
-import { type Extension } from '@qwen-code/qwen-code-core';
+import { type Extension } from '@agent-param/param-core';
 import { t } from '../../../../i18n/index.js';
 import { ExtensionUpdateState } from '../../../state/extensions.js';
 

@@ -1614,8 +1614,8 @@ describe('buildHumanReadableRuleLabel', () => {
   });
 
   it('converts Read with absolute path specifier', () => {
-    const label = buildHumanReadableRuleLabel(['Read(//Users/mochi/.qwen/**)']);
-    expect(label).toBe('read files in /Users/mochi/.qwen/');
+    const label = buildHumanReadableRuleLabel(['Read(//Users/mochi/.param/**)']);
+    expect(label).toBe('read files in /Users/mochi/.param/');
   });
 
   it('converts Read with relative path specifier', () => {

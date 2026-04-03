@@ -1,4 +1,4 @@
-package com.alibaba.qwen.code.cli.protocol.data;
+package com.alibaba.param.code.cli.protocol.data;
 
 /**
  * Represents usage information for a specific model.

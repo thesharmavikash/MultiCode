@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import { ModelRegistry, QWEN_OAUTH_MODELS } from './modelRegistry.js';
+import { ModelRegistry, PARAM_OAUTH_MODELS } from './modelRegistry.js';
 import { AuthType } from '../core/contentGenerator.js';
 import type { ModelProvidersConfig } from './types.js';
 
@@ -14,15 +14,15 @@ describe('ModelRegistry', () => {
     it('should always include hard-coded qwen-oauth models', () => {
       const registry = new ModelRegistry();
 
-      const qwenModels = registry.getModelsForAuthType(AuthType.QWEN_OAUTH);
-      expect(qwenModels.length).toBe(QWEN_OAUTH_MODELS.length);
+      const qwenModels = registry.getModelsForAuthType(AuthType.PARAM_OAUTH);
+      expect(qwenModels.length).toBe(PARAM_OAUTH_MODELS.length);
       expect(qwenModels[0].id).toBe('coder-model');
     });
 
     it('should initialize with empty config', () => {
       const registry = new ModelRegistry();
-      expect(registry.getModelsForAuthType(AuthType.QWEN_OAUTH).length).toBe(
-        QWEN_OAUTH_MODELS.length,
+      expect(registry.getModelsForAuthType(AuthType.PARAM_OAUTH).length).toBe(
+        PARAM_OAUTH_MODELS.length,
       );
       expect(registry.getModelsForAuthType(AuthType.USE_OPENAI).length).toBe(0);
     });
@@ -58,8 +58,8 @@ describe('ModelRegistry', () => {
       const registry = new ModelRegistry(modelProvidersConfig);
 
       // Should still use hard-coded qwen-oauth models
-      const qwenModels = registry.getModelsForAuthType(AuthType.QWEN_OAUTH);
-      expect(qwenModels.length).toBe(QWEN_OAUTH_MODELS.length);
+      const qwenModels = registry.getModelsForAuthType(AuthType.PARAM_OAUTH);
+      expect(qwenModels.length).toBe(PARAM_OAUTH_MODELS.length);
       expect(qwenModels.find((m) => m.id === 'custom-qwen')).toBeUndefined();
     });
   });
@@ -190,7 +190,7 @@ describe('ModelRegistry', () => {
     it('should return coder-model for qwen-oauth', () => {
       const registry = new ModelRegistry();
       const defaultModel = registry.getDefaultModelForAuthType(
-        AuthType.QWEN_OAUTH,
+        AuthType.PARAM_OAUTH,
       );
       expect(defaultModel?.id).toBe('coder-model');
     });
@@ -224,7 +224,7 @@ describe('ModelRegistry', () => {
   describe('default base URLs', () => {
     it('should apply default dashscope URL for qwen-oauth', () => {
       const registry = new ModelRegistry();
-      const model = registry.getModel(AuthType.QWEN_OAUTH, 'coder-model');
+      const model = registry.getModel(AuthType.PARAM_OAUTH, 'coder-model');
       expect(model?.baseUrl).toBe('DYNAMIC_QWEN_OAUTH_BASE_URL');
     });
 
@@ -409,8 +409,8 @@ describe('ModelRegistry', () => {
         openai: [{ id: 'gpt-4', name: 'GPT-4' }],
       });
 
-      expect(registry.getModelsForAuthType(AuthType.QWEN_OAUTH).length).toBe(
-        QWEN_OAUTH_MODELS.length,
+      expect(registry.getModelsForAuthType(AuthType.PARAM_OAUTH).length).toBe(
+        PARAM_OAUTH_MODELS.length,
       );
 
       registry.reloadModels({
@@ -418,11 +418,11 @@ describe('ModelRegistry', () => {
       });
 
       // qwen-oauth models should still exist
-      expect(registry.getModelsForAuthType(AuthType.QWEN_OAUTH).length).toBe(
-        QWEN_OAUTH_MODELS.length,
+      expect(registry.getModelsForAuthType(AuthType.PARAM_OAUTH).length).toBe(
+        PARAM_OAUTH_MODELS.length,
       );
       expect(
-        registry.getModel(AuthType.QWEN_OAUTH, 'coder-model'),
+        registry.getModel(AuthType.PARAM_OAUTH, 'coder-model'),
       ).toBeDefined();
     });
 
@@ -442,8 +442,8 @@ describe('ModelRegistry', () => {
       expect(registry.getModelsForAuthType(AuthType.USE_GEMINI).length).toBe(0);
 
       // qwen-oauth models should still exist
-      expect(registry.getModelsForAuthType(AuthType.QWEN_OAUTH).length).toBe(
-        QWEN_OAUTH_MODELS.length,
+      expect(registry.getModelsForAuthType(AuthType.PARAM_OAUTH).length).toBe(
+        PARAM_OAUTH_MODELS.length,
       );
     });
 
@@ -455,8 +455,8 @@ describe('ModelRegistry', () => {
       });
 
       // qwen-oauth should still use hard-coded models
-      const qwenModels = registry.getModelsForAuthType(AuthType.QWEN_OAUTH);
-      expect(qwenModels.length).toBe(QWEN_OAUTH_MODELS.length);
+      const qwenModels = registry.getModelsForAuthType(AuthType.PARAM_OAUTH);
+      expect(qwenModels.length).toBe(PARAM_OAUTH_MODELS.length);
       expect(qwenModels.find((m) => m.id === 'custom-qwen')).toBeUndefined();
     });
 
@@ -508,8 +508,8 @@ describe('ModelRegistry', () => {
       // All user-configured models should be cleared
       expect(registry.getModelsForAuthType(AuthType.USE_OPENAI).length).toBe(0);
       // qwen-oauth models should still exist
-      expect(registry.getModelsForAuthType(AuthType.QWEN_OAUTH).length).toBe(
-        QWEN_OAUTH_MODELS.length,
+      expect(registry.getModelsForAuthType(AuthType.PARAM_OAUTH).length).toBe(
+        PARAM_OAUTH_MODELS.length,
       );
     });
 

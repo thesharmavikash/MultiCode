@@ -1,11 +1,11 @@
-package com.alibaba.qwen.code.cli.protocol.message.assistant.block;
+package com.alibaba.param.code.cli.protocol.message.assistant.block;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson2.annotation.JSONType;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
 
 /**
  * Represents a tool use content block.

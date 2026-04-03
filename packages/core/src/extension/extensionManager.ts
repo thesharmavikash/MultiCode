@@ -219,7 +219,7 @@ function filterMcpConfig(original: MCPServerConfig): MCPServerConfig {
 
 function getContextFileNames(config: ExtensionConfig): string[] {
   if (!config.contextFileName || config.contextFileName.length === 0) {
-    return ['QWEN.md'];
+    return ['param.md'];
   } else if (!Array.isArray(config.contextFileName)) {
     return [config.contextFileName];
   }
@@ -269,7 +269,7 @@ async function convertGeminiOrClaudeExtension(
   pluginName?: string,
 ): Promise<{ extensionDir: string; originSource: ExtensionOriginSource }> {
   let newExtensionDir = extensionDir;
-  let originSource: ExtensionOriginSource = 'QwenCode';
+  let originSource: ExtensionOriginSource = 'paramCode';
   const configFilePath = path.join(extensionDir, EXTENSIONS_CONFIG_FILENAME);
   if (fs.existsSync(configFilePath)) {
     newExtensionDir = extensionDir;
@@ -538,60 +538,25 @@ export class ExtensionManager {
    */
   async refreshCache(): Promise<void> {
     this.extensionCache = new Map<string, Extension>();
-    const extensions = await this.loadExtensionsFromDir(os.homedir());
+    const dirs = Storage.getUserExtensionsDirs();
+    const extensions = await this.loadExtensionsFromDirs(dirs);
     extensions.forEach((extension) => {
       this.extensionCache!.set(extension.name, extension);
     });
   }
 
-  getLoadedExtensions(): Extension[] {
-    if (!this.extensionCache) {
-      return [];
-    }
-    return [...this.extensionCache!.values()];
+  async loadExtensionsFromDirs(dirs: string[]): Promise<Extension[]> {
+    const allExtensions: Extension[] = [];
+    await Promise.all(
+      dirs.map(async (dir) => {
+        const extensions = await this.loadExtensionsFromDir(dir);
+        allExtensions.push(...extensions);
+      }),
+    );
+    return allExtensions;
   }
 
-  // ==========================================================================
-  // Extension loading methods
-  // ==========================================================================
-
-  /**
-   * Loads an extension by name.
-   */
-  async loadExtensionByName(
-    name: string,
-    workspaceDir?: string,
-  ): Promise<Extension | null> {
-    const cwd = workspaceDir ?? this.workspaceDir;
-    const userExtensionsDir = ExtensionStorage.getUserExtensionsDir();
-    if (!fs.existsSync(userExtensionsDir)) {
-      return null;
-    }
-
-    for (const subdir of fs.readdirSync(userExtensionsDir)) {
-      const extensionDir = path.join(userExtensionsDir, subdir);
-      if (!fs.statSync(extensionDir).isDirectory()) {
-        continue;
-      }
-      const extension = await this.loadExtension({
-        extensionDir,
-        workspaceDir: cwd,
-      });
-      if (
-        extension &&
-        extension.config.name.toLowerCase() === name.toLowerCase()
-      ) {
-        return extension;
-      }
-    }
-
-    return null;
-  }
-
-  async loadExtensionsFromDir(dir: string): Promise<Extension[]> {
-    const storage = new Storage(dir);
-    const extensionsDir = storage.getExtensionsDir();
-
+  async loadExtensionsFromDir(extensionsDir: string): Promise<Extension[]> {
     let subdirs: string[];
     try {
       subdirs = fs.readdirSync(extensionsDir);
@@ -601,13 +566,24 @@ export class ExtensionManager {
     }
 
     const extensions: Extension[] = [];
-    for (const subdir of subdirs) {
-      const extensionDir = path.join(extensionsDir, subdir);
+    const results = await Promise.all(
+      subdirs.map(async (subdir) => {
+        const extensionDir = path.join(extensionsDir, subdir);
+        try {
+          if (!fs.statSync(extensionDir).isDirectory()) {
+            return null;
+          }
+          return await this.loadExtension({
+            extensionDir,
+            workspaceDir: this.workspaceDir,
+          });
+        } catch {
+          return null;
+        }
+      }),
+    );
 
-      const extension = await this.loadExtension({
-        extensionDir,
-        workspaceDir: dir,
-      });
+    for (const extension of results) {
       if (extension != null) {
         extensions.push(extension);
       }
@@ -615,11 +591,19 @@ export class ExtensionManager {
     return extensions;
   }
 
+  getLoadedExtensions(): Extension[] {
+    if (!this.extensionCache) {
+      return [];
+    }
+    return [...this.extensionCache!.values()];
+  }
+
   async loadExtension(
     context: LoadExtensionContext,
   ): Promise<Extension | null> {
     const { extensionDir, workspaceDir } = context;
-    if (!fs.statSync(extensionDir).isDirectory()) {
+    const configPath = path.join(extensionDir, 'param-extension.json');
+    if (!fs.existsSync(configPath)) {
       return null;
     }
 
@@ -1206,7 +1190,7 @@ export class ExtensionManager {
         const installMetadata: ExtensionInstallMetadata = {
           source: extension.path,
           type: 'local',
-          originSource: extension.installMetadata?.originSource || 'QwenCode',
+          originSource: extension.installMetadata?.originSource || 'paramCode',
         };
         await this.installExtension(
           installMetadata,

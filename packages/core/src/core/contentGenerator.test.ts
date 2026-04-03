@@ -89,11 +89,11 @@ describe('createContentGeneratorConfig', () => {
   } as unknown as Config;
 
   it('should preserve provided fields and set authType for QWEN_OAUTH', () => {
-    const cfg = createContentGeneratorConfig(mockConfig, AuthType.QWEN_OAUTH, {
+    const cfg = createContentGeneratorConfig(mockConfig, AuthType.PARAM_OAUTH, {
       model: 'coder-model',
       apiKey: 'QWEN_OAUTH_DYNAMIC_TOKEN',
     });
-    expect(cfg.authType).toBe(AuthType.QWEN_OAUTH);
+    expect(cfg.authType).toBe(AuthType.PARAM_OAUTH);
     expect(cfg.model).toBe('coder-model');
     expect(cfg.apiKey).toBe('QWEN_OAUTH_DYNAMIC_TOKEN');
   });
@@ -102,7 +102,7 @@ describe('createContentGeneratorConfig', () => {
     const warnSpy = vi
       .spyOn(console, 'warn')
       .mockImplementation(() => undefined);
-    const cfg = createContentGeneratorConfig(mockConfig, AuthType.QWEN_OAUTH, {
+    const cfg = createContentGeneratorConfig(mockConfig, AuthType.PARAM_OAUTH, {
       model: 'some-random-model',
     });
     expect(cfg.model).toBe('some-random-model');

@@ -10,7 +10,7 @@ import type { SpawnInfo } from '../utils/cliPath.js';
 export type { PermissionMode, AuthType };
 
 export type TransportOptions = {
-  pathToQwenExecutable?: string;
+  pathToparamExecutable?: string;
   spawnInfo?: SpawnInfo;
   cwd?: string;
   model?: string;
@@ -50,7 +50,7 @@ export type TransportOptions = {
 
 export interface QuerySystemPromptPreset {
   type: 'preset';
-  preset: 'qwen_code';
+  preset: 'param_code';
   append?: string;
 }
 
@@ -111,7 +111,7 @@ export type McpAuthProviderType =
  * - Streamable HTTP: httpUrl, headers
  * - WebSocket: tcp
  *
- * This interface aligns with MCPServerConfig in @qwen-code/qwen-code-core.
+ * This interface aligns with MCPServerConfig in @param-code/param-code-core.
  */
 export interface CLIMcpServerConfig {
   // For stdio transport
@@ -190,7 +190,7 @@ export function isSdkMcpServerConfig(
 }
 
 /**
- * Configuration options for creating a query session with the Qwen CLI.
+ * Configuration options for creating a query session with the param CLI.
  */
 export interface QueryOptions {
   /**
@@ -202,21 +202,21 @@ export interface QueryOptions {
 
   /**
    * The AI model to use for the query session.
-   * This takes precedence over the environment variables `OPENAI_MODEL` and `QWEN_MODEL`
-   * @example 'qwen-max', 'qwen-plus', 'qwen-turbo'
+   * This takes precedence over the environment variables `OPENAI_MODEL` and `param_MODEL`
+   * @example 'param-max', 'param-plus', 'param-turbo'
    */
   model?: string;
 
   /**
-   * Path to the Qwen CLI executable.
+   * Path to the param CLI executable.
    *
    * If not provided, the SDK automatically uses the bundled CLI included in the package.
    *
    * Supports multiple formats:
-   * - Command name (no path separators): `'qwen'` -> executes from PATH
+   * - Command name (no path separators): `'param'` -> executes from PATH
    * - JavaScript file: `'/path/to/cli.js'` -> uses Node.js (or Bun if running under Bun)
    * - TypeScript file: `'/path/to/index.ts'` -> uses tsx if available (silent support for dev/debug)
-   * - Native binary: `'/path/to/qwen'` -> executes directly
+   * - Native binary: `'/path/to/param'` -> executes directly
    *
    * Runtime detection:
    * - `.js/.mjs/.cjs` files: Node.js (or Bun if running under Bun)
@@ -225,23 +225,23 @@ export interface QueryOptions {
    * - Other files: executed as native binaries
    *
    * @example '/path/to/cli.js'
-   * @example 'qwen'
+   * @example 'param'
    * @example './packages/cli/index.ts'
    */
-  pathToQwenExecutable?: string;
+  pathToparamExecutable?: string;
 
   /**
-   * Environment variables to pass to the Qwen CLI process.
+   * Environment variables to pass to the param CLI process.
    * These variables will be merged with the current process environment.
    */
   env?: Record<string, string>;
 
   /**
-   * System prompt configuration for the Qwen CLI session.
+   * System prompt configuration for the param CLI session.
    *
    * - `string`: fully overrides the main session system prompt
-   * - `{ type: 'preset', preset: 'qwen_code', append?: string }`:
-   *   uses Qwen Code's built-in prompt as the base and optionally appends extra
+   * - `{ type: 'preset', preset: 'param_code', append?: string }`:
+   *   uses param Code's built-in prompt as the base and optionally appends extra
    *   instructions for the main session
    */
   systemPrompt?: QuerySystemPrompt;
@@ -342,7 +342,7 @@ export interface QueryOptions {
   debug?: boolean;
 
   /**
-   * Custom handler for stderr output from the Qwen CLI process.
+   * Custom handler for stderr output from the param CLI process.
    * Use this to capture and process error messages or diagnostic output.
    */
   stderr?: (message: string) => void;
@@ -418,10 +418,10 @@ export interface QueryOptions {
   /**
    * Authentication type for the AI service.
    * - 'openai': Use OpenAI-compatible authentication
-   * - 'qwen-oauth': Use Qwen OAuth authentication
+   * - 'param-oauth': Use param OAuth authentication
    *
-   * Though we support 'qwen-oauth', it's not recommended to use it in the SDK.
-   * Because the credentials are stored in `~/.qwen` and may need to refresh periodically.
+   * Though we support 'param-oauth', it's not recommended to use it in the SDK.
+   * Because the credentials are stored in `~/.param` and may need to refresh periodically.
    */
   authType?: AuthType;
 
@@ -443,7 +443,7 @@ export interface QueryOptions {
 
   /**
    * Resume a previous session by providing its session ID.
-   * This is equivalent to using the `--resume` flag in the Qwen CLI.
+   * This is equivalent to using the `--resume` flag in the param CLI.
    * @example '123e4567-e89b-12d3-a456-426614174000'
    */
   resume?: string;

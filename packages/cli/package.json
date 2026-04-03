@@ -1,16 +1,16 @@
 {
-  "name": "@qwen-code/qwen-code",
+  "name": "@agent-param/param",
   "version": "0.14.0",
-  "description": "Qwen Code",
+  "description": "Param",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/QwenLM/qwen-code.git"
+    "url": "git+https://github.com/paramLM/param-code.git"
   },
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "qwen": "dist/index.js"
+    "param": "dist/index.js"
   },
   "exports": {
     ".": {
@@ -33,19 +33,19 @@
     "dist"
   ],
   "config": {
-    "sandboxImageUri": "ghcr.io/qwenlm/qwen-code:0.14.0"
+    "sandboxImageUri": "ghcr.io/paramlm/param:0.14.0"
   },
   "dependencies": {
     "@agentclientprotocol/sdk": "^0.14.1",
     "@google/genai": "1.30.0",
     "@iarna/toml": "^2.2.5",
     "@modelcontextprotocol/sdk": "^1.25.1",
-    "@qwen-code/channel-base": "file:../channels/base",
-    "@qwen-code/channel-telegram": "file:../channels/telegram",
-    "@qwen-code/channel-weixin": "file:../channels/weixin",
-    "@qwen-code/channel-dingtalk": "file:../channels/dingtalk",
-    "@qwen-code/qwen-code-core": "file:../core",
-    "@qwen-code/web-templates": "file:../web-templates",
+    "@agent-param/channel-base": "file:../channels/base",
+    "@agent-param/channel-telegram": "file:../channels/telegram",
+    "@agent-param/channel-weixin": "file:../channels/weixin",
+    "@agent-param/channel-dingtalk": "file:../channels/dingtalk",
+    "@agent-param/param-core": "file:../core",
+    "@agent-param/web-templates": "file:../web-templates",
     "@types/update-notifier": "^6.0.8",
     "ansi-regex": "^6.2.2",
     "command-exists": "^1.2.9",
@@ -79,7 +79,7 @@
   "devDependencies": {
     "@babel/runtime": "^7.27.6",
     "@google/gemini-cli-test-utils": "file:../test-utils",
-    "@qwen-code/qwen-code-test-utils": "file:../test-utils",
+    "@agent-param/param-test-utils": "file:../test-utils",
     "@testing-library/react": "^16.3.0",
     "@types/archiver": "^6.0.3",
     "@types/command-exists": "^1.2.3",

@@ -89,7 +89,7 @@ class ReadFileToolInvocation extends BaseToolInvocation<
     const globalTempDir = Storage.getGlobalTempDir();
     const projectTempDir = this.config.storage.getProjectTempDir();
     const userSkillsDirs = this.config.storage.getUserSkillsDirs();
-    const userExtensionsDir = Storage.getUserExtensionsDir();
+    const userExtensionsDir = Storage.getUserExtensionsDirs()[0];
     const osTempDir = os.tmpdir();
 
     if (
@@ -219,8 +219,8 @@ export class ReadFileTool extends BaseDeclarativeTool<
     }
 
     const fileService = this.config.getFileService();
-    if (fileService.shouldQwenIgnoreFile(params.file_path)) {
-      return `File path '${filePath}' is ignored by .qwenignore pattern(s).`;
+    if (fileService.shouldParamIgnoreFile(params.file_path)) {
+      return `File path '${filePath}' is ignored by .paramignore pattern(s).`;
     }
 
     return null;

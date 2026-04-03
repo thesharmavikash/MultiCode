@@ -1,7 +1,7 @@
-package com.alibaba.qwen.code.cli.protocol.message.assistant.block;
+package com.alibaba.param.code.cli.protocol.message.assistant.block;
 
 import com.alibaba.fastjson2.annotation.JSONType;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
 
 /**
  * Represents a thinking content block.

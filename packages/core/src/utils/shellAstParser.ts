@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen
+ * Copyright 2025 param
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -582,8 +582,8 @@ let parserInitFailed = false;
  *
  * For the bundle scenario the vendor directory must be located next to
  * the cli.js bundle file.  The challenge is that `import.meta.url` may
- * point to a symlink (e.g. `/usr/bin/qwen`) rather than the real file
- * (`/usr/lib/node_modules/@qwen-code/qwen-code/cli.js`), and whether
+ * point to a symlink (e.g. `/usr/bin/param`) rather than the real file
+ * (`/usr/lib/node_modules/@param-code/param-code/cli.js`), and whether
  * Node.js automatically resolves symlinks for `import.meta.url` depends
  * on the version and OS.  We therefore probe several candidate directories
  * and return the first path where the vendor file actually exists.

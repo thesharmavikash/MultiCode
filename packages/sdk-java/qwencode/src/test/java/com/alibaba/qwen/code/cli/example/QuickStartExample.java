@@ -1,18 +1,18 @@
-package com.alibaba.qwen.code.cli.example;
+package com.alibaba.param.code.cli.example;
 
-import com.alibaba.qwen.code.cli.QwenCodeCli;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.TextAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolResultAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantUsage;
-import com.alibaba.qwen.code.cli.protocol.data.PermissionMode;
-import com.alibaba.qwen.code.cli.protocol.data.behavior.Behavior.Operation;
-import com.alibaba.qwen.code.cli.session.Session;
-import com.alibaba.qwen.code.cli.session.event.consumers.AssistantContentSimpleConsumers;
-import com.alibaba.qwen.code.cli.transport.TransportOptions;
-import com.alibaba.qwen.code.cli.utils.Timeout;
+import com.alibaba.param.code.cli.paramCodeCli;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.TextAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolResultAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantUsage;
+import com.alibaba.param.code.cli.protocol.data.PermissionMode;
+import com.alibaba.param.code.cli.protocol.data.behavior.Behavior.Operation;
+import com.alibaba.param.code.cli.session.Session;
+import com.alibaba.param.code.cli.session.event.consumers.AssistantContentSimpleConsumers;
+import com.alibaba.param.code.cli.transport.TransportOptions;
+import com.alibaba.param.code.cli.utils.Timeout;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public class QuickStartExample {
      * Simple example showing basic query usage
      */
     public static void runSimpleExample() {
-        List<String> result = QwenCodeCli.simpleQuery("hello world");
+        List<String> result = paramCodeCli.simpleQuery("hello world");
         result.forEach(logger::info);
     }
 
@@ -52,7 +52,7 @@ public class QuickStartExample {
      */
     public static void runTransportOptionsExample() {
             TransportOptions options = new TransportOptions()
-                    .setModel("qwen3-coder-flash")
+                    .setModel("param3-coder-flash")
                     .setPermissionMode(PermissionMode.AUTO_EDIT)
                     .setCwd("./")
                     .setEnv(new HashMap<String, String>() {{put("CUSTOM_VAR", "value");}})
@@ -61,7 +61,7 @@ public class QuickStartExample {
                     .setMessageTimeout(new Timeout(90L, TimeUnit.SECONDS))
                     .setAllowedTools(Arrays.asList("read_file", "write_file", "list_directory"));
 
-        List<String> result = QwenCodeCli.simpleQuery("who are you, what are your capabilities?", options);
+        List<String> result = paramCodeCli.simpleQuery("who are you, what are your capabilities?", options);
         result.forEach(logger::info);
     }
 
@@ -69,7 +69,7 @@ public class QuickStartExample {
      * Streaming example showing simple query usage
      */
     public static void runStreamingExample() {
-        QwenCodeCli.simpleQuery("who are you, what are your capabilities?",
+        paramCodeCli.simpleQuery("who are you, what are your capabilities?",
                 new TransportOptions().setMessageTimeout(new Timeout(10L, TimeUnit.SECONDS)), new AssistantContentSimpleConsumers() {
 
                     @Override

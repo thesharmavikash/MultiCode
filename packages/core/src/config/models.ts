@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export const DEFAULT_QWEN_MODEL = 'coder-model';
-export const DEFAULT_QWEN_FLASH_MODEL = 'coder-model';
-export const DEFAULT_QWEN_EMBEDDING_MODEL = 'text-embedding-v4';
-export const MAINLINE_CODER_MODEL = 'qwen3.5-plus';
+export const DEFAULT_PARAM_MODEL = 'coder-model';
+export const DEFAULT_PARAM_FLASH_MODEL = 'coder-model';
+export const DEFAULT_PARAM_EMBEDDING_MODEL = 'text-embedding-v4';
+export const MAINLINE_CODER_MODEL = 'param3.5-plus';

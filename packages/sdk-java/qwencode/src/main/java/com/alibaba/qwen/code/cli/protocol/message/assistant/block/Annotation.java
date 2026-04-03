@@ -1,4 +1,4 @@
-package com.alibaba.qwen.code.cli.protocol.message.assistant.block;
+package com.alibaba.param.code.cli.protocol.message.assistant.block;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 

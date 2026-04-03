@@ -4,9 +4,9 @@
  * Start the mock WebSocket server for testing the plugin-example channel.
  *
  * Usage:
- *   npx qwen-channel-plugin-example-server
+ *   npx param-channel-plugin-example-server
  *   # or
- *   node node_modules/@qwen-code/channel-plugin-example/dist/start-server.js
+ *   node node_modules/@param-code/channel-plugin-example/dist/start-server.js
  *
  * Environment variables:
  *   HTTP_PORT  (default: 9200)

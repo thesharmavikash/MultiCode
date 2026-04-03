@@ -1,4 +1,4 @@
-package com.alibaba.qwen.code.cli.protocol.message;
+package com.alibaba.param.code.cli.protocol.message;
 
 import java.util.Map;
 

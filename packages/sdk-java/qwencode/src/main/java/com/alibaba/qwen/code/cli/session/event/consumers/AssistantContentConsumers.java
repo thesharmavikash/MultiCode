@@ -1,18 +1,18 @@
-package com.alibaba.qwen.code.cli.session.event.consumers;
+package com.alibaba.param.code.cli.session.event.consumers;
 
-import com.alibaba.qwen.code.cli.protocol.data.AssistantUsage;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.TextAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolResultAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.behavior.Behavior;
-import com.alibaba.qwen.code.cli.protocol.data.behavior.Behavior.Operation;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.CLIControlPermissionRequest;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.ControlRequestPayload;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.ControlResponsePayload;
-import com.alibaba.qwen.code.cli.session.Session;
-import com.alibaba.qwen.code.cli.utils.Timeout;
+import com.alibaba.param.code.cli.protocol.data.AssistantUsage;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.TextAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolResultAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.behavior.Behavior;
+import com.alibaba.param.code.cli.protocol.data.behavior.Behavior.Operation;
+import com.alibaba.param.code.cli.protocol.message.control.payload.CLIControlPermissionRequest;
+import com.alibaba.param.code.cli.protocol.message.control.payload.ControlRequestPayload;
+import com.alibaba.param.code.cli.protocol.message.control.payload.ControlResponsePayload;
+import com.alibaba.param.code.cli.session.Session;
+import com.alibaba.param.code.cli.utils.Timeout;
 
 /**
  * Interface for handling different types of assistant content during a session.

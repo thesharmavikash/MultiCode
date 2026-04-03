@@ -12,7 +12,7 @@ import {
   AuthType,
   type ContentGeneratorConfig,
   type Config,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-param/param-core';
 
 // Helper function to create a mock config
 function createMockConfig(
@@ -80,7 +80,7 @@ describe('modelCommand', () => {
   it('should return dialog action for QWEN_OAUTH auth type', async () => {
     const mockConfig = createMockConfig({
       model: 'test-model',
-      authType: AuthType.QWEN_OAUTH,
+      authType: AuthType.PARAM_OAUTH,
     });
     mockContext.services.config = mockConfig as Config;
 

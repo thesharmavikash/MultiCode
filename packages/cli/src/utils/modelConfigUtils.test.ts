@@ -9,7 +9,7 @@ import {
   AuthType,
   resolveModelConfig,
   type ProviderModelConfig,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-param/param-core';
 import {
   getAuthTypeFromEnv,
   resolveCliGenerationConfig,
@@ -18,9 +18,9 @@ import type { Settings } from '../config/settings.js';
 
 const mockWriteStderrLine = vi.hoisted(() => vi.fn());
 
-vi.mock('@qwen-code/qwen-code-core', async (importOriginal) => {
+vi.mock('@agent-param/param-core', async (importOriginal) => {
   const original =
-    await importOriginal<typeof import('@qwen-code/qwen-code-core')>();
+    await importOriginal<typeof import('@agent-param/param-core')>();
   return {
     ...original,
     resolveModelConfig: vi.fn(),
@@ -66,7 +66,7 @@ describe('modelConfigUtils', () => {
     it('should return QWEN_OAUTH when QWEN_OAUTH is set', () => {
       process.env['QWEN_OAUTH'] = 'true';
 
-      expect(getAuthTypeFromEnv()).toBe(AuthType.QWEN_OAUTH);
+      expect(getAuthTypeFromEnv()).toBe(AuthType.PARAM_OAUTH);
     });
 
     it('should return USE_GEMINI when Gemini env vars are set', () => {
@@ -120,7 +120,7 @@ describe('modelConfigUtils', () => {
       process.env['OPENAI_BASE_URL'] = 'https://api.openai.com';
 
       // QWEN_OAUTH is checked first, so it should be returned even when other auth vars are set
-      expect(getAuthTypeFromEnv()).toBe(AuthType.QWEN_OAUTH);
+      expect(getAuthTypeFromEnv()).toBe(AuthType.PARAM_OAUTH);
     });
 
     it('should return undefined when no auth env vars are set', () => {

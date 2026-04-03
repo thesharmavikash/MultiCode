@@ -1,9 +1,9 @@
-package com.alibaba.qwen.code.cli.protocol.message.assistant;
+package com.alibaba.param.code.cli.protocol.message.assistant;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.alibaba.fastjson2.annotation.JSONType;
-import com.alibaba.qwen.code.cli.protocol.message.MessageBase;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.event.StreamEvent;
+import com.alibaba.param.code.cli.protocol.message.MessageBase;
+import com.alibaba.param.code.cli.protocol.message.assistant.event.StreamEvent;
 
 /**
  * Represents a partial assistant message during streaming.

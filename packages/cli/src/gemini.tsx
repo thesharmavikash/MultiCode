@@ -11,14 +11,12 @@ import {
   Storage,
   type Config,
   createDebugLogger,
-} from '@qwen-code/qwen-code-core';
-import { render } from 'ink';
+} from '@agent-param/param-core';
 import dns from 'node:dns';
 import os from 'node:os';
 import { basename } from 'node:path';
 import v8 from 'node:v8';
 import React from 'react';
-import { validateAuthMethod } from './config/auth.js';
 import * as cliConfig from './config/config.js';
 import { loadCliConfig, parseArguments } from './config/config.js';
 import type { DnsResolutionOrder, LoadedSettings } from './config/settings.js';
@@ -27,9 +25,6 @@ import {
   initializeApp,
   type InitializationResult,
 } from './core/initializer.js';
-import { runNonInteractive } from './nonInteractiveCli.js';
-import { runNonInteractiveStreamJson } from './nonInteractive/session.js';
-import { AppContainer } from './ui/AppContainer.js';
 import { setMaxSizedBoxDebugging } from './ui/components/shared/MaxSizedBox.js';
 import { KeypressProvider } from './ui/contexts/KeypressContext.js';
 import { SessionStatsProvider } from './ui/contexts/SessionContext.js';
@@ -58,7 +53,6 @@ import { getUserStartupWarnings } from './utils/userStartupWarnings.js';
 import { getCliVersion } from './utils/version.js';
 import { writeStderrLine } from './utils/stdioHelpers.js';
 import { computeWindowTitle } from './utils/windowTitle.js';
-import { validateNonInteractiveAuth } from './validateNonInterActiveAuth.js';
 import { showResumeSessionPicker } from './ui/components/StandaloneSessionPicker.js';
 import { initializeLlmOutputLanguage } from './utils/languageUtils.js';
 
@@ -96,7 +90,7 @@ function getNodeMemoryArgs(isDebugMode: boolean): string[] {
     );
   }
 
-  if (process.env['QWEN_CODE_NO_RELAUNCH']) {
+  if (process.env['PARAM_CODE_NO_RELAUNCH']) {
     return [];
   }
 
@@ -144,6 +138,10 @@ export async function startInteractiveUI(
   workspaceRoot: string = process.cwd(),
   initializationResult: InitializationResult,
 ) {
+  const [_, { AppContainer }] = await Promise.all([
+    import('ink'),
+    import('./ui/AppContainer.js'),
+  ]);
   const version = await getCliVersion();
   setWindowTitle(basename(workspaceRoot), settings);
 
@@ -211,8 +209,10 @@ export async function startInteractiveUI(
 
 export async function main() {
   setupUnhandledRejectionHandler();
-  const settings = loadSettings();
-  await cleanupCheckpoints();
+  const [settings] = await Promise.all([
+    loadSettings(),
+    cleanupCheckpoints(),
+  ]);
 
   let argv = await parseArguments();
 
@@ -270,6 +270,7 @@ export async function main() {
           // Fresh users may not have selected/persisted an authType yet.
           // In that case, defer auth prompting/selection to the main interactive flow.
           if (authType) {
+            const { validateAuthMethod } = await import('./config/auth.js');
             const err = validateAuthMethod(authType, partialConfig);
             if (err) {
               throw new Error(err);
@@ -348,7 +349,7 @@ export async function main() {
   }
 
   // We are now past the logic handling potentially launching a child process
-  // to run Qwen Code. It is now safe to perform expensive initialization that
+  // to run param Code. It is now safe to perform expensive initialization that
   // may have side effects.
 
   // Initialize output language file before config loads to ensure it's included in context
@@ -471,6 +472,9 @@ export async function main() {
       }
     }
 
+    const { validateNonInteractiveAuth } = await import(
+      './validateNonInterActiveAuth.js'
+    );
     const nonInteractiveConfig = await validateNonInteractiveAuth(
       settings.merged.security?.auth?.useExternal,
       config,
@@ -482,6 +486,9 @@ export async function main() {
     if (inputFormat === InputFormat.STREAM_JSON) {
       const trimmedInput = (input ?? '').trim();
 
+      const { runNonInteractiveStreamJson } = await import(
+        './nonInteractive/session.js'
+      );
       await runNonInteractiveStreamJson(
         nonInteractiveConfig,
         trimmedInput.length > 0 ? trimmedInput : '',
@@ -492,7 +499,7 @@ export async function main() {
 
     if (!input) {
       writeStderrLine(
-        `No input provided via stdin. Input can be provided by piping data into gemini or using the --prompt option.`,
+        `No input provided via stdin. Input can be provided by piping data into param or using the --prompt option.`,
       );
       process.exit(1);
     }
@@ -508,6 +515,7 @@ export async function main() {
 
     debugLogger.debug(`Session ID: ${config.getSessionId()}`);
 
+    const { runNonInteractive } = await import('./nonInteractiveCli.js');
     await runNonInteractive(nonInteractiveConfig, settings, input, prompt_id);
     // Call cleanup before process.exit, which causes cleanup to not run
     await runExitCleanup();

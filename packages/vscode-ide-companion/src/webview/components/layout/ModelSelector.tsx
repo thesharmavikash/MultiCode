@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
 import type { ModelInfo } from '@agentclientprotocol/sdk';
-import { PlanCompletedIcon } from '@qwen-code/webui';
+import { PlanCompletedIcon } from '@param-code/webui';
 
 interface ModelSelectorProps {
   visible: boolean;

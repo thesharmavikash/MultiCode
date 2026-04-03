@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen
+ * Copyright 2025 param
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -8,8 +8,8 @@ import {
   AuthType,
   type Config,
   type AvailableModel as CoreAvailableModel,
-  QWEN_OAUTH_MODELS,
-} from '@qwen-code/qwen-code-core';
+  PARAM_OAUTH_MODELS,
+} from '@agent-param/param-core';
 import { t } from '../../i18n/index.js';
 
 export type AvailableModel = {
@@ -19,7 +19,7 @@ export type AvailableModel = {
   isVision?: boolean;
 };
 
-const CACHED_QWEN_OAUTH_MODELS: AvailableModel[] = QWEN_OAUTH_MODELS.map(
+const CACHED_PARAM_OAUTH_MODELS: AvailableModel[] = PARAM_OAUTH_MODELS.map(
   (model) => ({
     id: model.id,
     label: model.name ?? model.id,
@@ -28,16 +28,16 @@ const CACHED_QWEN_OAUTH_MODELS: AvailableModel[] = QWEN_OAUTH_MODELS.map(
   }),
 );
 
-function getQwenOAuthModels(): readonly AvailableModel[] {
-  return CACHED_QWEN_OAUTH_MODELS;
+function getparamOAuthModels(): readonly AvailableModel[] {
+  return CACHED_PARAM_OAUTH_MODELS;
 }
 
 /**
- * Get available Qwen models
+ * Get available param models
  * coder-model now has vision capabilities by default.
  */
-export function getFilteredQwenModels(): AvailableModel[] {
-  return [...getQwenOAuthModels()];
+export function getFilteredparamModels(): AvailableModel[] {
+  return [...getparamOAuthModels()];
 }
 
 /**
@@ -112,8 +112,8 @@ export function getAvailableModelsForAuthType(
 
   // Fall back to environment variables for specific auth types (no config provided)
   switch (authType) {
-    case AuthType.QWEN_OAUTH: {
-      return [...getQwenOAuthModels()];
+    case AuthType.PARAM_OAUTH: {
+      return [...getparamOAuthModels()];
     }
     case AuthType.USE_OPENAI: {
       const openAIModel = getOpenAIAvailableModelFromEnv();

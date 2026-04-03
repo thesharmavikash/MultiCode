@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  *
  * Shared utility functions for tool call components
- * Now re-exports from @qwen-code/webui for backward compatibility
+ * Now re-exports from @param-code/webui for backward compatibility
  */
 
 export {
@@ -15,7 +15,7 @@ export {
   groupContent,
   hasToolCallOutput,
   mapToolStatusToContainerStatus,
-} from '@qwen-code/webui';
+} from '@param-code/webui';
 
 // Re-export types for backward compatibility
 export type {
@@ -23,4 +23,4 @@ export type {
   GroupedContent,
   ToolCallData,
   ToolCallStatus,
-} from '@qwen-code/webui';
+} from '@param-code/webui';

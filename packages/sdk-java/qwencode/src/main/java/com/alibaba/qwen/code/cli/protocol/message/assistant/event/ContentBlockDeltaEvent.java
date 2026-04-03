@@ -1,4 +1,4 @@
-package com.alibaba.qwen.code.cli.protocol.message.assistant.event;
+package com.alibaba.param.code.cli.protocol.message.assistant.event;
 
 import java.util.Map;
 
@@ -6,10 +6,10 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.TypeReference;
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.alibaba.fastjson2.annotation.JSONType;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.TextAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.TextAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
 
 /**
  * Represents a content block delta event during streaming.

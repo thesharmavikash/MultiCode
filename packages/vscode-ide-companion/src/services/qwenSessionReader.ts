@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -8,12 +8,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import * as readline from 'readline';
-import { getProjectHash } from '@qwen-code/qwen-code-core/src/utils/paths.js';
+import { getProjectHash } from '@param-code/param-code-core/src/utils/paths.js';
 
-export interface QwenMessage {
+export interface paramMessage {
   id: string;
   timestamp: string;
-  type: 'user' | 'qwen';
+  type: 'user' | 'param';
   content: string;
   thoughts?: unknown[];
   tokens?: {
@@ -27,23 +27,23 @@ export interface QwenMessage {
   model?: string;
 }
 
-export interface QwenSession {
+export interface paramSession {
   sessionId: string;
   projectHash: string;
   startTime: string;
   lastUpdated: string;
-  messages: QwenMessage[];
+  messages: paramMessage[];
   filePath?: string;
   messageCount?: number;
   firstUserText?: string;
   cwd?: string;
 }
 
-export class QwenSessionReader {
-  private qwenDir: string;
+export class paramSessionReader {
+  private paramDir: string;
 
   constructor() {
-    this.qwenDir = path.join(os.homedir(), '.qwen');
+    this.paramDir = path.join(os.homedir(), '.param');
   }
 
   /**
@@ -52,21 +52,21 @@ export class QwenSessionReader {
   async getAllSessions(
     workingDir?: string,
     allProjects: boolean = false,
-  ): Promise<QwenSession[]> {
+  ): Promise<paramSession[]> {
     try {
-      const sessions: QwenSession[] = [];
+      const sessions: paramSession[] = [];
 
       if (!allProjects && workingDir) {
         // Current project only
         const projectHash = getProjectHash(workingDir);
-        const chatsDir = path.join(this.qwenDir, 'tmp', projectHash, 'chats');
+        const chatsDir = path.join(this.paramDir, 'tmp', projectHash, 'chats');
         const projectSessions = await this.readSessionsFromDir(chatsDir);
         sessions.push(...projectSessions);
       } else {
         // All projects
-        const tmpDir = path.join(this.qwenDir, 'tmp');
+        const tmpDir = path.join(this.paramDir, 'tmp');
         if (!fs.existsSync(tmpDir)) {
-          console.log('[QwenSessionReader] Tmp directory not found:', tmpDir);
+          console.log('[paramSessionReader] Tmp directory not found:', tmpDir);
           return [];
         }
 
@@ -86,7 +86,7 @@ export class QwenSessionReader {
 
       return sessions;
     } catch (error) {
-      console.error('[QwenSessionReader] Failed to get sessions:', error);
+      console.error('[paramSessionReader] Failed to get sessions:', error);
       return [];
     }
   }
@@ -94,8 +94,8 @@ export class QwenSessionReader {
   /**
    * Read all sessions from specified directory
    */
-  private async readSessionsFromDir(chatsDir: string): Promise<QwenSession[]> {
-    const sessions: QwenSession[] = [];
+  private async readSessionsFromDir(chatsDir: string): Promise<paramSession[]> {
+    const sessions: paramSession[] = [];
 
     if (!fs.existsSync(chatsDir)) {
       return sessions;
@@ -115,12 +115,12 @@ export class QwenSessionReader {
       const filePath = path.join(chatsDir, file);
       try {
         const content = fs.readFileSync(filePath, 'utf-8');
-        const session = JSON.parse(content) as QwenSession;
+        const session = JSON.parse(content) as paramSession;
         session.filePath = filePath;
         sessions.push(session);
       } catch (error) {
         console.error(
-          '[QwenSessionReader] Failed to read session file:',
+          '[paramSessionReader] Failed to read session file:',
           filePath,
           error,
         );
@@ -137,7 +137,7 @@ export class QwenSessionReader {
         }
       } catch (error) {
         console.error(
-          '[QwenSessionReader] Failed to read JSONL session file:',
+          '[paramSessionReader] Failed to read JSONL session file:',
           filePath,
           error,
         );
@@ -153,7 +153,7 @@ export class QwenSessionReader {
   async getSession(
     sessionId: string,
     _workingDir?: string,
-  ): Promise<QwenSession | null> {
+  ): Promise<paramSession | null> {
     // First try to find in all projects
     const sessions = await this.getAllSessions(undefined, true);
     const found = sessions.find((s) => s.sessionId === sessionId);
@@ -180,7 +180,7 @@ export class QwenSessionReader {
   /**
    * Get session title (based on first user message)
    */
-  getSessionTitle(session: QwenSession): string {
+  getSessionTitle(session: paramSession): string {
     // Prefer cached prompt text to avoid loading messages for JSONL sessions
     if (session.firstUserText) {
       return (
@@ -207,7 +207,7 @@ export class QwenSessionReader {
   private async readJsonlSession(
     filePath: string,
     includeMessages: boolean,
-  ): Promise<QwenSession | null> {
+  ): Promise<paramSession | null> {
     try {
       if (!fs.existsSync(filePath)) {
         return null;
@@ -220,7 +220,7 @@ export class QwenSessionReader {
         crlfDelay: Infinity,
       });
 
-      const messages: QwenMessage[] = [];
+      const messages: paramMessage[] = [];
       const seenUuids = new Set<string>();
       let sessionId: string | undefined;
       let startTime: string | undefined;
@@ -262,7 +262,7 @@ export class QwenSessionReader {
             messages.push({
               id: uuid || `${messages.length}`,
               timestamp: typeof obj.timestamp === 'string' ? obj.timestamp : '',
-              type: type === 'user' ? 'user' : 'qwen',
+              type: type === 'user' ? 'user' : 'param',
               content: text,
             });
           }
@@ -297,7 +297,7 @@ export class QwenSessionReader {
       };
     } catch (error) {
       console.error(
-        '[QwenSessionReader] Failed to parse JSONL session:',
+        '[paramSessionReader] Failed to parse JSONL session:',
         error,
       );
       return null;
@@ -346,7 +346,7 @@ export class QwenSessionReader {
       }
       return false;
     } catch (error) {
-      console.error('[QwenSessionReader] Failed to delete session:', error);
+      console.error('[paramSessionReader] Failed to delete session:', error);
       return false;
     }
   }

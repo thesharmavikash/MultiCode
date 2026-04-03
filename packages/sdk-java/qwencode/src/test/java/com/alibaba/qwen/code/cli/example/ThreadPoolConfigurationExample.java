@@ -1,8 +1,8 @@
-package com.alibaba.qwen.code.cli.example;
+package com.alibaba.param.code.cli.example;
 
-import com.alibaba.qwen.code.cli.QwenCodeCli;
-import com.alibaba.qwen.code.cli.session.Session;
-import com.alibaba.qwen.code.cli.utils.ThreadPoolConfig;
+import com.alibaba.param.code.cli.paramCodeCli;
+import com.alibaba.param.code.cli.session.Session;
+import com.alibaba.param.code.cli.utils.ThreadPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.concurrent.Executors;
@@ -45,6 +45,6 @@ public class ThreadPoolConfigurationExample {
         logger.info("Default thread pool properties modified");
 
         // The SDK will now use the modified executor for all operations
-        Session session = QwenCodeCli.newSession();
+        Session session = paramCodeCli.newSession();
     }
 }

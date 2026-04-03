@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen
+ * Copyright 2025 param
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,10 +14,10 @@
  * Skills are stored as directories containing a SKILL.md file with YAML
  * frontmatter for metadata. They can be loaded from four levels
  * (precedence: project > user > extension > bundled):
- * - Project-level: `.qwen/skills/`
- * - User-level: `~/.qwen/skills/`
+ * - Project-level: `.param/skills/`
+ * - User-level: `~/.param/skills/`
  * - Extension-level: provided by installed extensions
- * - Bundled: built-in skills shipped with qwen-code
+ * - Bundled: built-in skills shipped with param-code
  */
 
 // Core types and interfaces

@@ -1,29 +1,29 @@
-package com.alibaba.qwen.code.cli.example;
+package com.alibaba.param.code.cli.example;
 
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.qwen.code.cli.QwenCodeCli;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.TextAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolResultAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantUsage;
-import com.alibaba.qwen.code.cli.protocol.data.behavior.Behavior.Operation;
-import com.alibaba.qwen.code.cli.protocol.message.SDKResultMessage;
-import com.alibaba.qwen.code.cli.protocol.message.SDKSystemMessage;
-import com.alibaba.qwen.code.cli.protocol.message.SDKUserMessage;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.SDKPartialAssistantMessage;
-import com.alibaba.qwen.code.cli.protocol.message.control.CLIControlRequest;
-import com.alibaba.qwen.code.cli.protocol.message.control.CLIControlResponse;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.ControlRequestPayload;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.ControlResponsePayload;
-import com.alibaba.qwen.code.cli.session.Session;
-import com.alibaba.qwen.code.cli.session.event.consumers.AssistantContentSimpleConsumers;
-import com.alibaba.qwen.code.cli.session.event.consumers.SessionEventSimpleConsumers;
-import com.alibaba.qwen.code.cli.protocol.data.PermissionMode;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.SDKAssistantMessage;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.block.TextBlock;
-import com.alibaba.qwen.code.cli.session.exception.SessionControlException;
+import com.alibaba.param.code.cli.paramCodeCli;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.TextAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolResultAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantUsage;
+import com.alibaba.param.code.cli.protocol.data.behavior.Behavior.Operation;
+import com.alibaba.param.code.cli.protocol.message.SDKResultMessage;
+import com.alibaba.param.code.cli.protocol.message.SDKSystemMessage;
+import com.alibaba.param.code.cli.protocol.message.SDKUserMessage;
+import com.alibaba.param.code.cli.protocol.message.assistant.SDKPartialAssistantMessage;
+import com.alibaba.param.code.cli.protocol.message.control.CLIControlRequest;
+import com.alibaba.param.code.cli.protocol.message.control.CLIControlResponse;
+import com.alibaba.param.code.cli.protocol.message.control.payload.ControlRequestPayload;
+import com.alibaba.param.code.cli.protocol.message.control.payload.ControlResponsePayload;
+import com.alibaba.param.code.cli.session.Session;
+import com.alibaba.param.code.cli.session.event.consumers.AssistantContentSimpleConsumers;
+import com.alibaba.param.code.cli.session.event.consumers.SessionEventSimpleConsumers;
+import com.alibaba.param.code.cli.protocol.data.PermissionMode;
+import com.alibaba.param.code.cli.protocol.message.assistant.SDKAssistantMessage;
+import com.alibaba.param.code.cli.protocol.message.assistant.block.TextBlock;
+import com.alibaba.param.code.cli.session.exception.SessionControlException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public class SessionExample {
     private static final Logger logger = LoggerFactory.getLogger(SessionExample.class);
 
     public static void main(String[] args) {
-        Session session = QwenCodeCli.newSession();
+        Session session = paramCodeCli.newSession();
         try {
             logger.info("runPermissionModeExample started {}", StringUtils.repeat("=", 150));
             runPermissionModeExample(session);
@@ -116,7 +116,7 @@ public class SessionExample {
     public static void runSetModelExample(Session session) {
         try {
             // Switch to a specific model
-            Optional<Boolean> modelChangeResult = session.setModel("qwen3-coder-flash");
+            Optional<Boolean> modelChangeResult = session.setModel("param3-coder-flash");
             logger.info("{}", modelChangeResult.map(s -> s ? "setModel success" : "setModel error")
                     .orElse("setModel unknown"));
 
@@ -124,7 +124,7 @@ public class SessionExample {
             session.sendPrompt("hello world", new SessionEventSimpleConsumers());
 
             // Switch to another model
-            Optional<Boolean> modelChangeResult2 = session.setModel("qwen3-coder-plus");
+            Optional<Boolean> modelChangeResult2 = session.setModel("param3-coder-plus");
             logger.info("{}", modelChangeResult2.map(s -> s ? "setModel success" : "setModel error")
                     .orElse("setModel unknown"));
 

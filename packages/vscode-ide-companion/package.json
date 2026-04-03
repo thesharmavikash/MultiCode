@@ -1,13 +1,13 @@
 {
-  "name": "qwen-code-vscode-ide-companion",
-  "displayName": "Qwen Code Companion",
-  "description": "Enable Qwen Code with direct access to your VS Code workspace.",
+  "name": "param-code-vscode-ide-companion",
+  "displayName": "param Code Companion",
+  "description": "Enable param Code with direct access to your VS Code workspace.",
   "version": "0.14.0",
-  "publisher": "qwenlm",
+  "publisher": "paramlm",
   "icon": "assets/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/QwenLM/qwen-code.git",
+    "url": "https://github.com/paramLM/param-code.git",
     "directory": "packages/vscode-ide-companion"
   },
   "engines": {
@@ -19,159 +19,159 @@
     "AI"
   ],
   "keywords": [
-    "qwen-code",
-    "qwen code",
-    "qwen",
-    "qwen code",
+    "param-code",
+    "param code",
+    "param",
+    "param code",
     "cli",
     "ide integration",
     "ide companion"
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onView:qwen-code.chatView.sidebar",
-    "onView:qwen-code.chatView.secondary",
-    "onCommand:qwen-code.openChat",
-    "onCommand:qwen-code.focusChat",
-    "onCommand:qwen-code.newConversation",
-    "onCommand:qwen-code.showLogs"
+    "onView:param-code.chatView.sidebar",
+    "onView:param-code.chatView.secondary",
+    "onCommand:param-code.openChat",
+    "onCommand:param-code.focusChat",
+    "onCommand:param-code.newConversation",
+    "onCommand:param-code.showLogs"
   ],
   "contributes": {
     "jsonValidation": [
       {
-        "fileMatch": "**/.qwen/settings.json",
+        "fileMatch": "**/.param/settings.json",
         "url": "./schemas/settings.schema.json"
       }
     ],
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "qwen-code-sidebar",
-          "title": "Qwen Code",
+          "id": "param-code-sidebar",
+          "title": "param Code",
           "icon": "assets/sidebar-icon.svg",
-          "when": "!qwen-code:supportsSecondarySidebar"
+          "when": "!param-code:supportsSecondarySidebar"
         }
       ],
       "secondarySidebar": [
         {
-          "id": "qwen-code-secondary",
-          "title": "Qwen Code",
+          "id": "param-code-secondary",
+          "title": "param Code",
           "icon": "assets/sidebar-icon.svg",
-          "when": "qwen-code:supportsSecondarySidebar"
+          "when": "param-code:supportsSecondarySidebar"
         }
       ]
     },
     "views": {
-      "qwen-code-sidebar": [
+      "param-code-sidebar": [
         {
           "type": "webview",
-          "id": "qwen-code.chatView.sidebar",
-          "name": "Qwen Code",
+          "id": "param-code.chatView.sidebar",
+          "name": "param Code",
           "icon": "assets/sidebar-icon.svg",
-          "when": "!qwen-code:supportsSecondarySidebar"
+          "when": "!param-code:supportsSecondarySidebar"
         }
       ],
-      "qwen-code-secondary": [
+      "param-code-secondary": [
         {
           "type": "webview",
-          "id": "qwen-code.chatView.secondary",
-          "name": "Qwen Code",
+          "id": "param-code.chatView.secondary",
+          "name": "param Code",
           "icon": "assets/sidebar-icon.svg",
-          "when": "qwen-code:supportsSecondarySidebar"
+          "when": "param-code:supportsSecondarySidebar"
         }
       ]
     },
     "languages": [
       {
-        "id": "qwen-diff-editable"
+        "id": "param-diff-editable"
       }
     ],
     "commands": [
       {
-        "command": "qwen.diff.accept",
-        "title": "Qwen Code: Accept Current Diff",
+        "command": "param.diff.accept",
+        "title": "param Code: Accept Current Diff",
         "icon": "$(check)"
       },
       {
-        "command": "qwen.diff.cancel",
-        "title": "Qwen Code: Close Diff Editor",
+        "command": "param.diff.cancel",
+        "title": "param Code: Close Diff Editor",
         "icon": "$(close)"
       },
       {
-        "command": "qwen-code.runQwenCode",
-        "title": "Qwen Code: Run"
+        "command": "param-code.runparamCode",
+        "title": "param Code: Run"
       },
       {
-        "command": "qwen-code.showNotices",
-        "title": "Qwen Code: View Third-Party Notices"
+        "command": "param-code.showNotices",
+        "title": "param Code: View Third-Party Notices"
       },
       {
-        "command": "qwen-code.openChat",
-        "title": "Qwen Code: Open",
+        "command": "param-code.openChat",
+        "title": "param Code: Open",
         "icon": "./assets/icon.png"
       },
       {
-        "command": "qwen-code.login",
-        "title": "Qwen Code: Login"
+        "command": "param-code.login",
+        "title": "param Code: Login"
       },
       {
-        "command": "qwen-code.focusChat",
-        "title": "Qwen Code: Focus Chat View"
+        "command": "param-code.focusChat",
+        "title": "param Code: Focus Chat View"
       },
       {
-        "command": "qwen-code.newConversation",
-        "title": "Qwen Code: New Conversation"
+        "command": "param-code.newConversation",
+        "title": "param Code: New Conversation"
       },
       {
-        "command": "qwen-code.showLogs",
-        "title": "Qwen Code: Show Logs"
+        "command": "param-code.showLogs",
+        "title": "param Code: Show Logs"
       }
     ],
     "menus": {
       "commandPalette": [
         {
-          "command": "qwen.diff.accept",
-          "when": "qwen.diff.isVisible"
+          "command": "param.diff.accept",
+          "when": "param.diff.isVisible"
         },
         {
-          "command": "qwen.diff.cancel",
-          "when": "qwen.diff.isVisible"
+          "command": "param.diff.cancel",
+          "when": "param.diff.isVisible"
         },
         {
-          "command": "qwen-code.login",
+          "command": "param-code.login",
           "when": "false"
         }
       ],
       "editor/title": [
         {
-          "command": "qwen.diff.accept",
-          "when": "qwen.diff.isVisible",
+          "command": "param.diff.accept",
+          "when": "param.diff.isVisible",
           "group": "navigation"
         },
         {
-          "command": "qwen.diff.cancel",
-          "when": "qwen.diff.isVisible",
+          "command": "param.diff.cancel",
+          "when": "param.diff.isVisible",
           "group": "navigation"
         },
         {
-          "command": "qwen-code.openChat",
+          "command": "param-code.openChat",
           "group": "navigation"
         }
       ]
     },
     "keybindings": [
       {
-        "command": "qwen.diff.accept",
+        "command": "param.diff.accept",
         "key": "ctrl+s",
-        "when": "qwen.diff.isVisible"
+        "when": "param.diff.isVisible"
       },
       {
-        "command": "qwen.diff.accept",
+        "command": "param.diff.accept",
         "key": "cmd+s",
-        "when": "qwen.diff.isVisible"
+        "when": "param.diff.isVisible"
       },
       {
-        "command": "qwen-code.focusChat",
+        "command": "param-code.focusChat",
         "key": "ctrl+shift+l",
         "mac": "cmd+shift+l"
       }
@@ -220,7 +220,7 @@
   },
   "dependencies": {
     "@agentclientprotocol/sdk": "^0.14.1",
-    "@qwen-code/webui": "*",
+    "@param-code/webui": "*",
     "@modelcontextprotocol/sdk": "^1.25.1",
     "cors": "^2.8.5",
     "express": "^5.1.0",

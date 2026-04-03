@@ -1,7 +1,7 @@
-package com.alibaba.qwen.code.cli.protocol.message.control.payload;
+package com.alibaba.param.code.cli.protocol.message.control.payload;
 
 import com.alibaba.fastjson2.annotation.JSONType;
-import com.alibaba.qwen.code.cli.protocol.data.Capabilities;
+import com.alibaba.param.code.cli.protocol.data.Capabilities;
 
 /**
  * Represents a control initialize response from the CLI.

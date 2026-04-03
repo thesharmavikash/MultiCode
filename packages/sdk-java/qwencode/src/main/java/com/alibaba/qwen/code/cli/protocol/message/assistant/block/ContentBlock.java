@@ -1,10 +1,10 @@
-package com.alibaba.qwen.code.cli.protocol.message.assistant.block;
+package com.alibaba.param.code.cli.protocol.message.assistant.block;
 
 import java.util.List;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.annotation.JSONType;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent;
 
 /**
  * Abstract base class for content blocks in assistant messages.

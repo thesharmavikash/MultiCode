@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,7 +12,7 @@
 
 import type React from 'react';
 import { Box, Text } from 'ink';
-import { ApprovalMode } from '@qwen-code/qwen-code-core';
+import { ApprovalMode } from '@agent-param/param-core';
 import { AutoAcceptIndicator } from '../AutoAcceptIndicator.js';
 import { ContextUsageDisplay } from '../ContextUsageDisplay.js';
 import { theme } from '../../semantic-colors.js';

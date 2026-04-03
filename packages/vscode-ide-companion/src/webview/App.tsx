@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -22,7 +22,7 @@ import {
   shouldSendMessage,
   useMessageSubmit,
 } from './hooks/useMessageSubmit.js';
-import type { PermissionOption, PermissionToolCall } from '@qwen-code/webui';
+import type { PermissionOption, PermissionToolCall } from '@param-code/webui';
 import type { TextMessage } from './hooks/message/useMessageHandling.js';
 import type { ToolCallData } from './components/messages/toolcalls/ToolCall.js';
 import { ToolCall } from './components/messages/toolcalls/ToolCall.js';
@@ -45,7 +45,7 @@ import {
   EmptyState,
   ChatHeader,
   SessionSelector,
-} from '@qwen-code/webui';
+} from '@param-code/webui';
 import { InputForm } from './components/layout/InputForm.js';
 import { ApprovalMode, NEXT_APPROVAL_MODE } from '../types/acpTypes.js';
 import type { ApprovalModeValue } from '../types/approvalModeValueTypes.js';
@@ -55,7 +55,7 @@ import type { Question } from '../types/acpTypes.js';
 import {
   DEFAULT_TOKEN_LIMIT,
   tokenLimit,
-} from '@qwen-code/qwen-code-core/src/core/tokenLimits.js';
+} from '@param-code/param-code-core/src/core/tokenLimits.js';
 import { useImagePaste, type WebViewImageMessage } from './hooks/useImage.js';
 
 export const App: React.FC = () => {
@@ -168,7 +168,7 @@ export const App: React.FC = () => {
           {
             id: 'login',
             label: 'Login',
-            description: 'Login to Qwen Code',
+            description: 'Login to param Code',
             type: 'command',
             group: 'Account',
           },
@@ -933,7 +933,7 @@ export const App: React.FC = () => {
           <div className="text-center">
             <div className="border-primary mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-b-2"></div>
             <p className="text-muted-foreground text-sm">
-              Preparing Qwen Code...
+              Preparing param Code...
             </p>
           </div>
         </div>
@@ -957,8 +957,8 @@ export const App: React.FC = () => {
 
       <ChatHeader
         currentSessionTitle={sessionManagement.currentSessionTitle}
-        onLoadSessions={sessionManagement.handleLoadQwenSessions}
-        onNewSession={sessionManagement.handleNewQwenSession}
+        onLoadSessions={sessionManagement.handleLoadparamSessions}
+        onNewSession={sessionManagement.handleNewparamSession}
       />
 
       <div
@@ -971,7 +971,7 @@ export const App: React.FC = () => {
               onLogin={() => {
                 vscode.postMessage({ type: 'login', data: {} });
                 messageHandling.setWaitingForResponse(
-                  'Logging in to Qwen Code...',
+                  'Logging in to param Code...',
                 );
               }}
             />

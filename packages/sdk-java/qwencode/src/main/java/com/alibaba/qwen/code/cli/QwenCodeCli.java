@@ -1,40 +1,40 @@
-package com.alibaba.qwen.code.cli;
+package com.alibaba.param.code.cli;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantUsage;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.TextAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolResultAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
-import com.alibaba.qwen.code.cli.protocol.data.behavior.Behavior.Operation;
-import com.alibaba.qwen.code.cli.session.Session;
-import com.alibaba.qwen.code.cli.session.event.consumers.AssistantContentConsumers;
-import com.alibaba.qwen.code.cli.session.event.consumers.AssistantContentSimpleConsumers;
-import com.alibaba.qwen.code.cli.session.event.consumers.SessionEventSimpleConsumers;
-import com.alibaba.qwen.code.cli.transport.Transport;
-import com.alibaba.qwen.code.cli.transport.TransportOptions;
-import com.alibaba.qwen.code.cli.transport.process.ProcessTransport;
-import com.alibaba.qwen.code.cli.utils.MyConcurrentUtils;
-import com.alibaba.qwen.code.cli.utils.Timeout;
+import com.alibaba.param.code.cli.protocol.data.AssistantUsage;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.TextAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ThingkingAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolResultAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.AssistantContent.ToolUseAssistantContent;
+import com.alibaba.param.code.cli.protocol.data.behavior.Behavior.Operation;
+import com.alibaba.param.code.cli.session.Session;
+import com.alibaba.param.code.cli.session.event.consumers.AssistantContentConsumers;
+import com.alibaba.param.code.cli.session.event.consumers.AssistantContentSimpleConsumers;
+import com.alibaba.param.code.cli.session.event.consumers.SessionEventSimpleConsumers;
+import com.alibaba.param.code.cli.transport.Transport;
+import com.alibaba.param.code.cli.transport.TransportOptions;
+import com.alibaba.param.code.cli.transport.process.ProcessTransport;
+import com.alibaba.param.code.cli.utils.MyConcurrentUtils;
+import com.alibaba.param.code.cli.utils.Timeout;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Main entry point for interacting with the Qwen Code CLI. Provides static methods for simple queries and session management.
+ * Main entry point for interacting with the param Code CLI. Provides static methods for simple queries and session management.
  *
  * @author skyfire
  * @version $Id: 0.0.1
  */
-public class QwenCodeCli {
-    private static final Logger log = LoggerFactory.getLogger(QwenCodeCli.class);
+public class paramCodeCli {
+    private static final Logger log = LoggerFactory.getLogger(paramCodeCli.class);
 
     /**
-     * Sends a simple query to the Qwen Code CLI and returns a list of responses.
+     * Sends a simple query to the param Code CLI and returns a list of responses.
      *
      * @param prompt The input prompt to send to the CLI
      * @return A list of strings representing the CLI's responses

@@ -1,12 +1,12 @@
 # Channels Design
 
-> External messaging integrations for Qwen Code — interact with an agent from Telegram, WeChat, and more.
+> External messaging integrations for param Code — interact with an agent from Telegram, WeChat, and more.
 >
 > User documentation: [Channels Overview](../../users/features/channels/overview.md).
 
 ## Overview
 
-A **channel** connects an external messaging platform to a Qwen Code agent. Configured in `settings.json`, managed via `qwen channel` subcommands, multi-user (each user gets an isolated ACP session).
+A **channel** connects an external messaging platform to a param Code agent. Configured in `settings.json`, managed via `param channel` subcommands, multi-user (each user gets an isolated ACP session).
 
 ## Architecture
 
@@ -19,7 +19,7 @@ A **channel** connects an external messaging platform to a Qwen Code agent. Conf
 │ User B   │                        │  │ Adapter    │    │  (shared)    │  │
 └──────────┘                        │  │            │    │              │  │
                                     │  │ - connect  │    │  - spawns    │  │
-                                    │  │ - receive  │    │    qwen-code │  │
+                                    │  │ - receive  │    │    param-code │  │
                                     │  │ - send     │    │  - manages   │  │
                                     │  │            │    │    sessions  │  │
                                     │  └─────┬──────┘    └──────┬───────┘  │
@@ -34,13 +34,13 @@ A **channel** connects an external messaging platform to a Qwen Code agent. Conf
                                                      │ stdio (ACP ndjson)
                                                      ▼
                                     ┌─────────────────────────────────────┐
-                                    │        qwen-code --acp              │
+                                    │        param-code --acp              │
                                     │   Session A (user alice, id: "abc") │
                                     │   Session B (user bob,   id: "def") │
                                     └─────────────────────────────────────┘
 ```
 
-**Platform Adapter** — connects to external API, translates messages to/from Envelopes. **ACP Bridge** — spawns `qwen-code --acp`, manages sessions, emits `textChunk`/`toolCall`/`disconnected` events. **Session Router** — maps senders to ACP sessions via namespaced keys (`<channel>:<sender>`). **Sender Gate** / **Group Gate** — access control (allowlist / pairing / open) and mention gating. **Channel Base** — abstract base with Template Method pattern: plugins override `connect`, `sendMessage`, `disconnect`. **Channel Registry** — `Map<string, ChannelPlugin>` with collision detection.
+**Platform Adapter** — connects to external API, translates messages to/from Envelopes. **ACP Bridge** — spawns `param-code --acp`, manages sessions, emits `textChunk`/`toolCall`/`disconnected` events. **Session Router** — maps senders to ACP sessions via namespaced keys (`<channel>:<sender>`). **Sender Gate** / **Group Gate** — access control (allowlist / pairing / open) and mention gating. **Channel Base** — abstract base with Template Method pattern: plugins override `connect`, `sendMessage`, `disconnect`. **Channel Registry** — `Map<string, ChannelPlugin>` with collision detection.
 
 ### Envelope
 
@@ -63,7 +63,7 @@ Slash commands (`/clear`, `/help`, `/status`) are handled in ChannelBase before 
 
 ### Sessions
 
-One `qwen-code --acp` process with multiple ACP sessions. Scope per channel: **`user`** (default), **`thread`**, or **`single`**. Routing keys namespaced as `<channelName>:<key>`.
+One `param-code --acp` process with multiple ACP sessions. Scope per channel: **`user`** (default), **`thread`**, or **`single`**. Routing keys namespaced as `<channelName>:<key>`.
 
 ### Error Handling
 
@@ -96,7 +96,7 @@ On inbound messages, plugins build an `Envelope` and call `this.handleInbound(en
 
 ### Discovery & Loading
 
-External plugins are **extensions** managed by `ExtensionManager`, declared in `qwen-extension.json`:
+External plugins are **extensions** managed by `ExtensionManager`, declared in `param-extension.json`:
 
 ```json
 {
@@ -111,7 +111,7 @@ External plugins are **extensions** managed by `ExtensionManager`, declared in `
 }
 ```
 
-Loading sequence at `qwen channel start`: load settings → register built-ins → scan extensions → dynamic import + validate → register (reject collisions) → validate config → `createChannel()` → `connect()`.
+Loading sequence at `param channel start`: load settings → register built-ins → scan extensions → dynamic import + validate → register (reject collisions) → validate config → `createChannel()` → `connect()`.
 
 Plugins run in-process (no sandbox), same trust model as npm dependencies.
 
@@ -127,7 +127,7 @@ Plugins run in-process (no sandbox), same trust model as npm dependencies.
       "allowedUsers": ["123456"],
       "sessionScope": "user", // user | thread | single
       "cwd": "/path/to/project",
-      "model": "qwen3.5-plus",
+      "model": "param3.5-plus",
       "instructions": "Keep responses short.",
       "groupPolicy": "disabled", // disabled | allowlist | open
       "groups": { "*": { "requireMention": true } },
@@ -142,24 +142,24 @@ Auth is plugin-specific: static token (Telegram), app credentials (DingTalk), QR
 
 ```bash
 # Channels
-qwen channel start [name]                     # start all or one channel
-qwen channel stop                             # stop running service
-qwen channel status                           # show channels, sessions, uptime
-qwen channel pairing list <ch>                # pending pairing requests
-qwen channel pairing approve <ch> <code>      # approve a request
+param channel start [name]                     # start all or one channel
+param channel stop                             # stop running service
+param channel status                           # show channels, sessions, uptime
+param channel pairing list <ch>                # pending pairing requests
+param channel pairing approve <ch> <code>      # approve a request
 
 # Extensions
-qwen extensions install <path-or-package>     # install
-qwen extensions link <local-path>             # symlink for dev
-qwen extensions list                          # show installed
-qwen extensions remove <name>                 # uninstall
+param extensions install <path-or-package>     # install
+param extensions link <local-path>             # symlink for dev
+param extensions list                          # show installed
+param extensions remove <name>                 # uninstall
 ```
 
 ## Package Structure
 
 ```
 packages/channels/
-├── base/                    # @qwen-code/channel-base
+├── base/                    # @param-code/channel-base
 │   └── src/
 │       ├── AcpBridge.ts     # ACP process lifecycle, session management
 │       ├── SessionRouter.ts # sender ↔ session mapping, persistence
@@ -168,9 +168,9 @@ packages/channels/
 │       ├── PairingStore.ts  # pairing code generation + approval
 │       ├── ChannelBase.ts   # abstract base: routing, slash commands
 │       └── types.ts         # Envelope, ChannelConfig, etc.
-├── telegram/                # @qwen-code/channel-telegram
-├── weixin/                  # @qwen-code/channel-weixin
-└── dingtalk/                # @qwen-code/channel-dingtalk
+├── telegram/                # @param-code/channel-telegram
+├── weixin/                  # @param-code/channel-weixin
+└── dingtalk/                # @param-code/channel-dingtalk
 ```
 
 ## Future Work
@@ -185,8 +185,8 @@ packages/channels/
 
 ### Operational Tooling
 
-- **`qwen channel doctor`** — config validation, env vars, bot tokens, network checks
-- **`qwen channel status --probe`** — real connectivity checks per channel
+- **`param channel doctor`** — config validation, env vars, bot tokens, network checks
+- **`param channel status --probe`** — real connectivity checks per channel
 
 ### Platform Expansion
 
@@ -200,5 +200,5 @@ packages/channels/
 
 ### Plugin Ecosystem
 
-- **Community plugin template** — `create-qwen-channel` scaffolding tool
-- **Plugin registry/discovery** — `qwen extensions search`, version compatibility
+- **Community plugin template** — `create-param-channel` scaffolding tool
+- **Plugin registry/discovery** — `param extensions search`, version compatibility

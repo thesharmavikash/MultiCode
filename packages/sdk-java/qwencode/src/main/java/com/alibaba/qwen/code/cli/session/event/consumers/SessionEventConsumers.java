@@ -1,16 +1,16 @@
-package com.alibaba.qwen.code.cli.session.event.consumers;
+package com.alibaba.param.code.cli.session.event.consumers;
 
-import com.alibaba.qwen.code.cli.protocol.message.SDKResultMessage;
-import com.alibaba.qwen.code.cli.protocol.message.SDKSystemMessage;
-import com.alibaba.qwen.code.cli.protocol.message.SDKUserMessage;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.SDKAssistantMessage;
-import com.alibaba.qwen.code.cli.protocol.message.assistant.SDKPartialAssistantMessage;
-import com.alibaba.qwen.code.cli.protocol.message.control.CLIControlRequest;
-import com.alibaba.qwen.code.cli.protocol.message.control.CLIControlResponse;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.ControlRequestPayload;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.ControlResponsePayload;
-import com.alibaba.qwen.code.cli.session.Session;
-import com.alibaba.qwen.code.cli.utils.Timeout;
+import com.alibaba.param.code.cli.protocol.message.SDKResultMessage;
+import com.alibaba.param.code.cli.protocol.message.SDKSystemMessage;
+import com.alibaba.param.code.cli.protocol.message.SDKUserMessage;
+import com.alibaba.param.code.cli.protocol.message.assistant.SDKAssistantMessage;
+import com.alibaba.param.code.cli.protocol.message.assistant.SDKPartialAssistantMessage;
+import com.alibaba.param.code.cli.protocol.message.control.CLIControlRequest;
+import com.alibaba.param.code.cli.protocol.message.control.CLIControlResponse;
+import com.alibaba.param.code.cli.protocol.message.control.payload.ControlRequestPayload;
+import com.alibaba.param.code.cli.protocol.message.control.payload.ControlResponsePayload;
+import com.alibaba.param.code.cli.session.Session;
+import com.alibaba.param.code.cli.utils.Timeout;
 
 /**
  * Interface for handling different types of events during a session.

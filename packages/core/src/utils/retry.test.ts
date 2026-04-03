@@ -300,7 +300,7 @@ describe('retryWithBackoff', () => {
         maxAttempts: 5,
         initialDelayMs: 100,
         maxDelayMs: 1000,
-        authType: AuthType.QWEN_OAUTH,
+        authType: AuthType.PARAM_OAUTH,
       });
 
       // Fast-forward time for delays
@@ -324,7 +324,7 @@ describe('retryWithBackoff', () => {
         maxAttempts: 5,
         initialDelayMs: 1000,
         maxDelayMs: 5000,
-        authType: AuthType.QWEN_OAUTH,
+        authType: AuthType.PARAM_OAUTH,
       });
 
       await expect(promise).rejects.toThrow(/Qwen OAuth quota exceeded/);
@@ -345,7 +345,7 @@ describe('retryWithBackoff', () => {
         maxAttempts: 5,
         initialDelayMs: 1000,
         maxDelayMs: 5000,
-        authType: AuthType.QWEN_OAUTH,
+        authType: AuthType.PARAM_OAUTH,
       });
 
       await expect(promise).rejects.toThrow(/Qwen OAuth quota exceeded/);
@@ -370,7 +370,7 @@ describe('retryWithBackoff', () => {
         maxAttempts: 5,
         initialDelayMs: 100,
         maxDelayMs: 1000,
-        authType: AuthType.QWEN_OAUTH,
+        authType: AuthType.PARAM_OAUTH,
       });
 
       // Fast-forward time for delays
@@ -395,7 +395,7 @@ describe('retryWithBackoff', () => {
         maxAttempts: 5,
         initialDelayMs: 100,
         maxDelayMs: 1000,
-        authType: AuthType.QWEN_OAUTH,
+        authType: AuthType.PARAM_OAUTH,
       });
 
       // Fast-forward time for delays
@@ -419,7 +419,7 @@ describe('retryWithBackoff', () => {
         maxAttempts: 5,
         initialDelayMs: 1000,
         maxDelayMs: 5000,
-        authType: AuthType.QWEN_OAUTH,
+        authType: AuthType.PARAM_OAUTH,
       });
 
       await expect(promise).rejects.toThrow(/Qwen OAuth quota exceeded/);
@@ -442,7 +442,7 @@ describe('retryWithBackoff', () => {
         maxAttempts: 5,
         initialDelayMs: 100,
         maxDelayMs: 1000,
-        authType: AuthType.QWEN_OAUTH,
+        authType: AuthType.PARAM_OAUTH,
       });
 
       // Fast-forward time for delays

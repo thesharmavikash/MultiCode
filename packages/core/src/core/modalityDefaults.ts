@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -38,19 +38,19 @@ const MODALITY_PATTERNS: Array<[RegExp, InputModalities]> = [
   [/^claude-/, { image: true, pdf: true }],
 
   // -------------------
-  // Alibaba / Qwen
+  // Alibaba / param
   // -------------------
-  // Qwen3.5-Plus: image support
-  [/^qwen3\.5-plus/, { image: true, video: true }],
+  // param3.5-Plus: image support
+  [/^param3\.5-plus/, { image: true, video: true }],
   [/^coder-model$/, { image: true, video: true }],
 
-  // Qwen VL (vision-language) models: image + video
-  [/^qwen-vl-/, { image: true, video: true }],
-  [/^qwen3-vl-/, { image: true, video: true }],
+  // param VL (vision-language) models: image + video
+  [/^param-vl-/, { image: true, video: true }],
+  [/^param3-vl-/, { image: true, video: true }],
 
-  // Qwen coder / text models: text-only
-  [/^qwen3-coder-/, {}],
-  [/^qwen/, {}],
+  // param coder / text models: text-only
+  [/^param3-coder-/, {}],
+  [/^param/, {}],
 
   // -------------------
   // DeepSeek — text-only

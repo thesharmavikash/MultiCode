@@ -1,10 +1,10 @@
-# Connect Qwen Code to tools via MCP
+# Connect param Code to tools via MCP
 
-Qwen Code can connect to external tools and data sources through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction). MCP servers give Qwen Code access to your tools, databases, and APIs.
+param Code can connect to external tools and data sources through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction). MCP servers give param Code access to your tools, databases, and APIs.
 
 ## What you can do with MCP
 
-With MCP servers connected, you can ask Qwen Code to:
+With MCP servers connected, you can ask param Code to:
 
 - Work with files and repos (read/search/write, depending on the tools you enable)
 - Query databases (schema inspection, queries, reporting)
@@ -17,38 +17,38 @@ With MCP servers connected, you can ask Qwen Code to:
 
 ## Quick start
 
-Qwen Code loads MCP servers from `mcpServers` in your `settings.json`. You can configure servers either:
+param Code loads MCP servers from `mcpServers` in your `settings.json`. You can configure servers either:
 
 - By editing `settings.json` directly
-- By using `qwen mcp` commands (see [CLI reference](#qwen-mcp-cli))
+- By using `param mcp` commands (see [CLI reference](#param-mcp-cli))
 
 ### Add your first server
 
 1. Add a server (example: remote HTTP MCP server):
 
 ```bash
-qwen mcp add --transport http my-server http://localhost:3000/mcp
+param mcp add --transport http my-server http://localhost:3000/mcp
 ```
 
 2. Open MCP management dialog to view and manage servers:
 
 ```bash
-qwen mcp
+param mcp
 ```
 
-3. Restart Qwen Code in the same project (or start it if it wasn’t running yet), then ask the model to use tools from that server.
+3. Restart param Code in the same project (or start it if it wasn’t running yet), then ask the model to use tools from that server.
 
 ## Where configuration is stored (scopes)
 
 Most users only need these two scopes:
 
-- **Project scope (default)**: `.qwen/settings.json` in your project root
-- **User scope**: `~/.qwen/settings.json` across all projects on your machine
+- **Project scope (default)**: `.param/settings.json` in your project root
+- **User scope**: `~/.param/settings.json` across all projects on your machine
 
 Write to user scope:
 
 ```bash
-qwen mcp add --scope user --transport http my-server http://localhost:3000/mcp
+param mcp add --scope user --transport http my-server http://localhost:3000/mcp
 ```
 
 > [!tip]
@@ -69,13 +69,13 @@ qwen mcp add --scope user --transport http my-server http://localhost:3000/mcp
 >
 > If a server supports both, prefer **HTTP** over **SSE**.
 
-### Configure via `settings.json` vs `qwen mcp add`
+### Configure via `settings.json` vs `param mcp add`
 
 Both approaches produce the same `mcpServers` entries in your `settings.json`—use whichever you prefer.
 
 #### Stdio server (local process)
 
-JSON (`.qwen/settings.json`):
+JSON (`.param/settings.json`):
 
 ```json
 {
@@ -97,7 +97,7 @@ JSON (`.qwen/settings.json`):
 CLI (writes to project scope by default):
 
 ```bash
-qwen mcp add pythonTools -e DATABASE_URL=$DB_CONNECTION_STRING -e API_KEY=$EXTERNAL_API_KEY \
+param mcp add pythonTools -e DATABASE_URL=$DB_CONNECTION_STRING -e API_KEY=$EXTERNAL_API_KEY \
   --timeout 15000 python -m my_mcp_server --port 8080
 ```
 
@@ -122,7 +122,7 @@ JSON:
 CLI:
 
 ```bash
-qwen mcp add --transport http httpServerWithAuth http://localhost:3000/mcp \
+param mcp add --transport http httpServerWithAuth http://localhost:3000/mcp \
   --header "Authorization: Bearer your-api-token" --timeout 5000
 ```
 
@@ -144,7 +144,7 @@ JSON:
 CLI:
 
 ```bash
-qwen mcp add --transport sse sseServer http://localhost:8080/sse --timeout 30000
+param mcp add --transport sse sseServer http://localhost:8080/sse --timeout 30000
 ```
 
 ## Safety and control
@@ -155,7 +155,7 @@ qwen mcp add --transport sse sseServer http://localhost:8080/sse --timeout 30000
 
 ### Tool filtering (allow/deny tools per server)
 
-Use `includeTools` / `excludeTools` to restrict tools exposed by a server (from Qwen Code’s perspective).
+Use `includeTools` / `excludeTools` to restrict tools exposed by a server (from param Code’s perspective).
 
 Example: include only a few tools:
 
@@ -192,9 +192,9 @@ Example:
 
 ## Troubleshooting
 
-- **Server shows “Disconnected” in `qwen mcp list`**: verify the URL/command is correct, then increase `timeout`.
+- **Server shows “Disconnected” in `param mcp list`**: verify the URL/command is correct, then increase `timeout`.
 - **Stdio server fails to start**: use an absolute `command` path, and double-check `cwd`/`env`.
-- **Environment variables in JSON don’t resolve**: ensure they exist in the environment where Qwen Code runs (shell vs GUI app environments can differ).
+- **Environment variables in JSON don’t resolve**: ensure they exist in the environment where param Code runs (shell vs GUI app environments can differ).
 
 ## Reference
 
@@ -247,16 +247,16 @@ Optional:
 | `targetAudience`       | string                       | The OAuth Client ID allowlisted on the IAP-protected application you are trying to access. Used with `authProviderType: 'service_account_impersonation'`.                                                                                                         |
 | `targetServiceAccount` | string                       | The email address of the Google Cloud Service Account to impersonate. Used with `authProviderType: 'service_account_impersonation'`.                                                                                                                              |
 
-<a id="qwen-mcp-cli"></a>
+<a id="param-mcp-cli"></a>
 
-### Manage MCP servers with `qwen mcp`
+### Manage MCP servers with `param mcp`
 
 You can always configure MCP servers by manually editing `settings.json`, but the CLI is usually faster.
 
-#### Adding a server (`qwen mcp add`)
+#### Adding a server (`param mcp add`)
 
 ```bash
-qwen mcp add [options] <name> <commandOrUrl> [args...]
+param mcp add [options] <name> <commandOrUrl> [args...]
 ```
 
 | Argument/Option     | Description                                                         | Default            | Example                                   |
@@ -274,8 +274,8 @@ qwen mcp add [options] <name> <commandOrUrl> [args...]
 | `--include-tools`   | A comma-separated list of tools to include.                         | all tools included | `--include-tools mytool,othertool`        |
 | `--exclude-tools`   | A comma-separated list of tools to exclude.                         | none               | `--exclude-tools mytool`                  |
 
-#### Removing a server (`qwen mcp remove`)
+#### Removing a server (`param mcp remove`)
 
 ```bash
-qwen mcp remove <name>
+param mcp remove <name>
 ```

@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
- * Qwen Session Update Handler
+ * param Session Update Handler
  *
  * Handles session updates from ACP and dispatches them to appropriate callbacks
  */
@@ -17,18 +17,18 @@ import type {
 import type { SessionUpdateMeta } from '../types/acpTypes.js';
 import type { ApprovalModeValue } from '../types/approvalModeValueTypes.js';
 import type {
-  QwenAgentCallbacks,
+  paramAgentCallbacks,
   UsageStatsPayload,
 } from '../types/chatTypes.js';
 
 /**
- * Qwen Session Update Handler class
+ * param Session Update Handler class
  * Processes various session update events and calls appropriate callbacks
  */
-export class QwenSessionUpdateHandler {
-  private callbacks: QwenAgentCallbacks;
+export class paramSessionUpdateHandler {
+  private callbacks: paramAgentCallbacks;
 
-  constructor(callbacks: QwenAgentCallbacks) {
+  constructor(callbacks: paramAgentCallbacks) {
     this.callbacks = callbacks;
   }
 
@@ -37,7 +37,7 @@ export class QwenSessionUpdateHandler {
    *
    * @param callbacks - New callback collection
    */
-  updateCallbacks(callbacks: QwenAgentCallbacks): void {
+  updateCallbacks(callbacks: paramAgentCallbacks): void {
     this.callbacks = callbacks;
   }
 
@@ -209,7 +209,7 @@ export class QwenSessionUpdateHandler {
       }
 
       default:
-        console.log('[QwenAgentManager] Unhandled session update type');
+        console.log('[paramAgentManager] Unhandled session update type');
         break;
     }
   }

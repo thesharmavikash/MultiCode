@@ -32,27 +32,27 @@ const argv = yargs(hideBin(process.argv)).option('q', {
   default: false,
 }).argv;
 
-let qwenSandbox = process.env.QWEN_SANDBOX;
+let paramSandbox = process.env.PARAM_SANDBOX;
 
-if (!qwenSandbox) {
-  const userSettingsFile = join(os.homedir(), '.qwen', 'settings.json');
+if (!paramSandbox) {
+  const userSettingsFile = join(os.homedir(), '.param', 'settings.json');
   if (existsSync(userSettingsFile)) {
     const settings = JSON.parse(
       stripJsonComments(readFileSync(userSettingsFile, 'utf-8')),
     );
     if (settings.sandbox) {
-      qwenSandbox = settings.sandbox;
+      paramSandbox = settings.sandbox;
     }
   }
 }
 
-if (!qwenSandbox) {
+if (!paramSandbox) {
   let currentDir = process.cwd();
   while (true) {
-    const qwenEnv = join(currentDir, '.qwen', '.env');
+    const paramEnv = join(currentDir, '.param', '.env');
     const regularEnv = join(currentDir, '.env');
-    if (existsSync(qwenEnv)) {
-      dotenv.config({ path: qwenEnv, quiet: true });
+    if (existsSync(paramEnv)) {
+      dotenv.config({ path: paramEnv, quiet: true });
       break;
     } else if (existsSync(regularEnv)) {
       dotenv.config({ path: regularEnv, quiet: true });
@@ -64,10 +64,10 @@ if (!qwenSandbox) {
     }
     currentDir = parentDir;
   }
-  qwenSandbox = process.env.QWEN_SANDBOX;
+  paramSandbox = process.env.PARAM_SANDBOX;
 }
 
-qwenSandbox = (qwenSandbox || '').toLowerCase();
+paramSandbox = (paramSandbox || '').toLowerCase();
 
 const commandExists = (cmd) => {
   // Use 'where.exe' (not 'where') on Windows because PowerShell aliases
@@ -90,23 +90,23 @@ const commandExists = (cmd) => {
 };
 
 let command = '';
-if (['1', 'true'].includes(qwenSandbox)) {
+if (['1', 'true'].includes(paramSandbox)) {
   if (commandExists('docker')) {
     command = 'docker';
   } else if (commandExists('podman')) {
     command = 'podman';
   } else {
     console.error(
-      'ERROR: install docker or podman or specify command in QWEN_SANDBOX',
+      'ERROR: install docker or podman or specify command in PARAM_SANDBOX',
     );
     process.exit(1);
   }
-} else if (qwenSandbox && !['0', 'false'].includes(qwenSandbox)) {
-  if (commandExists(qwenSandbox)) {
-    command = qwenSandbox;
+} else if (paramSandbox && !['0', 'false'].includes(paramSandbox)) {
+  if (commandExists(paramSandbox)) {
+    command = paramSandbox;
   } else {
     console.error(
-      `ERROR: missing sandbox command '${qwenSandbox}' (from QWEN_SANDBOX)`,
+      `ERROR: missing sandbox command '${paramSandbox}' (from PARAM_SANDBOX)`,
     );
     process.exit(1);
   }

@@ -36,7 +36,7 @@ import {
 } from '../telemetry/types.js';
 import type { UiTelemetryService } from '../telemetry/uiTelemetry.js';
 
-const debugLogger = createDebugLogger('QWEN_CODE_CHAT');
+const debugLogger = createDebugLogger('param_CODE_CHAT');
 
 export enum StreamEventType {
   /** A regular content chunk from the API. */

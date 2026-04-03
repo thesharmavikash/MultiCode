@@ -1,4 +1,4 @@
-package com.alibaba.qwen.code.cli.transport;
+package com.alibaba.param.code.cli.transport;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -6,7 +6,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 
 /**
- * Defines the contract for communication with the Qwen Code CLI.
+ * Defines the contract for communication with the param Code CLI.
  *
  * @author skyfire
  * @version $Id: 0.0.1

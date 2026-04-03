@@ -1,4 +1,4 @@
-package com.alibaba.qwen.code.cli.session.exception;
+package com.alibaba.param.code.cli.session.exception;
 
 /**
  * Exception thrown when a session control operation fails.

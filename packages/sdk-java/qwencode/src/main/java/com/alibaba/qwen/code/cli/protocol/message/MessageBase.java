@@ -1,11 +1,11 @@
-package com.alibaba.qwen.code.cli.protocol.message;
+package com.alibaba.param.code.cli.protocol.message;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.alibaba.fastjson2.annotation.JSONType;
 
 /**
- * Base class for messages in the Qwen Code protocol.
+ * Base class for messages in the param Code protocol.
  *
  * @author skyfire
  * @version $Id: 0.0.1

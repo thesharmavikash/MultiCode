@@ -20,11 +20,11 @@ import {
 import {
   ExtensionManager,
   parseInstallSource,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-param/param-core';
 
-vi.mock('@qwen-code/qwen-code-core', async (importOriginal) => {
+vi.mock('@agent-param/param-core', async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import('@qwen-code/qwen-code-core')>();
+    await importOriginal<typeof import('@agent-param/param-core')>();
   return {
     ...actual,
     parseInstallSource: vi.fn(),

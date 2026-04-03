@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,7 +11,7 @@ const require = createRequire(import.meta.url);
 /** @type {import('tailwindcss').Config} */
 export default {
   // Use webui preset for shared theme configuration
-  presets: [require('@qwen-code/webui/tailwind.preset')],
+  presets: [require('@param-code/webui/tailwind.preset')],
   content: [
     './src/webview/**/**/*.{js,jsx,ts,tsx}',
     // Include webui components to prevent Tailwind JIT from tree-shaking their classes
@@ -44,7 +44,7 @@ export default {
         'slide-up': 'slide-up 200ms ease-out both',
       },
       colors: {
-        qwen: {
+        param: {
           orange: '#615fff',
           'clay-orange': '#4f46e5',
           ivory: '#f5f5ff',

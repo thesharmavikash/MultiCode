@@ -1,11 +1,11 @@
-package com.alibaba.qwen.code.cli.protocol.message.control;
+package com.alibaba.param.code.cli.protocol.message.control;
 
 import java.util.UUID;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.alibaba.fastjson2.annotation.JSONType;
-import com.alibaba.qwen.code.cli.protocol.message.MessageBase;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.ControlRequestPayload;
+import com.alibaba.param.code.cli.protocol.message.MessageBase;
+import com.alibaba.param.code.cli.protocol.message.control.payload.ControlRequestPayload;
 
 /**
  * Represents a control request to the CLI.

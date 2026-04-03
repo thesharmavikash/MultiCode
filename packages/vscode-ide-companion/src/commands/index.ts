@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,17 +15,17 @@ import {
 
 type Logger = (message: string) => void;
 
-export const runQwenCodeCommand = 'qwen-code.runQwenCode';
-export const showDiffCommand = 'qwenCode.showDiff';
-export const openChatCommand = 'qwen-code.openChat';
-export const openNewChatTabCommand = 'qwenCode.openNewChatTab';
-export const loginCommand = 'qwen-code.login';
-export const focusChatCommand = 'qwen-code.focusChat';
-export const newConversationCommand = 'qwen-code.newConversation';
-export const showLogsCommand = 'qwen-code.showLogs';
+export const runparamCodeCommand = 'param-code.runparamCode';
+export const showDiffCommand = 'paramCode.showDiff';
+export const openChatCommand = 'param-code.openChat';
+export const openNewChatTabCommand = 'paramCode.openNewChatTab';
+export const loginCommand = 'param-code.login';
+export const focusChatCommand = 'param-code.focusChat';
+export const newConversationCommand = 'param-code.newConversation';
+export const showLogsCommand = 'param-code.showLogs';
 
 /**
- * Register all Qwen Code chat-related commands.
+ * Register all param Code chat-related commands.
  *
  * `openChat` and `newConversation` always open an editor tab, while
  * `focusChat` focuses the secondary sidebar (preferred) or primary sidebar.
@@ -103,7 +103,7 @@ export function registerNewCommands(
         await providers[providers.length - 1].forceReLogin();
       } else {
         vscode.window.showInformationMessage(
-          'Please open Qwen Code chat first before logging in.',
+          'Please open param Code chat first before logging in.',
         );
       }
     }),
@@ -136,7 +136,7 @@ export function registerNewCommands(
         outputChannel.show(true);
       } else {
         vscode.window.showWarningMessage(
-          'Qwen Code Companion log channel is not available.',
+          'param Code Companion log channel is not available.',
         );
       }
     }),

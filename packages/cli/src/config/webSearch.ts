@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2025 Qwen
+ * Copyright 2025 param
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AuthType } from '@qwen-code/qwen-code-core';
-import type { WebSearchProviderConfig } from '@qwen-code/qwen-code-core';
+import { AuthType } from '@agent-param/param-core';
+import type { WebSearchProviderConfig } from '@agent-param/param-core';
 import type { Settings } from './settings.js';
 
 /**
@@ -34,7 +34,7 @@ export interface WebSearchConfig {
  *
  * @param argv - Command line arguments
  * @param settings - User settings from settings.json
- * @param authType - Authentication type (e.g., 'qwen-oauth')
+ * @param authType - Authentication type (e.g., 'param-oauth')
  * @returns WebSearch configuration or undefined if no providers available
  */
 export function buildWebSearchConfig(
@@ -42,7 +42,7 @@ export function buildWebSearchConfig(
   settings: Settings,
   authType?: string,
 ): WebSearchConfig | undefined {
-  const isQwenOAuth = authType === AuthType.QWEN_OAUTH;
+  const isparamOAuth = authType === AuthType.PARAM_OAUTH;
 
   // Step 1: Collect providers from settings or command line/env
   let providers: WebSearchProviderConfig[] = [];
@@ -77,8 +77,8 @@ export function buildWebSearchConfig(
     }
   }
 
-  // Step 2: Ensure dashscope is available for qwen-oauth users
-  if (isQwenOAuth) {
+  // Step 2: Ensure dashscope is available for param-oauth users
+  if (isparamOAuth) {
     const hasDashscope = providers.some((p) => p.type === 'dashscope');
     if (!hasDashscope) {
       providers.push({ type: 'dashscope' } as WebSearchProviderConfig);

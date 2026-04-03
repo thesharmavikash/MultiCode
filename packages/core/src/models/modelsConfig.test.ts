@@ -447,14 +447,14 @@ describe('ModelsConfig', () => {
   it('should always force Qwen OAuth apiKey placeholder when applying model defaults', async () => {
     // Simulate a stale/explicit apiKey existing before switching models.
     const modelsConfig = new ModelsConfig({
-      initialAuthType: AuthType.QWEN_OAUTH,
+      initialAuthType: AuthType.PARAM_OAUTH,
       generationConfig: {
         apiKey: 'manual-key-should-not-leak',
       },
     });
 
     // Switching within qwen-oauth triggers applyResolvedModelDefaults().
-    await modelsConfig.switchModel(AuthType.QWEN_OAUTH, 'coder-model');
+    await modelsConfig.switchModel(AuthType.PARAM_OAUTH, 'coder-model');
 
     const gc = currentGenerationConfig(modelsConfig);
     expect(gc.apiKey).toBe('QWEN_OAUTH_DYNAMIC_TOKEN');
@@ -500,9 +500,9 @@ describe('ModelsConfig', () => {
     // Fresh user: authType not selected yet (currentAuthType undefined).
     const modelsConfig = new ModelsConfig();
 
-    // Config.refreshAuth passes modelId from modelsConfig.getModel(), which falls back to DEFAULT_QWEN_MODEL.
+    // Config.refreshAuth passes modelId from modelsConfig.getModel(), which falls back to DEFAULT_PARAM_MODEL.
     modelsConfig.syncAfterAuthRefresh(
-      AuthType.QWEN_OAUTH,
+      AuthType.PARAM_OAUTH,
       modelsConfig.getModel(),
     );
 
@@ -525,7 +525,7 @@ describe('ModelsConfig', () => {
     // User switches to qwen-oauth via AuthDialog
     // refreshAuth calls syncAfterAuthRefresh with the current model (gpt-4o)
     // which doesn't exist in qwen-oauth registry, so it should use default
-    modelsConfig.syncAfterAuthRefresh(AuthType.QWEN_OAUTH, 'gpt-4o');
+    modelsConfig.syncAfterAuthRefresh(AuthType.PARAM_OAUTH, 'gpt-4o');
 
     const gc = currentGenerationConfig(modelsConfig);
     // Should use default qwen-oauth model (coder-model), not the OPENAI model
@@ -555,7 +555,7 @@ describe('ModelsConfig', () => {
     // User switches to qwen-oauth
     // Since authType is not USE_OPENAI, manual credentials should be cleared
     // and default qwen-oauth model should be applied
-    modelsConfig.syncAfterAuthRefresh(AuthType.QWEN_OAUTH, 'gpt-4o');
+    modelsConfig.syncAfterAuthRefresh(AuthType.PARAM_OAUTH, 'gpt-4o');
 
     const gc = currentGenerationConfig(modelsConfig);
     // Should use default qwen-oauth model, not preserve manual OpenAI credentials
@@ -638,7 +638,7 @@ describe('ModelsConfig', () => {
       modelProvidersConfig,
       generationConfig: {},
     });
-    expect(config3.getModel()).toBe('coder-model'); // Falls back to DEFAULT_QWEN_MODEL
+    expect(config3.getModel()).toBe('coder-model'); // Falls back to DEFAULT_PARAM_MODEL
     expect(config3.getGenerationConfig().model).toBeUndefined();
   });
 
@@ -757,23 +757,23 @@ describe('ModelsConfig', () => {
 
       // qwen-oauth models should be ordered first
       const firstNonQwenIndex = allModels.findIndex(
-        (m) => m.authType !== AuthType.QWEN_OAUTH,
+        (m) => m.authType !== AuthType.PARAM_OAUTH,
       );
       expect(firstNonQwenIndex).toBeGreaterThan(0);
       expect(
         allModels
           .slice(0, firstNonQwenIndex)
-          .every((m) => m.authType === AuthType.QWEN_OAUTH),
+          .every((m) => m.authType === AuthType.PARAM_OAUTH),
       ).toBe(true);
       expect(
         allModels
           .slice(firstNonQwenIndex)
-          .every((m) => m.authType !== AuthType.QWEN_OAUTH),
+          .every((m) => m.authType !== AuthType.PARAM_OAUTH),
       ).toBe(true);
 
       // Should include qwen-oauth models (hard-coded)
       const qwenModels = allModels.filter(
-        (m) => m.authType === AuthType.QWEN_OAUTH,
+        (m) => m.authType === AuthType.PARAM_OAUTH,
       );
       expect(qwenModels.length).toBeGreaterThan(0);
 
@@ -808,7 +808,7 @@ describe('ModelsConfig', () => {
       // Should still include qwen-oauth models (hard-coded)
       expect(allModels.length).toBeGreaterThan(0);
       const qwenModels = allModels.filter(
-        (m) => m.authType === AuthType.QWEN_OAUTH,
+        (m) => m.authType === AuthType.PARAM_OAUTH,
       );
       expect(qwenModels.length).toBeGreaterThan(0);
     });
@@ -881,18 +881,18 @@ describe('ModelsConfig', () => {
       // Filter: include qwen-oauth but request it later -> still ordered first
       const withQwen = modelsConfig.getAllConfiguredModels([
         AuthType.USE_OPENAI,
-        AuthType.QWEN_OAUTH,
+        AuthType.PARAM_OAUTH,
         AuthType.USE_ANTHROPIC,
       ]);
       expect(withQwen.length).toBeGreaterThan(0);
       const firstNonQwenIndex = withQwen.findIndex(
-        (m) => m.authType !== AuthType.QWEN_OAUTH,
+        (m) => m.authType !== AuthType.PARAM_OAUTH,
       );
       expect(firstNonQwenIndex).toBeGreaterThan(0);
       expect(
         withQwen
           .slice(0, firstNonQwenIndex)
-          .every((m) => m.authType === AuthType.QWEN_OAUTH),
+          .every((m) => m.authType === AuthType.PARAM_OAUTH),
       ).toBe(true);
     });
   });
@@ -1389,7 +1389,7 @@ describe('ModelsConfig', () => {
       expect(
         modelsConfig
           .getAllConfiguredModels()
-          .filter((m) => m.authType !== 'qwen-oauth').length,
+          .filter((m) => m.authType !== AuthType.PARAM_OAUTH).length,
       ).toBeGreaterThan(0);
 
       // Reload with empty config
@@ -1397,7 +1397,7 @@ describe('ModelsConfig', () => {
 
       // Only qwen-oauth models should remain
       const models = modelsConfig.getAllConfiguredModels();
-      expect(models.every((m) => m.authType === 'qwen-oauth')).toBe(true);
+      expect(models.every((m) => m.authType === AuthType.PARAM_OAUTH)).toBe(true);
     });
 
     it('should preserve qwen-oauth models after reload', () => {
@@ -1409,7 +1409,7 @@ describe('ModelsConfig', () => {
 
       const initialQwenModels = modelsConfig
         .getAllConfiguredModels()
-        .filter((m) => m.authType === 'qwen-oauth');
+        .filter((m) => m.authType === AuthType.PARAM_OAUTH);
 
       modelsConfig.reloadModelProvidersConfig({
         gemini: [{ id: 'gemini-pro', name: 'Gemini Pro' }],
@@ -1418,7 +1418,7 @@ describe('ModelsConfig', () => {
       // qwen-oauth models should still exist
       const qwenModelsAfterReload = modelsConfig
         .getAllConfiguredModels()
-        .filter((m) => m.authType === 'qwen-oauth');
+        .filter((m) => m.authType === AuthType.PARAM_OAUTH);
       expect(qwenModelsAfterReload.length).toBe(initialQwenModels.length);
     });
 

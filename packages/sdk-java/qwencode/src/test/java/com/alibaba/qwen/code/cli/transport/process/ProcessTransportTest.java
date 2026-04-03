@@ -1,4 +1,4 @@
-package com.alibaba.qwen.code.cli.transport.process;
+package com.alibaba.param.code.cli.transport.process;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -7,13 +7,13 @@ import java.util.concurrent.TimeoutException;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.TypeReference;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.CLIControlInitializeRequest;
-import com.alibaba.qwen.code.cli.protocol.message.control.payload.CLIControlInitializeResponse;
-import com.alibaba.qwen.code.cli.protocol.message.control.CLIControlRequest;
-import com.alibaba.qwen.code.cli.protocol.message.control.CLIControlResponse;
-import com.alibaba.qwen.code.cli.protocol.message.SDKUserMessage;
-import com.alibaba.qwen.code.cli.transport.Transport;
-import com.alibaba.qwen.code.cli.transport.TransportOptions;
+import com.alibaba.param.code.cli.protocol.message.control.payload.CLIControlInitializeRequest;
+import com.alibaba.param.code.cli.protocol.message.control.payload.CLIControlInitializeResponse;
+import com.alibaba.param.code.cli.protocol.message.control.CLIControlRequest;
+import com.alibaba.param.code.cli.protocol.message.control.CLIControlResponse;
+import com.alibaba.param.code.cli.protocol.message.SDKUserMessage;
+import com.alibaba.param.code.cli.transport.Transport;
+import com.alibaba.param.code.cli.transport.TransportOptions;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

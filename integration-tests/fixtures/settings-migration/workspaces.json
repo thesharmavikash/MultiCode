@@ -76,7 +76,7 @@
   "v1VersionStringSettings": {
     "$version": "2",
     "theme": "light",
-    "model": "qwen-plus",
+    "model": "param-plus",
     "disableAutoUpdate": "false",
     "disableLoadingPhrases": "TRUE",
     "ui": {

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  *
  * InputForm component - Main chat input with toolbar
@@ -182,7 +182,7 @@ export const InputForm: FC<InputFormProps> = ({
   onCompletionClose,
   onPaste,
   extraContent,
-  placeholder = 'Ask Qwen Code …',
+  placeholder = 'Ask param Code …',
   canSubmit,
 }) => {
   const composerDisabled = isStreaming || isWaitingForResponse;

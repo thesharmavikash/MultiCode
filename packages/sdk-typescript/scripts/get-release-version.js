@@ -2,7 +2,7 @@
 
 /**
  * @license
- * Copyright 2025 Qwen Team
+ * Copyright 2025 param Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,7 +14,7 @@ import { dirname, join } from 'node:path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const PACKAGE_NAME = '@qwen-code/sdk';
+const PACKAGE_NAME = '@param-code/sdk';
 const TAG_PREFIX = 'sdk-typescript-v';
 
 function readJson(filePath) {
